@@ -2,6 +2,7 @@ from pathlib import Path
 from re import findall
 
 from modules.CardType import CardType
+from modules.RemoteFont import RemoteFont
 from modules.Debug import log
 
 class BetterStandardTitleCard(CardType):
@@ -23,7 +24,7 @@ class BetterStandardTitleCard(CardType):
     }
 
     """Default font and text color for episode title text"""
-    TITLE_FONT = str((REF_DIRECTORY / 'Comic Sans MS.ttf').resolve())
+    TITLE_FONT = str(RemoteFont('CollinHeist', 'Comic Sans MS.ttf'))
     TITLE_COLOR = '#F5E94E'
 
     """Default characters to replace in the generic font"""
@@ -378,8 +379,8 @@ class BetterStandardTitleCard(CardType):
         """
 
         return ((font.size != 1.0)
-            or (font.color != StandardTitleCard.TITLE_COLOR)
-            or (font.replacements != StandardTitleCard.FONT_REPLACEMENTS)
+            or (font.color != BetterStandardTitleCard.TITLE_COLOR)
+            or (font.replacements != BetterStandardTitleCard.FONT_REPLACEMENTS)
             or (font.vertical_shift != 0)
             or (font.interline_spacing != 0))
 
