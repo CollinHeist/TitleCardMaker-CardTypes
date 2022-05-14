@@ -2,7 +2,7 @@ from pathlib import Path
 from re import findall
 
 from modules.CardType import CardType
-from modules.RemoteFont import RemoteFont
+from modules.RemoteFile import RemoteFile
 from modules.Debug import log
 
 class BetterStandardTitleCard(CardType):
@@ -12,7 +12,7 @@ class BetterStandardTitleCard(CardType):
     """
 
     """Directory where all reference files used by this card are stored"""
-    REF_DIRECTORY = Path(__file__).parent
+    REF_DIRECTORY = Path(__file__).parent.parent / 'ref'
 
     """Characteristics for title splitting by this class"""
     TITLE_CHARACTERISTICS = {
@@ -22,7 +22,7 @@ class BetterStandardTitleCard(CardType):
     }
 
     """Default font and text color for episode title text"""
-    TITLE_FONT = str(RemoteFont('CollinHeist', 'Comic Sans MS.ttf'))
+    TITLE_FONT = str(RemoteFile('CollinHeist', 'Comic Sans MS.ttf'))
     TITLE_COLOR = '#F5E94E'
 
     """Default characters to replace in the generic font"""
