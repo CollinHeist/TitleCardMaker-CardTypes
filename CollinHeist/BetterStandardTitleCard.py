@@ -172,8 +172,8 @@ class BetterStandardTitleCard(CardType):
         """
 
         return [
-            f'-fill "{self.self.TITLE_COLOR}"',
-            f'-stroke "{self.self.TITLE_COLOR}"',
+            f'-fill "{self.TITLE_COLOR}"',
+            f'-stroke "{self.TITLE_COLOR}"',
             f'-strokewidth 0.75',
         ]
 
