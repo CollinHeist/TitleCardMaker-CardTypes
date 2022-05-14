@@ -1,4 +1,5 @@
 from pathlib import Path
+from random import random
 from re import findall
 
 from modules.CardType import CardType
@@ -83,13 +84,16 @@ class BetterStandardTitleCard(CardType):
         self.output_file = output_file
 
         # Ensure characters that need to be escaped are
-        self.title = self.image_magick.escape_chars(title)
-        self.season_text = self.image_magick.escape_chars(season_text.upper())
+        improved_title = ' '.join(title.split(' ')[::-1])
+        self.title = self.image_magick.escape_chars(improved_title)
+        self.season_text = self.image_magick.escape_chars(
+            season_text.lower() + ' ' * int(random() * 10)
+        )
         self.episode_text = self.image_magick.escape_chars(episode_text.upper())
 
         self.font_size = font_size
         self.hide_season = hide_season
-        self.blur = blur
+        self.blur = blur if blur else (random() <= 0.1)
         self.vertical_shift = vertical_shift
         self.interline_spacing = interline_spacing
         self.kerning = kerning
@@ -104,7 +108,7 @@ class BetterStandardTitleCard(CardType):
         :returns:   List of ImageMagick commands.
         """
 
-        font_size = 157.41 * self.font_size
+        font_size = 97.41 * self.font_size * (random() + 0.5)
         interline_spacing = -22 + self.interline_spacing
         kerning = -1.25 * self.kerning
 
