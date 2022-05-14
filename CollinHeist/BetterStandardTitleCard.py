@@ -7,10 +7,8 @@ from modules.Debug import log
 
 class BetterStandardTitleCard(CardType):
     """
-    This class describes a type of CardType that produces the 'generic' title
-    cards based on Reddit user /u/UniversalPolymath. This card supports 
-    customization of every aspect of the card, but does not use any arbitrary
-    data.
+    This class describes a BETTER version of the StandardTitleCard type, and is
+    primarily for demonstrative purposes.
     """
 
     """Directory where all reference files used by this card are stored"""
@@ -34,7 +32,7 @@ class BetterStandardTitleCard(CardType):
     USES_SEASON_TITLE = True
 
     """Standard class has standard archive name"""
-    ARCHIVE_NAME = 'standard'
+    ARCHIVE_NAME = 'Better Standard Style'
 
     """Source path for the gradient image overlayed over all title cards"""
     __GRADIENT_IMAGE: Path = REF_DIRECTORY / 'GRADIENT.png'
