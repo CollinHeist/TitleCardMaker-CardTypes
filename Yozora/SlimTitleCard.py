@@ -24,7 +24,7 @@ class SlimTitleCard(CardType):
     }
 
     """Default font and text color for episode title text"""
-    TITLE_FONT = str(RemoteFile('Yozora', 'ref/slim/Axiforma Regular.otf''))
+    TITLE_FONT = str(RemoteFile('Yozora', 'ref/slim/Axiforma Regular.otf'))
     TITLE_COLOR = '#FFFFFF'
 
     """Default characters to replace in the generic font"""
