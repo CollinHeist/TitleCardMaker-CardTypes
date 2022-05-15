@@ -33,7 +33,7 @@ class SlimTitleCard(CardType):
     """Whether this CardType uses season titles for archival purposes"""
     USES_SEASON_TITLE = True
 
-    """Standard class has standard archive name"""
+    """Slim class has specialized archive name"""
     ARCHIVE_NAME = 'Slim Style'
 
     """Source path for the gradient image overlayed over all title cards"""
@@ -381,10 +381,10 @@ class SlimTitleCard(CardType):
         :returns:   True if a custom font is indicated, False otherwise.
         """
 
-        return ((font.file != StandardTitleCard.TITLE_FONT)
+        return ((font.file != SlimTitleCard.TITLE_FONT)
             or (font.size != 1.0)
-            or (font.color != StandardTitleCard.TITLE_COLOR)
-            or (font.replacements != StandardTitleCard.FONT_REPLACEMENTS)
+            or (font.color != SlimTitleCard.TITLE_COLOR)
+            or (font.replacements != SlimTitleCard.FONT_REPLACEMENTS)
             or (font.vertical_shift != 0)
             or (font.interline_spacing != 0))
 
