@@ -24,7 +24,7 @@ class SlimTitleCard(CardType):
     }
 
     """Default font and text color for episode title text"""
-    TITLE_FONT = str(RemoteFile('Yozora', 'ref/slim/Axiforma-Regular.otf'))
+    TITLE_FONT = str(RemoteFile('Yozora', 'ref/slim/Comfortaa-Regular.ttf'))
     TITLE_COLOR = '#FFFFFF'
 
     """Default characters to replace in the generic font"""
@@ -40,8 +40,8 @@ class SlimTitleCard(CardType):
     __GRADIENT_IMAGE = REF_DIRECTORY / 'GRADIENT.png'
 
     """Default fonts and color for series count text"""
-    SEASON_COUNT_FONT = RemoteFile('Yozora', 'ref/slim/Axiforma-SemiBold.ttf')
-    EPISODE_COUNT_FONT = RemoteFile('Yozora', 'ref/slim/Axiforma-Regular.otf')
+    SEASON_COUNT_FONT = RemoteFile('Yozora', 'ref/slim/Comfortaa-SemiBold.ttf')
+    EPISODE_COUNT_FONT = RemoteFile('Yozora', 'ref/slim/Comfortaa-Regular.ttf')
     SERIES_COUNT_TEXT_COLOR = '#a5a5a5'
 
     """Paths to intermediate files that are deleted after the card is created"""
@@ -396,9 +396,8 @@ class SlimTitleCard(CardType):
             or (font.color != SlimTitleCard.TITLE_COLOR)
             or (font.replacements != SlimTitleCard.FONT_REPLACEMENTS)
             or (font.vertical_shift != 0)
-            or (font.interline_spacing != 0)
             or (font.kerning != 1.0)
-            or (font.stroke_width != 1.0))
+            or (font.interline_spacing != 0))
 
 
     @staticmethod
