@@ -2,6 +2,7 @@ from pathlib import Path
 from re import findall
 
 from modules.CardType import CardType
+from modules.RemoteFile import RemoteFile
 from modules.Debug import log
 
 class SlimTitleCard(CardType):
@@ -13,7 +14,7 @@ class SlimTitleCard(CardType):
     """
 
     """Directory where all reference files used by this card are stored"""
-    REF_DIRECTORY = Path(__file__).parent / 'ref' / 'slim'
+    REF_DIRECTORY = Path(__file__).parent.parent / 'ref'
 
     """Characteristics for title splitting by this class"""
     TITLE_CHARACTERISTICS = {
@@ -23,7 +24,7 @@ class SlimTitleCard(CardType):
     }
 
     """Default font and text color for episode title text"""
-    TITLE_FONT = str((REF_DIRECTORY / 'Axiforma Regular.otf').resolve())
+    TITLE_FONT = str(RemoteFile('Yozora', 'ref/slim/Axiforma Regular.otf''))
     TITLE_COLOR = '#FFFFFF'
 
     """Default characters to replace in the generic font"""
@@ -33,14 +34,14 @@ class SlimTitleCard(CardType):
     USES_SEASON_TITLE = True
 
     """Standard class has standard archive name"""
-    ARCHIVE_NAME = 'slim'
+    ARCHIVE_NAME = 'Slim Style'
 
     """Source path for the gradient image overlayed over all title cards"""
-    __GRADIENT_IMAGE: Path = REF_DIRECTORY / 'GRADIENT.png'
+    __GRADIENT_IMAGE = REF_DIRECTORY / 'GRADIENT.png'
 
     """Default fonts and color for series count text"""
-    SEASON_COUNT_FONT = REF_DIRECTORY / 'Axiforma Semibold.otf'
-    EPISODE_COUNT_FONT = REF_DIRECTORY / 'Axiforma Regular.otf'
+    SEASON_COUNT_FONT = RemoteFile('Yozora', 'ref/slim/Axiforma Semibold.otf')
+    EPISODE_COUNT_FONT = RemoteFile('Yozora', 'ref/slim/Axiforma Regular.otf')
     SERIES_COUNT_TEXT_COLOR = '#a5a5a5'
 
     """Paths to intermediate files that are deleted after the card is created"""
@@ -48,7 +49,7 @@ class SlimTitleCard(CardType):
     __GRADIENT_WITH_TITLE = CardType.TEMP_DIR / 'gradient_title.png'
     __SERIES_COUNT_TEXT = CardType.TEMP_DIR / 'series_count_text.png'
 
-    __slots__ = ('souce_file', 'output_file', 'title', 'season_text',
+    __slots__ = ('source_file', 'output_file', 'title', 'season_text',
                  'episode_text', 'font', 'font_size', 'title_color',
                  'hide_season', 'vertical_shift', 'interline_spacing')
 
