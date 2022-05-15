@@ -40,7 +40,7 @@ class SlimTitleCard(CardType):
     __GRADIENT_IMAGE = REF_DIRECTORY / 'GRADIENT.png'
 
     """Default fonts and color for series count text"""
-    SEASON_COUNT_FONT = RemoteFile('Yozora', 'ref/slim/Axiforma Semibold.otf')
+    SEASON_COUNT_FONT = RemoteFile('Yozora', 'ref/slim/Axiforma SemiBold.ttf')
     EPISODE_COUNT_FONT = RemoteFile('Yozora', 'ref/slim/Axiforma Regular.otf')
     SERIES_COUNT_TEXT_COLOR = '#a5a5a5'
 
