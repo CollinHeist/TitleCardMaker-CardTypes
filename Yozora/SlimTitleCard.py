@@ -228,7 +228,7 @@ class SlimTitleCard(CardType):
                     text added.
         """
 
-        vertical_shift = 85 + self.vertical_shift
+        vertical_shift = 100 + self.vertical_shift
 
         command = ' '.join([
             f'convert "{gradient_image.resolve()}"',
