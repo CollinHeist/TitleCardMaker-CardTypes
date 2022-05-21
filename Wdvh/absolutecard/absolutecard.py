@@ -24,7 +24,7 @@ class StandardTitleCard(CardType):
     }
 
     """Default font and text color for episode title text"""
-    TITLE_FONT = str((REF_DIRECTORY / 'TerminalDosis-Bold.ttf').resolve())
+    TITLE_FONT = str(RemoteFile(`Wdvh`, 'standardcard/TerminalDosis-Bold.ttf'))
     TITLE_COLOR = '#FFFFFF'
 
     """Default characters to replace in the generic font"""
