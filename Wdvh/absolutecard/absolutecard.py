@@ -59,7 +59,7 @@ class StandardTitleCard(CardType):
 
     def __init__(self, source: Path, output_file: Path, title: str,
                  episode_text: str, font: str,
-                 font_size: float, title_color: str, hide_season: bool,
+                 font_size: float, title_color: str,
                  blur: bool=False, vertical_shift: int=0,
                  interline_spacing: int=0, kerning: float=1.0,
                  stroke_width: float=1.0, *args, **kwargs) -> None:
