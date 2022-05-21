@@ -2,6 +2,7 @@ from pathlib import Path
 from re import findall
 
 from modules.CardType import CardType
+from modules.RemoteFile import RemoteFile
 from modules.Debug import log
 
 class StandardTitleCard(CardType):
