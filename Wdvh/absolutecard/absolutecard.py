@@ -449,8 +449,4 @@ class StandardTitleCard(CardType):
             )
 
         # Delete all intermediate images
-        images = [gradient_image, titled_image]
-        if not self.hide_season:
-            images.append(series_count_image)
-
-        self.image_magick.delete_intermediate_images(*images)
+        self.image_magick.delete_intermediate_images(gradient_image, titled_image)
