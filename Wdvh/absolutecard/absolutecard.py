@@ -267,47 +267,6 @@ class StandardTitleCard(CardType):
         return self.output_file
 
 
-    def _get_series_count_text_dimensions(self) -> dict:
-        """
-        Gets the series count text dimensions.
-        
-        :returns:   The series count text dimensions.
-        """
-
-        command = ' '.join([
-            f'convert -debug annotate xc: ',
-            *self.__series_count_text_global_effects(),
-            f'-font "{self.SEASON_COUNT_FONT.resolve()}"',
-            f'-gravity east',
-            *self.__series_count_text_effects(),
-            f'-annotate +1600+697.2 "{self.season_text} "',
-            f'-font "{self.EPISODE_COUNT_FONT.resolve()}"',
-            f'-gravity center',
-            *self.__series_count_text_effects(),
-            f'-annotate +0+689.5 "• "',
-            f'-gravity west',
-            *self.__series_count_text_effects(),
-            f'-annotate +1640+697.2 "{self.episode_text}"',
-            f'null: 2>&1'
-        ])
-
-        # Get text dimensions from the output
-        metrics = self.image_magick.run_get_output(command)
-        widths = list(map(int, findall(r'Metrics:.*width:\s+(\d+)', metrics)))
-        heights = list(map(int, findall(r'Metrics:.*height:\s+(\d+)', metrics)))
-
-        # Don't raise IndexError if no dimensions were found
-        if len(widths) < 2 or len(heights) < 2:
-            log.warning(f'Unable to identify font dimensions, file bug report')
-            widths = [370, 47, 357]
-            heights = [68, 83, 83]
-
-        return {
-            'width':    sum(widths),
-            'width1':   widths[0],
-            'width2':   widths[1],
-            'height':   max(heights)+25,
-        }
 
 
     @staticmethod
