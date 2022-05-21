@@ -6,11 +6,11 @@ These are modification of the [StandardTitleCard](https://github.com/CollinHeist
 
 ### standardcard
 
-<img src="https://github.com/Wdvh/tcm/blob/f769956d584be0436d225dd37902ad3a140b964e/standardcard/standardcardpreview.jpg" width="1000"/>
+<img src="https://github.com/Wdvh/TitleCardMaker-CardTypes/blob/4f174f4e284bcf30f350309917cc0109fd60454d/Wdvh/standardcard/standardcardpreview.jpg" width="1000"/>
 
 ### absolutecard
 
-<img src="https://github.com/Wdvh/tcm/blob/f769956d584be0436d225dd37902ad3a140b964e/absolutecard/absolutecardpreview.jpg" width="1000"/>
+<img src="https://github.com/Wdvh/TitleCardMaker-CardTypes/blob/4f174f4e284bcf30f350309917cc0109fd60454d/Wdvh/absolutecard/absolutecardpreview.jpg" width="1000"/>
 
 ## Features
 
