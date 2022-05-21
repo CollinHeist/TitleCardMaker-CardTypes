@@ -4,7 +4,7 @@ These are modification of the [StandardTitleCard](https://github.com/CollinHeist
 
 ## Example Cards
 
-## standardcard
+### standardcard
 
 <img src="https://github.com/Wdvh/tcm/blob/f769956d584be0436d225dd37902ad3a140b964e/standardcard/standardcardpreview.jpg" width="1000"/>
 
