@@ -31,7 +31,7 @@ class StandardTitleCard(CardType):
     FONT_REPLACEMENTS = {}
 
     """Whether this CardType uses season titles for archival purposes"""
-    USES_SEASON_TITLE = True
+    USES_SEASON_TITLE = False
 
     """Standard class has standard archive name"""
     ARCHIVE_NAME = 'standard'
