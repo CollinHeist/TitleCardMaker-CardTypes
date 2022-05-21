@@ -310,44 +310,6 @@ class StandardTitleCard(CardType):
         }
 
 
-    def _create_series_count_text_image(self, width: float, width1: float,
-                                        width2: float, height: float) -> Path:
-        """
-        Creates an image with only series count text. This image is transparent,
-        and not any wider than is necessary (as indicated by `dimensions`).
-        
-        :returns:   Path to the created image containing only series count text.
-        """
-
-        # Create text only transparent image of season count text
-        command = ' '.join([
-            f'convert -size "{width}x{height}"',
-            f'-alpha on',
-            f'-background transparent',
-            f'xc:transparent',
-            *self.__series_count_text_global_effects(),
-            f'-font "{self.SEASON_COUNT_FONT.resolve()}"',
-            *self.__series_count_text_black_stroke(),
-            f'-annotate +0+{height-25} "{self.season_text} "',
-            *self.__series_count_text_effects(),
-            f'-annotate +0+{height-25} "{self.season_text} "',
-            f'-font "{self.EPISODE_COUNT_FONT.resolve()}"',
-            *self.__series_count_text_black_stroke(),
-            f'-annotate +{width1}+{height-25-6.5} "•"',
-            *self.__series_count_text_effects(),
-            f'-annotate +{width1}+{height-25-6.5} "•"',
-            *self.__series_count_text_black_stroke(),
-            f'-annotate +{width1+width2}+{height-25} "{self.episode_text}"',
-            *self.__series_count_text_effects(),
-            f'-annotate +{width1+width2}+{height-25} "{self.episode_text}"',
-            f'"PNG32:{self.__SERIES_COUNT_TEXT.resolve()}"',
-        ])
-
-        self.image_magick.run(command)
-
-        return self.__SERIES_COUNT_TEXT
-
-
     @staticmethod
     def is_custom_font(font: 'Font') -> bool:
         """
