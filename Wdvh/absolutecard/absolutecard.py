@@ -429,18 +429,8 @@ class StandardTitleCard(CardType):
         # Create the output directory and any necessary parents 
         self.output_file.parent.mkdir(parents=True, exist_ok=True)
 
-        # If season text is hidden, just add episode text 
-        if self.hide_season:
-            self._add_series_count_text_no_season(titled_image)
-        else:
-            # If adding season text, create intermediate images and combine them
-            series_count_image = self._create_series_count_text_image(
-                **self._get_series_count_text_dimensions()
-            )
-            self._combine_titled_image_series_count_text(
-                titled_image,
-                series_count_image
-            )
+        # Add episode text 
+        self._add_series_count_text_no_season(titled_image)
 
         # Delete all intermediate images
         self.image_magick.delete_intermediate_images(gradient_image, titled_image)
