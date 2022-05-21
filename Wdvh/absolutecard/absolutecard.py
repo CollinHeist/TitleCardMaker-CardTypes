@@ -95,7 +95,6 @@ class StandardTitleCard(CardType):
 
         # Ensure characters that need to be escaped are
         self.title = self.image_magick.escape_chars(title)
-        self.season_text = self.image_magick.escape_chars(season_text.upper())
         self.episode_text = self.image_magick.escape_chars(episode_text.upper())
 
         self.font = font
