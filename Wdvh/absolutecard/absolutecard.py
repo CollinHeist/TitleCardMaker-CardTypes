@@ -348,34 +348,6 @@ class StandardTitleCard(CardType):
         return self.__SERIES_COUNT_TEXT
 
 
-    def _combine_titled_image_series_count_text(self, titled_image: Path,
-                                                series_count_image: Path)->Path:
-        """
-        Combine the titled image (image+gradient+episode title) and the series
-        count image (optional season number+optional dot+episode number) into a
-        single image. This is written into the output image for this object.
-
-        :param      titled_image:       Path to the titled image to add.
-        :param      series_count_image: Path to the series count transparent
-                                        image to add.
-
-        :returns:   Path to the created image (the output file).
-        """
-
-        command = ' '.join([
-            f'composite',
-            f'-gravity center',
-            f'-geometry +0+790.2',
-            f'"{series_count_image.resolve()}"',
-            f'"{titled_image.resolve()}"',
-            f'"{self.output_file.resolve()}"',
-        ])
-
-        self.image_magick.run(command)
-
-        return self.output_file
-
-
     @staticmethod
     def is_custom_font(font: 'Font') -> bool:
         """
