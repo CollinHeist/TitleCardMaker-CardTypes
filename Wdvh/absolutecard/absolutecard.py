@@ -77,8 +77,6 @@ class StandardTitleCard(CardType):
                                     font.
         :param  font_size:          Scalar to apply to the title font size.
         :param  title_color:        Color to use for the episode title.
-        :param  hide_season:        Whether to omit the season text (and joining
-                                    character) from the title card completely.
         :param  blur:               Whether to blur the source image.
         :param  vertical_shift:     Pixels to adjust title vertical shift by.
         :param  interline_spacing:  Pixels to adjust title interline spacing by.
