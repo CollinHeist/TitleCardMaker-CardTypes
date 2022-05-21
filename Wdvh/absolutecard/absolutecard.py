@@ -100,7 +100,6 @@ class StandardTitleCard(CardType):
         self.font = font
         self.font_size = font_size
         self.title_color = title_color
-        self.hide_season = hide_season
         self.blur = blur
         self.vertical_shift = vertical_shift
         self.interline_spacing = interline_spacing
