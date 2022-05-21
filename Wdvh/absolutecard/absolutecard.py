@@ -3,6 +3,7 @@ from re import findall
 
 from modules.CardType import CardType
 from modules.Debug import log
+from modules.RemoteFile import RemoteFile
 
 class StandardTitleCard(CardType):
     """
