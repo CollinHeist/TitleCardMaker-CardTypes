@@ -34,7 +34,7 @@ class WhiteTextAbsolute(CardType):
     USES_SEASON_TITLE = False
 
     """Standard class has standard archive name"""
-    ARCHIVE_NAME = 'standard'
+    ARCHIVE_NAME = 'Absolute Ordering Style'
     
     EPISODE_TEXT_FORMAT = "E{abs_number:02}"
     
