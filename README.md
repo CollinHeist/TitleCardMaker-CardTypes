@@ -17,7 +17,23 @@ In order to contribute your own custom Card Type to this repository, follow thes
 # Available Card Types
 | Creator | `card_type` Specification | Example |
 | :---: | :---: | :--- |
-| Wdvh | `Wdvh/WhiteTextStandard` | <img src="https://github.com/CollinHeist/TitleCardMaker-CardTypes/blob/485023a2b44addc7d565679b2f599805faeae966/Wdvh/whitetextstandardpreview.jpg" height="200"/> |
-| Wdvh | `Wdvh/WhiteTextAbsolute` | <img src="https://github.com/CollinHeist/TitleCardMaker-CardTypes/blob/485023a2b44addc7d565679b2f599805faeae966/Wdvh/whitetextabsolutepreview.jpg" height="200"/>
+| Wdvh | `Wdvh/WhiteTextStandard` | <img src="https://user-images.githubusercontent.com/17693271/169709359-ffc9e109-b327-44e9-b78a-7276f77fe917.jpg" height="200"/> |
+| Wdvh | `Wdvh/WhiteTextAbsolute` | <img src="https://user-images.githubusercontent.com/17693271/169709482-6bb023ab-4986-464e-88d6-0e05ad75d0d3.jpg" height="200"/>
 | Yozora | `Yozora/SlimTitleCard` | <img src="https://cdn.discordapp.com/attachments/975108033531219979/977614937457303602/S01E04.jpg" height="200"/> |
 | CollinHeist | `CollinHeist/BetterStandardTitleCard` | <img src="https://user-images.githubusercontent.com/17693271/169563977-a4711317-afc8-426f-ab85-9f4c76037dc0.jpg" height="200"/> |
+
+# Using a Custom Card Type
+The [available card types](#available-card-types) can all be specified within the Maker by adding the following:
+
+```yaml
+card_type: {USER/CARDTYPE}
+```
+
+To a specific series, template, or library. For example, to create Breaking Bad in the example card type, it might look like:
+
+```yaml
+series:
+  Breaking Bad:
+    year: 2008
+    card_type: CollinHeist/BetterStandardTitleCard
+```
