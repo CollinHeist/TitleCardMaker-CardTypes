@@ -5,7 +5,7 @@ from modules.CardType import CardType
 from modules.Debug import log
 from modules.RemoteFile import RemoteFile
 
-class AbsoluteCard(CardType):
+class WhiteTextAbsolute(CardType):
     """
     This class describes a type of CardType that produces the 'generic' title
     cards based on Reddit user /u/UniversalPolymath. This card supports 
