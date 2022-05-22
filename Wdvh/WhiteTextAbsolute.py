@@ -7,10 +7,7 @@ from modules.RemoteFile import RemoteFile
 
 class WhiteTextAbsolute(CardType):
     """
-    This class describes a type of CardType that produces the 'generic' title
-    cards based on Reddit user /u/UniversalPolymath. This card supports 
-    customization of every aspect of the card, but does not use any arbitrary
-    data.
+    This class describes Wdvh's absolute CardType intended for absolute episode ordering
     """
 
     """Directory where all reference files used by this card are stored"""
