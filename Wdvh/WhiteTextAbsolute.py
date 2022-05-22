@@ -140,7 +140,7 @@ class WhiteTextAbsolute(CardType):
 
         return [
             f'-fill white',
-            f'-stroke #062A40',
+            f'-stroke "#062A40"',
             f'-strokewidth {stroke_width}',
         ]
 
