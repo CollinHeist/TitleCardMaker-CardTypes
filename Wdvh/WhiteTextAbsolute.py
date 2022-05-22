@@ -264,8 +264,6 @@ class WhiteTextAbsolute(CardType):
         return self.output_file
 
 
-
-
     @staticmethod
     def is_custom_font(font: 'Font') -> bool:
         """
