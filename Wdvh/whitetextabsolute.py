@@ -39,7 +39,7 @@ class AbsoluteCard(CardType):
     EPISODE_TEXT_FORMAT = "E{abs_number:02}"
     
     """Source path for the gradient image overlayed over all title cards"""
-    __GRADIENT_IMAGE = REF_DIRECTORY / 'GRADIENTABS.png'
+    __GRADIENT_IMAGE = RemoteFile('Wdvh', 'GRADIENTABS.png')
 
     """Default fonts and color for series count text"""
     SEASON_COUNT_FONT = REF_DIRECTORY / 'Sequel-Neue.otf'
