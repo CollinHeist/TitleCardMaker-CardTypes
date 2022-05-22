@@ -391,10 +391,10 @@ class WhiteTextStandard(CardType):
         :returns:   True if a custom font is indicated, False otherwise.
         """
 
-        return ((font.file != StandardTitleCard.TITLE_FONT)
+        return ((font.file != WhiteTextStandard.TITLE_FONT)
             or (font.size != 1.0)
-            or (font.color != StandardTitleCard.TITLE_COLOR)
-            or (font.replacements != StandardTitleCard.FONT_REPLACEMENTS)
+            or (font.color != WhiteTextStandard.TITLE_COLOR)
+            or (font.replacements != WhiteTextStandard.FONT_REPLACEMENTS)
             or (font.vertical_shift != 0)
             or (font.interline_spacing != 0)
             or (font.kerning != 1.0)
