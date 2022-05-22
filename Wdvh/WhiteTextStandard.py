@@ -5,7 +5,7 @@ from modules.CardType import CardType
 from modules.RemoteFile import RemoteFile
 from modules.Debug import log
 
-class StandardTitleCard(CardType):
+class WhiteTextStandard(CardType):
     """
     This class describes a type of CardType that produces the 'generic' title
     cards based on Reddit user /u/UniversalPolymath. This card supports 
