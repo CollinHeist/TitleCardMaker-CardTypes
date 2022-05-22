@@ -17,7 +17,7 @@ In order to contribute your own custom Card Type to this repository, follow thes
 # Available Card Types
 | Creator | `card_type` Specification | Example |
 | :---: | :---: | :--- |
-| CollinHeist | `CollinHeist/BetterStandardTitleCard` | <img src="https://user-images.githubusercontent.com/17693271/169563977-a4711317-afc8-426f-ab85-9f4c76037dc0.jpg" height="200"/> |
-| Yozora | `Yozora/SlimTitleCard` | <img src="https://cdn.discordapp.com/attachments/975108033531219979/977614937457303602/S01E04.jpg" height="200"/> |
 | Wdvh | `Wdvh/WhiteTextStandard` | <img src="https://github.com/CollinHeist/TitleCardMaker-CardTypes/blob/485023a2b44addc7d565679b2f599805faeae966/Wdvh/whitetextstandardpreview.jpg" height="200"/> |
 | Wdvh | `Wdvh/WhiteTextAbsolute` | <img src="https://github.com/CollinHeist/TitleCardMaker-CardTypes/blob/485023a2b44addc7d565679b2f599805faeae966/Wdvh/whitetextabsolutepreview.jpg" height="200"/>
+| Yozora | `Yozora/SlimTitleCard` | <img src="https://cdn.discordapp.com/attachments/975108033531219979/977614937457303602/S01E04.jpg" height="200"/> |
+| CollinHeist | `CollinHeist/BetterStandardTitleCard` | <img src="https://user-images.githubusercontent.com/17693271/169563977-a4711317-afc8-426f-ab85-9f4c76037dc0.jpg" height="200"/> |
