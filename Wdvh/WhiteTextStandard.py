@@ -415,7 +415,7 @@ class WhiteTextStandard(CardType):
         :returns:   True if custom season titles are indicated, False otherwise.
         """
 
-        standard_etf = StandardTitleCard.EPISODE_TEXT_FORMAT.upper()
+        standard_etf = WhiteTextStandard.EPISODE_TEXT_FORMAT.upper()
 
         return (custom_episode_map or
                 episode_text_format.upper() != standard_etf)
