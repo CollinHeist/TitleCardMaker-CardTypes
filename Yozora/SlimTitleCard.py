@@ -37,7 +37,7 @@ class SlimTitleCard(CardType):
     ARCHIVE_NAME = 'Slim Style'
 
     """Source path for the gradient image overlayed over all title cards"""
-    __GRADIENT_IMAGE = REF_DIRECTORY / 'GRADIENT.png'
+    __GRADIENT_IMAGE = RemoteFile('Yozora', 'ref/slim/GRADIENT.png')
 
     """Default fonts and color for series count text"""
     SEASON_COUNT_FONT = RemoteFile('Yozora', 'ref/slim/Comfortaa-SemiBold.ttf')
