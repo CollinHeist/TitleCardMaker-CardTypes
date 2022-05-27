@@ -32,18 +32,15 @@ class WhiteTextTitleOnly(CardType):
     """Standard class has standard archive name"""
     ARCHIVE_NAME = 'Title Only Style'
     
-    EPISODE_TEXT_FORMAT = "E{abs_number:02}"
-    
     """Source path for the gradient image overlayed over all title cards"""
     __GRADIENT_IMAGE = REF_DIRECTORY / 'GRADIENT.png'
 
     """Paths to intermediate files that are deleted after the card is created"""
     __SOURCE_WITH_GRADIENT = CardType.TEMP_DIR / 'source_gradient.png'
 
-    __slots__ = ('source_file', 'output_file', 'title',
-                 'font', 'font_size', 'title_color',
-                 'hide_season', 'blur', 'vertical_shift', 'interline_spacing',
-                 'kerning', 'stroke_width')
+    __slots__ = ('source_file', 'output_file', 'title', 'font', 'font_size',
+                 'title_color', 'hide_season', 'blur', 'vertical_shift',
+                 'interline_spacing', 'kerning', 'stroke_width')
 
 
     def __init__(self, source: Path, output_file: Path, title: str,
@@ -59,10 +56,8 @@ class WhiteTextTitleOnly(CardType):
 
         :param  source:             Source image.
         :param  output_file:        Output file.
-        :param  title_top_line:     Episode title.
-        :param  font:               Font to use for the episode title. MUST be a
-                                    a valid ImageMagick font, or filepath to a
-                                    font.
+        :param  title:              Episode title.
+        :param  font:               Font to use for the episode title.
         :param  font_size:          Scalar to apply to the title font size.
         :param  title_color:        Color to use for the episode title.
         :param  blur:               Whether to blur the source image.
