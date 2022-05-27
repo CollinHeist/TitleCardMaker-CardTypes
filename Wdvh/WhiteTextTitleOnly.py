@@ -1,5 +1,4 @@
 from pathlib import Path
-from re import findall
 
 from modules.CardType import CardType
 from modules.Debug import log
@@ -7,7 +6,7 @@ from modules.RemoteFile import RemoteFile
 
 class WhiteTextTitleOnly(CardType):
     """
-    This class describes Wdvh's absolute CardType intended for Mini Series with titles Like Episode 1 or Part 1 
+    This class describes Wdvh's title only title CardType
     """
 
     """Directory where all reference files used by this card are stored"""
@@ -38,24 +37,17 @@ class WhiteTextTitleOnly(CardType):
     """Source path for the gradient image overlayed over all title cards"""
     __GRADIENT_IMAGE = RemoteFile('Wdvh', 'GRADIENTABS.png')
 
-    """Default fonts and color for series count text"""
-    SEASON_COUNT_FONT = REF_DIRECTORY / 'Sequel-Neue.otf'
-    EPISODE_COUNT_FONT = REF_DIRECTORY / 'Sequel-Neue.otf'
-    SERIES_COUNT_TEXT_COLOR = '#FFFFFF'
-
     """Paths to intermediate files that are deleted after the card is created"""
     __SOURCE_WITH_GRADIENT = CardType.TEMP_DIR / 'source_gradient.png'
-    __GRADIENT_WITH_TITLE = CardType.TEMP_DIR / 'gradient_title.png'
-    __SERIES_COUNT_TEXT = CardType.TEMP_DIR / 'series_count_text.png'
 
     __slots__ = ('source_file', 'output_file', 'title',
-                 'episode_text', 'font', 'font_size', 'title_color',
+                 'font', 'font_size', 'title_color',
                  'hide_season', 'blur', 'vertical_shift', 'interline_spacing',
                  'kerning', 'stroke_width')
 
 
     def __init__(self, source: Path, output_file: Path, title: str,
-                 episode_text: str, font: str,
+                 font: str,
                  font_size: float, title_color: str,
                  blur: bool=False, vertical_shift: int=0,
                  interline_spacing: int=0, kerning: float=1.0,
@@ -68,7 +60,6 @@ class WhiteTextTitleOnly(CardType):
         :param  source:             Source image.
         :param  output_file:        Output file.
         :param  title_top_line:     Episode title.
-        :param  episode_text:       Text to use as episode count text.
         :param  font:               Font to use for the episode title. MUST be a
                                     a valid ImageMagick font, or filepath to a
                                     font.
@@ -92,7 +83,6 @@ class WhiteTextTitleOnly(CardType):
 
         # Ensure characters that need to be escaped are
         self.title = self.image_magick.escape_chars(title)
-        self.episode_text = self.image_magick.escape_chars(episode_text.upper())
 
         self.font = font
         self.font_size = font_size
@@ -142,50 +132,6 @@ class WhiteTextTitleOnly(CardType):
         ]
 
 
-    def __series_count_text_global_effects(self) -> list:
-        """
-        ImageMagick commands for global text effects applied to all series count
-        text (season/episode count and dot).
-        
-        :returns:   List of ImageMagick commands.
-        """
-
-        return [
-            f'-kerning 5.42',
-            f'-pointsize 120',
-        ]
-
-
-    def __series_count_text_black_stroke(self) -> list:
-        """
-        ImageMagick commands for adding the necessary black stroke effects to
-        series count text.
-        
-        :returns:   List of ImageMagick commands.
-        """
-
-        return [
-            f'-fill white',
-            f'-stroke "#062A40"',
-            f'-strokewidth 2',
-        ]
-
-
-    def __series_count_text_effects(self) -> list:
-        """
-        ImageMagick commands for adding the necessary text effects to the series
-        count text.
-        
-        :returns:   List of ImageMagick commands.
-        """
-
-        return [
-            f'-fill white',
-            f'-stroke "#062A40"',
-            f'-strokewidth 2',
-        ]
-
-
     def _add_gradient(self) -> Path:
         """
         Add the static gradient to this object's source image.
@@ -230,32 +176,6 @@ class WhiteTextTitleOnly(CardType):
             f'-annotate +0+{vertical_shift} "{self.title}"',
             f'-fill "{self.title_color}"',
             f'-annotate +0+{vertical_shift} "{self.title}"',
-            f'"{self.__GRADIENT_WITH_TITLE.resolve()}"',
-        ])
-
-        self.image_magick.run(command)
-
-        return self.__GRADIENT_WITH_TITLE
-
-
-    def _add_series_count_text_no_season(self, titled_image: Path) -> Path:
-        """
-        Adds the series count text without season title/number.
-        
-        :param      titled_image:  The titled image to add text to.
-
-        :returns:   Path to the created image (the output file).
-        """
-
-        command = ' '.join([
-            f'convert "{titled_image.resolve()}"',
-            *self.__series_count_text_global_effects(),
-            f'-font "{self.EPISODE_COUNT_FONT.resolve()}"',
-            f'-gravity center',
-            *self.__series_count_text_black_stroke(),
-            f'-annotate -14000-7500 "{self.episode_text}"',
-            *self.__series_count_text_effects(),
-            f'-annotate -14000-7500 "{self.episode_text}"',
             f'"{self.output_file.resolve()}"',
         ])
 
@@ -275,10 +195,10 @@ class WhiteTextTitleOnly(CardType):
         :returns:   True if a custom font is indicated, False otherwise.
         """
 
-        return ((font.file != WhiteTextAbsolute.TITLE_FONT)
+        return ((font.file != WhiteTextTitleOnly.TITLE_FONT)
             or (font.size != 1.0)
-            or (font.color != WhiteTextAbsolute.TITLE_COLOR)
-            or (font.replacements != WhiteTextAbsolute.FONT_REPLACEMENTS)
+            or (font.color != WhiteTextTitleOnly.TITLE_COLOR)
+            or (font.replacements != WhiteTextTitleOnly.FONT_REPLACEMENTS)
             or (font.vertical_shift != 0)
             or (font.interline_spacing != 0)
             or (font.kerning != 1.0)
@@ -296,7 +216,7 @@ class WhiteTextTitleOnly(CardType):
                                             customized.
         :param      episode_text_format:    The episode text format in use.
         
-        :returns:   True if custom season titles are indicated, False otherwise.
+        :returns:   False, as season titles are not used by this card.
         """
 
         return False
@@ -308,17 +228,14 @@ class WhiteTextTitleOnly(CardType):
         defined title card.
         """
         
+        # Create the output directory and any necessary parents 
+        self.output_file.parent.mkdir(parents=True, exist_ok=True)
+
         # Add the gradient to the source image (always)
         gradient_image = self._add_gradient()
 
         # Add either one or two lines of episode text 
-        titled_image = self._add_title_text(gradient_image)
-
-        # Create the output directory and any necessary parents 
-        self.output_file.parent.mkdir(parents=True, exist_ok=True)
-
-        # Add episode text 
-        self._add_series_count_text_no_season(titled_image)
+        self._add_title_text(gradient_image)
 
         # Delete all intermediate images
-        self.image_magick.delete_intermediate_images(gradient_image, titled_image)
+        self.image_magick.delete_intermediate_images(gradient_image)
