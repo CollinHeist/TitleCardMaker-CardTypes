@@ -35,7 +35,7 @@ class WhiteTextTitleOnly(CardType):
     EPISODE_TEXT_FORMAT = "E{abs_number:02}"
     
     """Source path for the gradient image overlayed over all title cards"""
-    __GRADIENT_IMAGE = RemoteFile('Wdvh', 'GRADIENTABS.png')
+    __GRADIENT_IMAGE = REF_DIRECTORY / 'GRADIENT.png'
 
     """Paths to intermediate files that are deleted after the card is created"""
     __SOURCE_WITH_GRADIENT = CardType.TEMP_DIR / 'source_gradient.png'
