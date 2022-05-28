@@ -7,8 +7,10 @@ from modules.RemoteFile import RemoteFile
 
 class WhiteTextBroadcast(CardType):
     """
-    This class describes lyonza's CardType based on Wvdh's "WhiteTextBroadcast" card to show SxxExx format instead of absolute numbering
+    This class describes lyonza's CardType based on Wvdh's
+    "WhiteTextBroadcast" card to show SxxExx format instead of absolute numbering.
     """
+
 
     """Directory where all reference files used by this card are stored"""
     REF_DIRECTORY = Path(__file__).parent.parent / 'ref'
@@ -34,9 +36,7 @@ class WhiteTextBroadcast(CardType):
     """Standard class has standard archive name"""
     ARCHIVE_NAME = 'Broadcast Ordering Style'
     
-    SEASON_TEXT_FORMAT = "S{season_number:02}"
-    
-    EPISODE_TEXT_FORMAT = "E{episode_number:02}"
+    EPISODE_TEXT_FORMAT = "S{season_number:02}E{episode_number:02}"
     
     """Source path for the gradient image overlayed over all title cards"""
     __GRADIENT_IMAGE = REF_DIRECTORY / 'GRADIENT.png'
