@@ -12,6 +12,10 @@ These are modification of the [StandardTitleCard](https://github.com/CollinHeist
 
 <img src="https://github.com/CollinHeist/TitleCardMaker-CardTypes/blob/485023a2b44addc7d565679b2f599805faeae966/Wdvh/whitetextabsolutepreview.jpg" width="1000"/>
 
+### WhiteTextTitleOnly
+
+<img src="https://github.com/Wdvh/TitleCardMaker-CardTypes/blob/110c2ec729dbb20d8ed461e7cc5a07c54540f842/Wdvh/WhiteTextTitleOnlypreview.jpg" width="1000"/>
+
 ## Features
 
 - Uses the TerminalDosis-Bold font for Titles and Sequel Neue for the season and episode numbers.
