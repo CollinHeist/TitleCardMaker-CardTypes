@@ -8,7 +8,7 @@ from modules.RemoteFile import RemoteFile
 class WhiteTextBroadcast(CardType):
     """
     This class describes lyonza's CardType based on Wvdh's
-    "WhiteTextBroadcast" card to show SxxExx format instead of absolute numbering.
+    "WhiteTextBroadcast" card to show SxxExx format instead of absolute numbering
     """
 
 
