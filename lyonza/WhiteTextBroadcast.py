@@ -248,7 +248,6 @@ class WhiteTextBroadcast(CardType):
         Adds the series count text without season title/number.
         
         :param      titled_image:  The titled image to add text to.
-
         :returns:   Path to the created image (the output file).
         """
 
@@ -256,11 +255,11 @@ class WhiteTextBroadcast(CardType):
             f'convert "{titled_image.resolve()}"',
             *self.__series_count_text_global_effects(),
             f'-font "{self.EPISODE_COUNT_FONT.resolve()}"',
-            f'-gravity northwest',
+            f'-gravity west',
             *self.__series_count_text_black_stroke(),
-            f'-annotate "{self.episode_text}"',
+            f'-annotate +100-750 "{self.episode_text}"',
             *self.__series_count_text_effects(),
-            f'-annotate "{self.episode_text}"',
+            f'-annotate +100-750 "{self.episode_text}"',
             f'"{self.output_file.resolve()}"',
         ])
 
