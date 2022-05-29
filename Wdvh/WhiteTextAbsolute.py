@@ -151,7 +151,6 @@ class WhiteTextAbsolute(CardType):
         """
 
         return [
-            f'-fill white',
             f'-kerning 5.42',
             f'-pointsize 120',
         ]
