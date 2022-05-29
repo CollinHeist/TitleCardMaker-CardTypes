@@ -276,11 +276,9 @@ class WhiteTextBroadcast(CardType):
         """
 
         return ((font.file != WhiteTextBroadcast.TITLE_FONT)
-
             or (font.size != 1.0)
             or (font.color != WhiteTextBroadcast.TITLE_COLOR)
             or (font.replacements != WhiteTextBroadcast.FONT_REPLACEMENTS)
-
             or (font.vertical_shift != 0)
             or (font.interline_spacing != 0)
             or (font.kerning != 1.0)
