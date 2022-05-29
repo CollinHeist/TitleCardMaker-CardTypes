@@ -39,7 +39,7 @@ class WhiteTextBroadcast(CardType):
     EPISODE_TEXT_FORMAT = "S{season_number:02}E{episode_number:02}"
     
     """Source path for the gradient image overlayed over all title cards"""
-    __GRADIENT_IMAGE = REF_DIRECTORY / 'GRADIENT.png'
+    __GRADIENT_IMAGE = RemoteFile('lyonza', 'GRADIENTABS.png')
 
     """Default fonts and color for series count text"""
     SEASON_COUNT_FONT = REF_DIRECTORY / 'Sequel-Neue.otf'
@@ -51,15 +51,15 @@ class WhiteTextBroadcast(CardType):
     __GRADIENT_WITH_TITLE = CardType.TEMP_DIR / 'gradient_title.png'
     __SERIES_COUNT_TEXT = CardType.TEMP_DIR / 'series_count_text.png'
 
-    __slots__ = ('source_file', 'output_file', 'title', 'season_text',
+    __slots__ = ('source_file', 'output_file', 'title',
                  'episode_text', 'font', 'font_size', 'title_color',
                  'hide_season', 'blur', 'vertical_shift', 'interline_spacing',
                  'kerning', 'stroke_width')
 
 
     def __init__(self, source: Path, output_file: Path, title: str,
-                 season_text: str, episode_text: str, font: str,
-                 font_size: float, title_color: str, hide_season: bool,
+                 episode_text: str, font: str,
+                 font_size: float, title_color: str,
                  blur: bool=False, vertical_shift: int=0,
                  interline_spacing: int=0, kerning: float=1.0,
                  stroke_width: float=1.0, *args, **kwargs) -> None:
@@ -67,12 +67,9 @@ class WhiteTextBroadcast(CardType):
         Initialize the TitleCardMaker object. This primarily just stores
         instance variables for later use in `create()`. If the provided font
         does not have a character in the title text, a space is used instead.
-
         :param  source:             Source image.
         :param  output_file:        Output file.
         :param  title_top_line:     Episode title.
-        :param  season_text:        Text to use as season count text. Ignored if
-                                    hide_season is True.        
         :param  episode_text:       Text to use as episode count text.
         :param  font:               Font to use for the episode title. MUST be a
                                     a valid ImageMagick font, or filepath to a
@@ -219,7 +216,6 @@ class WhiteTextBroadcast(CardType):
     def _add_title_text(self, gradient_image: Path) -> Path:
         """
         Adds episode title text to the provide image.
-
         :param      gradient_image: The image with gradient added.
         
         :returns:   Path to the created image that has a gradient and the title
@@ -279,10 +275,10 @@ class WhiteTextBroadcast(CardType):
         :returns:   True if a custom font is indicated, False otherwise.
         """
 
-        return ((font.file != WhiteTextBroadcast.TITLE_FONT)
+        return ((font.file != WhiteTextAbsolute.TITLE_FONT)
             or (font.size != 1.0)
-            or (font.color != WhiteTextBroadcast.TITLE_COLOR)
-            or (font.replacements != WhiteTextBroadcast.FONT_REPLACEMENTS)
+            or (font.color != WhiteTextAbsolute.TITLE_COLOR)
+            or (font.replacements != WhiteTextAbsolute.FONT_REPLACEMENTS)
             or (font.vertical_shift != 0)
             or (font.interline_spacing != 0)
             or (font.kerning != 1.0)
