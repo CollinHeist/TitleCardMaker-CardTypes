@@ -135,11 +135,11 @@ class WhiteTextBroadcast(CardType):
         :returns:   List of ImageMagick commands.
         """
 
-        stroke_width = 4.0 * self.stroke_width
+        stroke_width = 3.0 * self.stroke_width
 
         return [
-            f'-fill white',
-            f'-stroke "#062A40"',
+            f'-fill black',
+            f'-stroke black',
             f'-strokewidth {stroke_width}',
         ]
 
@@ -167,9 +167,9 @@ class WhiteTextBroadcast(CardType):
         """
 
         return [
-            f'-fill white',
-            f'-stroke "#062A40"',
-            f'-strokewidth 2',
+            f'-fill black',
+            f'-stroke black',
+            f'-strokewidth 6',
         ]
 
 
@@ -183,8 +183,8 @@ class WhiteTextBroadcast(CardType):
 
         return [
             f'-fill white',
-            f'-stroke "#062A40"',
-            f'-strokewidth 2',
+            f'-stroke black',
+            f'-strokewidth 0.75',
         ]
 
 

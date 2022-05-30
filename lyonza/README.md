@@ -6,4 +6,4 @@ The WhiteTextAbsolute uses the different font, font sizes and the episode title 
 
 This card uses the same positioning but has the option to have the season number included.
 
-<img src="https://user-images.githubusercontent.com/1803189/170856525-4b6fa8c7-ef16-494d-9e93-b2403f2cbfd1.png"/>
+<img src="https://user-images.githubusercontent.com/1803189/170878776-2ebd14fe-0880-4863-a7a8-0c3fac1ecdc7.jpg"/>
