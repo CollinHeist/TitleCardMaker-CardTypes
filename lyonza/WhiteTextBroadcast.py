@@ -42,8 +42,8 @@ class WhiteTextBroadcast(CardType):
     __GRADIENT_IMAGE = RemoteFile('lyonza', 'GRADIENTABS.png')
 
     """Default fonts and color for series count text"""
-    SEASON_COUNT_FONT = REF_DIRECTORY / 'Sequel-Neue.otf'
-    EPISODE_COUNT_FONT = REF_DIRECTORY / 'Sequel-Neue.otf'
+    SEASON_COUNT_FONT = RemoteFile('lyonza', 'TerminalDosis-Bold.ttf')
+    EPISODE_COUNT_FONT = RemoteFile('lyonza', 'TerminalDosis-Bold.ttf')
     SERIES_COUNT_TEXT_COLOR = '#FFFFFF'
 
     """Paths to intermediate files that are deleted after the card is created"""
