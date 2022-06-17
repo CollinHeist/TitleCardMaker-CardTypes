@@ -120,7 +120,7 @@ class WhiteTextStandard(CardType):
         """
 
         font_size = 180 * self.font_size
-        interline_spacing = -17 + self.interline_spacing
+        interline_spacing = -70 + self.interline_spacing
         kerning = -1.25 * self.kerning
 
         return [
