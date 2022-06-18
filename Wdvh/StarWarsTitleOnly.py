@@ -14,7 +14,7 @@ class StarWarsTitleOnly (CardType):
     """
 
     """Directory where all reference files used by this card are stored"""
-    REF_DIRECTORY = Path(__file__).parent / 'ref' / 'star_wars'
+    REF_DIRECTORY = Path(__file__).parent.parent / 'ref' / 'star_wars'
 
     """Characteristics for title splitting by this class"""
     TITLE_CHARACTERISTICS = {
@@ -35,9 +35,6 @@ class StarWarsTitleOnly (CardType):
     """Default episode text format string"""
     EPISODE_TEXT_FORMAT = ' '
 
-    """Color of the episode/episode number text"""
-    EPISODE_TEXT_COLOR = '#AB8630'
-
     """Standard font replacements for the title font"""
     FONT_REPLACEMENTS = {'Ō': 'O', 'ō': 'o'}
 
@@ -47,16 +44,11 @@ class StarWarsTitleOnly (CardType):
     """Path to the reference star image to overlay on all source images"""
     __STAR_GRADIENT_IMAGE = REF_DIRECTORY / 'star_gradient.png'
 
-    """Path to the font to use for the episode/episode number text """
-    EPISODE_TEXT_FONT = REF_DIRECTORY / 'HelveticaNeue.ttc'
-    EPISODE_NUMBER_FONT = REF_DIRECTORY / 'HelveticaNeue-Bold.ttf'
-
     """Paths to intermediate files that are deleted after the card is created"""
     __SOURCE_WITH_STARS = CardType.TEMP_DIR / 'source_gradient.png'
 
 
-    __slots__ = ('source_file', 'output_file', 'title', 'episode_prefix',
-                 'episode_text', 'hide_episode_text', 'blur')
+    __slots__ = ('source_file', 'output_file', 'title', 'blur')
 
     
     def __init__(self, source: Path, output_file: Path, title: str, blur: bool=False, *args, **kwargs) -> None:
@@ -66,7 +58,6 @@ class StarWarsTitleOnly (CardType):
         :param      source:             Source image for this card.
         :param      output_file:        Output filepath for this card.
         :param      title:              The title for this card.
-        :param      episode_text:       The episode text for this card.
         :param      blur:               Whether to blur the source image.
         :param      args and kwargs:    Unused arguments to permit generalized
                                         function calls for any CardType.
@@ -84,47 +75,6 @@ class StarWarsTitleOnly (CardType):
 
         # Store blur flag
         self.blur = blur
-
-
-    def __modify_episode_text(self, text: str) -> str:
-        """
-        Modify the given episode text (such as "EPISODE 1" or "CHAPTER 1") to fit
-        the theme of this card. This removes preface text like episode, chapter,
-        or part; and converts numeric episode numbers to their text equivalent.
-        For example:
-
-        >>> self.__modify_episode_text('Episode 9')
-        'NINE'
-        >>> self.__modify_episode_text('PART 14')
-        'FOURTEEN'
-        
-        :param      text:   The episode text to modify.
-        
-        :returns:   The modified episode text with preface text removed, numbers
-                    replaced with words, and converted to uppercase. If numbers
-                    cannot be replaced, that step is skipped.
-        """
-
-        # Convert to uppercase, remove space padding
-        modified_text = text.upper().strip()
-
-        # Remove preface text - if CHAPTER or EPISODE, set object episode prefix
-        if match(rf'CHAPTER\s*(\d+)', modified_text):
-            self.episode_prefix = 'CHAPTER'
-            modified_text = modified_text.replace('CHAPTER', '')
-        elif match(rf'EPISODE\s*(\d+)', modified_text):
-            self.episode_prefix = 'EPISODE'
-            modified_text = modified_text.replace('EPISODE', '')
-        elif match(rf'PART\s*(\d+)', modified_text):
-            self.episode_prefix = 'PART'
-            modified_text = modified_text.replace('PART', '')
-
-        try:
-            # Only digit episode text remains, return as a number (i.e. "two")
-            return num2words(int(modified_text.strip())).upper()
-        except ValueError:
-            # Not just a digit, return as-is
-            return modified_text.strip()
 
 
     def __add_star_gradient(self, source: Path) -> Path:
@@ -193,27 +143,6 @@ class StarWarsTitleOnly (CardType):
         return self.output_file
 
 
-    def __add_all_text(self, gradient_source: Path) -> Path:
-        """
-        Add the title, "EPISODE" prefix, and episode text to the given image.
-        
-        :param      gradient_source:    Source image with starry gradient
-                                        overlaid.
-        
-        :returns:   Path to the created image (the output file).
-        """
-
-        command = ' '.join([
-            f'convert "{gradient_source.resolve()}"',
-            *self.__add_title_text(),
-            f'"{self.output_file.resolve()}"',
-        ])
-
-        self.image_magick.run(command)
-
-        return self.output_file
-
-
     @staticmethod
     def is_custom_font(font: 'Font') -> bool:
         """
@@ -240,19 +169,10 @@ class StarWarsTitleOnly (CardType):
                                             generalized function calls for any
                                             CardType.
         
-        :returns:   True if custom season titles are indicated, False otherwise.
+        :returns:   False, as season titles are not utilized.
         """
-
-        generic_formats = (
-            'episode {episode_number}',
-            'chapter {episode_number}',
-            'part {episode_number}',
-            'episode {abs_number}',
-            'chapter {abs_number}',
-            'part {abs_number}',
-        )
         
-        return episode_text_format.lower() not in generic_formats
+        return False
 
 
     def create(self) -> None:
@@ -262,7 +182,7 @@ class StarWarsTitleOnly (CardType):
         star_image = self.__add_star_gradient(self.source_file)
 
         # Add text to starry image, result is output
-        self.__add_all_text(star_image)
+        self.__add_only_title(star_image)
 
         # Delete all intermediate images
         self.image_magick.delete_intermediate_images(star_image)
