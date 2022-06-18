@@ -51,14 +51,14 @@ class WhiteTextStandard(CardType):
 
     __slots__ = ('source_file', 'output_file', 'title', 'season_text',
                  'episode_text', 'font', 'font_size', 'title_color',
-                 'hide_season', 'blur', 'vertical_shift', 'interline_spacing',
-                 'kerning', 'stroke_width')
+                 'hide_season', 'separator', 'blur', 'vertical_shift', 
+                 'interline_spacing', 'kerning', 'stroke_width')
 
 
     def __init__(self, source: Path, output_file: Path, title: str,
                  season_text: str, episode_text: str, font: str,
                  font_size: float, title_color: str, hide_season: bool,
-                 blur: bool=False, vertical_shift: int=0,
+                 separator: str='-', blur: bool=False, vertical_shift: int=0,
                  interline_spacing: int=0, kerning: float=1.0,
                  stroke_width: float=1.0, *args, **kwargs) -> None:
         """
@@ -72,6 +72,8 @@ class WhiteTextStandard(CardType):
         :param  season_text:        Text to use as season count text. Ignored if
                                     hide_season is True.
         :param  episode_text:       Text to use as episode count text.
+        :param  separator:          Character to use to separate season and
+                                    episode text.
         :param  font:               Font to use for the episode title. MUST be a
                                     a valid ImageMagick font, or filepath to a
                                     font.
@@ -104,6 +106,7 @@ class WhiteTextStandard(CardType):
         self.font_size = font_size
         self.title_color = title_color
         self.hide_season = hide_season
+        self.separator = separator
         self.blur = blur
         self.vertical_shift = vertical_shift
         self.interline_spacing = interline_spacing
@@ -281,6 +284,7 @@ class WhiteTextStandard(CardType):
         command = ' '.join([
             f'convert -debug annotate xc: ',
             *self.__series_count_text_global_effects(),
+            f'-annotate +0+689.5 "{self.separator} "',
             f'-font "{self.SEASON_COUNT_FONT.resolve()}"',
             f'-gravity east',
             *self.__series_count_text_effects(),
@@ -333,7 +337,9 @@ class WhiteTextStandard(CardType):
             f'-font "{self.SEASON_COUNT_FONT.resolve()}"',
             *self.__series_count_text_black_stroke(),
             f'-annotate +0+{height-25} "{self.season_text} "',
+            f'-annotate +{width1}+{height-25-6.5} "{self.separator}"',
             *self.__series_count_text_effects(),
+            f'-annotate +{width1}+{height-25-6.5} "{self.separator}"',
             f'-annotate +0+{height-25} "{self.season_text} "',
             f'-font "{self.EPISODE_COUNT_FONT.resolve()}"',
             *self.__series_count_text_black_stroke(),
