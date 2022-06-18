@@ -268,9 +268,9 @@ class WhiteTextStandard(CardType):
             f'-font "{self.EPISODE_COUNT_FONT.resolve()}"',
             f'-gravity center',
             *self.__series_count_text_black_stroke(),
-            f'-annotate +0+720 "{series_count_text}"',
+            f'-annotate +0+800 "{series_count_text}"',
             *self.__series_count_text_effects(),
-            f'-annotate +0+720 "{series_count_text}"',
+            f'-annotate +0+800 "{series_count_text}"',
             f'"{self.output_file.resolve()}"',
         ])
 

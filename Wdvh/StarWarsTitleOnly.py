@@ -42,7 +42,7 @@ class StarWarsTitleOnly (CardType):
     USES_SEASON_TITLE = False
 
     """Path to the reference star image to overlay on all source images"""
-    __STAR_GRADIENT_IMAGE = REF_DIRECTORY / 'star_gradient.png'
+    __STAR_GRADIENT_IMAGE = REF_DIRECTORY / 'star_gradient_title_only.png'
 
     """Paths to intermediate files that are deleted after the card is created"""
     __SOURCE_WITH_STARS = CardType.TEMP_DIR / 'source_gradient.png'
@@ -118,7 +118,7 @@ class StarWarsTitleOnly (CardType):
             f'-kerning 0.5',
             f'-interline-spacing 20',
             f'-fill "{self.TITLE_COLOR}"',
-            f'-annotate +320+829 "{self.title}"',
+            f'-annotate +320+1529 "{self.title}"',
         ]
 
 
