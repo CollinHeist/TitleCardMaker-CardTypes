@@ -26,7 +26,7 @@ A variation of the standard Star Wars Card for Shows Like Obi-Wan Kenobi that us
 
 ### Star Wars Title Only
 
-<img src="https://github.com/CollinHeist/TitleCardMaker-CardTypes/blob/110c2ec729dbb20d8ed461e7cc5a07c54540f842/Wdvh/S01E07.jpg" width="1000"/>
+<img src="https://github.com/Wdvh/TitleCardMaker-CardTypes/blob/c14f1b3759983a63e66982ba6517e2bc3f651dca/Wdvh/S01E01.jpg" width="1000"/>
 
 ## Features
 
