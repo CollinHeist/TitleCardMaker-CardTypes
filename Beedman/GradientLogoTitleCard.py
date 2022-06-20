@@ -229,7 +229,7 @@ class GradientLogoTitleCard(CardType):
             f'-resize "{self.TITLE_CARD_SIZE}^"',
             f'-extent "{self.TITLE_CARD_SIZE}"',
             f'-blur {self.BLUR_PROFILE}' if self.blur else '',
-            f'"{self.__GRADIENT_IMAGE.resolve()}"',
+            f'"{self.__GRADIENT_IMAGE}"',
             f'-background None',
             f'-layers Flatten',
             f'"{self.__SOURCE_WITH_GRADIENT.resolve()}"',
