@@ -5,6 +5,7 @@ from num2words import num2words
 
 from modules.CardType import CardType
 from modules.Debug import log
+from modules.RemoteFile import RemoteFile
 
 class StarWarsTitleOnly (CardType):
     """
