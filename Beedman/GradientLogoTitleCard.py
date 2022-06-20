@@ -37,7 +37,7 @@ class GradientLogoTitleCard(CardType):
     ARCHIVE_NAME = 'gradient logo'
 
     """Source path for the gradient image overlayed over all title cards"""
-    __GRADIENT_IMAGE = REF_DIRECTORY / 'leftgradient.png'
+    __GRADIENT_IMAGE = str(RemoteFile('Beedman', 'leftgradient.png'))
 
     """Default fonts and color for series count text"""
     SEASON_COUNT_FONT = REF_DIRECTORY / 'Proxima Nova Semibold.otf'
