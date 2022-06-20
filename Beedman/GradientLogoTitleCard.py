@@ -3,17 +3,18 @@ from re import findall
 
 from modules.CardType import CardType
 from modules.Debug import log
+from modules.RemoteFile import RemoteFile
 
 class GradientLogoTitleCard(CardType):
     """
-    This class describes a type of CardType that produces the 'generic' title
-    cards based on Reddit user /u/UniversalPolymath. This card supports 
-    customization of every aspect of the card, but does not use any arbitrary
-    data.
+    This class describes a type of CardType created by Beedman, and is 
+    a modification of the StandardTitleCard class with a different gradient 
+    overlay, featuring a logo and left-aligned title text
     """
     
     """Directory where all reference files used by this card are stored"""
-    REF_DIRECTORY = Path(__file__).parent / 'ref'
+    REF_DIRECTORY = Path(__file__).parent.parent / 'ref'
+
 
     """Characteristics for title splitting by this class"""
     TITLE_CHARACTERISTICS = {
@@ -33,8 +34,9 @@ class GradientLogoTitleCard(CardType):
     """Whether this CardType uses season titles for archival purposes"""
     USES_SEASON_TITLE = True
 
-    """Standard class has standard archive name"""
-    ARCHIVE_NAME = 'gradient logo'
+    """Archive name for this card type"""
+    ARCHIVE_NAME = 'Gradient Logo Style'
+
 
     """Source path for the gradient image overlayed over all title cards"""
     __GRADIENT_IMAGE = str(RemoteFile('Beedman', 'leftgradient.png'))
@@ -243,19 +245,6 @@ class GradientLogoTitleCard(CardType):
         
         :returns:   Path to the created image.
         """
-
-        # Get height of the resized logo to determine offset
-        # I don't think this is even used now but I left it in just in case
-        #height_command = ' '.join([
-         #   f'identify',
-          #  f'-format "%h"',
-           # f'"{resized_logo.resolve()}"',
-        #])
-
-        #height = int(self.image_magick.run_get_output(height_command))
-
-        # Just set everything to be 50 pixels from the edge
-        #offset = 50
 
         command = ' '.join([
             f'convert "{gradient_image.resolve()}"',
@@ -497,9 +486,6 @@ class GradientLogoTitleCard(CardType):
 
         # Add either one or two lines of episode text 
         titled_image = self._add_title_text(gradient_image)
-
-        # Create the output directory and any necessary parents 
-        self.output_file.parent.mkdir(parents=True, exist_ok=True)
 
         # If season text is hidden, just add episode text 
         if self.hide_season:
