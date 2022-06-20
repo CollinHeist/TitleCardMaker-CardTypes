@@ -42,7 +42,7 @@ class StarWarsTitleOnly (CardType):
     USES_SEASON_TITLE = False
 
     """Path to the reference star image to overlay on all source images"""
-    __STAR_GRADIENT_IMAGE = REF_DIRECTORY / 'star_gradient_title_only.png'
+    __STAR_GRADIENT_IMAGE = RemoteFile('Wdvh', 'star_gradient_title_only.png')
 
     """Paths to intermediate files that are deleted after the card is created"""
     __SOURCE_WITH_STARS = CardType.TEMP_DIR / 'source_gradient.png'
