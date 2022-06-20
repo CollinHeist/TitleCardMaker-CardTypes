@@ -9,6 +9,7 @@ In order to contribute your own custom Card Type to this repository, follow thes
 3. Inside that folder, create a `README.md` file with at least one example and a description of your card (as well as any nuances / features)
 4. Add your custom Card Type Python class (that follows the specifications outlined [here](https://github.com/CollinHeist/TitleCardMaker/wiki/Custom-Card-Types#creating-a-custom-card-type)) to your username folder
    * Be sure to [read the wiki](https://github.com/CollinHeist/TitleCardMaker-CardTypes/wiki) on the specific syntax required for your CardType to work as a remote asset.
+   * It can be helpful to look at my example (`CollinHeist/BetterStandardTitleCard`), or an existing card type, for syntax help
 5. Edit the below [table](https://github.com/CollinHeist/TitleCardMaker-CardTypes#available-card-types) with your username and an example of your card
 6. Submit a pull request to this repository
 
@@ -24,7 +25,6 @@ In order to contribute your own custom Card Type to this repository, follow thes
 | Yozora | `Yozora/SlimTitleCard` | <img src="https://cdn.discordapp.com/attachments/975108033531219979/977614937457303602/S01E04.jpg" height="200"/> |
 | lyonza | `lyonza/WhiteTextBroadcast` | <img src="https://user-images.githubusercontent.com/1803189/171089736-f60a6ff2-0914-432a-a45d-145323d39c42.jpg" height="200"/> |
 | Beedman | `Beedman/GradientLogoTitleCard` | <img src="https://github.com/Beedman/TitleCardMaker-CardTypes/blob/master/Beedman/The%20Afterparty%20(2022)%20-%20S01E02%20-%20Brett.jpg?raw=true" height="200"/> |
-| CollinHeist | `CollinHeist/BetterStandardTitleCard` | <img src="https://user-images.githubusercontent.com/17693271/169563977-a4711317-afc8-426f-ab85-9f4c76037dc0.jpg" height="200"/> |
 
 # Using a Custom Card Type
 The [available card types](#available-card-types) can all be specified within the Maker by adding the following:
