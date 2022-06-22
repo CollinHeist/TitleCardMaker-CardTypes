@@ -298,11 +298,11 @@ class GradientLogoTitleCard(CardType):
             f'convert "{titled_image.resolve()}"',
             *self.__series_count_text_global_effects(),
             f'-font "{self.EPISODE_COUNT_FONT.resolve()}"',
-            f'-gravity center',
+            f'-gravity southwest',
             *self.__series_count_text_black_stroke(),
-            f'-annotate +0+697.2 "{self.episode_text}"',
+            f'-annotate +50+50 "{self.episode_text}"',
             *self.__series_count_text_effects(),
-            f'-annotate +0+697.2 "{self.episode_text}"',
+            f'-annotate +50+50 "{self.episode_text}"',
             f'"{self.output_file.resolve()}"',
         ])
 
