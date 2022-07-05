@@ -229,8 +229,8 @@ class BarebonesTitleCard(CardType):
 
 
     @staticmethod
-    def is_custom_season_titles(episode_text_format: str,
-                                *args, **kwargs) -> bool:
+    def is_custom_season_titles(custom_episode_map: bool, 
+                                episode_text_format: str) -> bool:
         """
         Determines whether the given attributes constitute custom or generic
         season titles.
