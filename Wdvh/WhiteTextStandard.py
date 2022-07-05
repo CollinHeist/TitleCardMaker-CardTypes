@@ -47,18 +47,17 @@ class WhiteTextStandard(CardType):
     """Paths to intermediate files that are deleted after the card is created"""
     __SOURCE_WITH_GRADIENT = CardType.TEMP_DIR / 'source_gradient.png'
     __GRADIENT_WITH_TITLE = CardType.TEMP_DIR / 'gradient_title.png'
-    __SERIES_COUNT_TEXT = CardType.TEMP_DIR / 'series_count_text.png'
 
     __slots__ = ('source_file', 'output_file', 'title', 'season_text',
                  'episode_text', 'font', 'font_size', 'title_color',
-                 'hide_season', 'blur', 'vertical_shift', 'interline_spacing',
-                 'kerning', 'stroke_width')
+                 'hide_season', 'separator', 'blur', 'vertical_shift', 
+                 'interline_spacing', 'kerning', 'stroke_width')
 
 
     def __init__(self, source: Path, output_file: Path, title: str,
                  season_text: str, episode_text: str, font: str,
                  font_size: float, title_color: str, hide_season: bool,
-                 blur: bool=False, vertical_shift: int=0,
+                 separator: str='-', blur: bool=False, vertical_shift: int=0,
                  interline_spacing: int=0, kerning: float=1.0,
                  stroke_width: float=1.0, *args, **kwargs) -> None:
         """
@@ -72,6 +71,8 @@ class WhiteTextStandard(CardType):
         :param  season_text:        Text to use as season count text. Ignored if
                                     hide_season is True.
         :param  episode_text:       Text to use as episode count text.
+        :param  separator:          Character to use to separate season and
+                                    episode text.
         :param  font:               Font to use for the episode title. MUST be a
                                     a valid ImageMagick font, or filepath to a
                                     font.
@@ -104,6 +105,7 @@ class WhiteTextStandard(CardType):
         self.font_size = font_size
         self.title_color = title_color
         self.hide_season = hide_season
+        self.separator = separator
         self.blur = blur
         self.vertical_shift = vertical_shift
         self.interline_spacing = interline_spacing
@@ -120,7 +122,7 @@ class WhiteTextStandard(CardType):
         """
 
         font_size = 180 * self.font_size
-        interline_spacing = -17 + self.interline_spacing
+        interline_spacing = -70 + self.interline_spacing
         kerning = -1.25 * self.kerning
 
         return [
@@ -245,14 +247,20 @@ class WhiteTextStandard(CardType):
         return self.__GRADIENT_WITH_TITLE
 
 
-    def _add_series_count_text_no_season(self, titled_image: Path) -> Path:
+    def _add_series_count_text(self, titled_image: Path) -> Path:
         """
-        Adds the series count text without season title/number.
+        Adds the (optional) season and episode text.
         
         :param      titled_image:  The titled image to add text to.
 
         :returns:   Path to the created image (the output file).
         """
+        
+        if self.hide_season:
+            series_count_text = self.episode_text
+        else:
+            series_count_text = (f'{self.season_text} {self.separator} '
+                                 f'{self.episode_text}')
 
         command = ' '.join([
             f'convert "{titled_image.resolve()}"',
@@ -260,118 +268,9 @@ class WhiteTextStandard(CardType):
             f'-font "{self.EPISODE_COUNT_FONT.resolve()}"',
             f'-gravity center',
             *self.__series_count_text_black_stroke(),
-            f'-annotate +0+697.2 "{self.episode_text}"',
+            f'-annotate +0+800 "{series_count_text}"',
             *self.__series_count_text_effects(),
-            f'-annotate +0+697.2 "{self.episode_text}"',
-            f'"{self.output_file.resolve()}"',
-        ])
-
-        self.image_magick.run(command)
-
-        return self.output_file
-
-
-    def _get_series_count_text_dimensions(self) -> dict:
-        """
-        Gets the series count text dimensions.
-        
-        :returns:   The series count text dimensions.
-        """
-
-        command = ' '.join([
-            f'convert -debug annotate xc: ',
-            *self.__series_count_text_global_effects(),
-            f'-font "{self.SEASON_COUNT_FONT.resolve()}"',
-            f'-gravity east',
-            *self.__series_count_text_effects(),
-            f'-annotate +1600+697.2 "{self.season_text} "',
-            f'-font "{self.EPISODE_COUNT_FONT.resolve()}"',
-            f'-gravity center',
-            *self.__series_count_text_effects(),
-            f'-annotate +0+689.5 "• "',
-            f'-gravity west',
-            *self.__series_count_text_effects(),
-            f'-annotate +1640+697.2 "{self.episode_text}"',
-            f'null: 2>&1'
-        ])
-
-        # Get text dimensions from the output
-        metrics = self.image_magick.run_get_output(command)
-        widths = list(map(int, findall(r'Metrics:.*width:\s+(\d+)', metrics)))
-        heights = list(map(int, findall(r'Metrics:.*height:\s+(\d+)', metrics)))
-
-        # Don't raise IndexError if no dimensions were found
-        if len(widths) < 2 or len(heights) < 2:
-            log.warning(f'Unable to identify font dimensions, file bug report')
-            widths = [370, 47, 357]
-            heights = [68, 83, 83]
-
-        return {
-            'width':    sum(widths),
-            'width1':   widths[0],
-            'width2':   widths[1],
-            'height':   max(heights)+25,
-        }
-
-
-    def _create_series_count_text_image(self, width: float, width1: float,
-                                        width2: float, height: float) -> Path:
-        """
-        Creates an image with only series count text. This image is transparent,
-        and not any wider than is necessary (as indicated by `dimensions`).
-        
-        :returns:   Path to the created image containing only series count text.
-        """
-
-        # Create text only transparent image of season count text
-        command = ' '.join([
-            f'convert -size "{width}x{height}"',
-            f'-alpha on',
-            f'-background transparent',
-            f'xc:transparent',
-            *self.__series_count_text_global_effects(),
-            f'-font "{self.SEASON_COUNT_FONT.resolve()}"',
-            *self.__series_count_text_black_stroke(),
-            f'-annotate +0+{height-25} "{self.season_text} "',
-            *self.__series_count_text_effects(),
-            f'-annotate +0+{height-25} "{self.season_text} "',
-            f'-font "{self.EPISODE_COUNT_FONT.resolve()}"',
-            *self.__series_count_text_black_stroke(),
-            f'-annotate +{width1}+{height-25-6.5} "•"',
-            *self.__series_count_text_effects(),
-            f'-annotate +{width1}+{height-25-6.5} "•"',
-            *self.__series_count_text_black_stroke(),
-            f'-annotate +{width1+width2}+{height-25} "{self.episode_text}"',
-            *self.__series_count_text_effects(),
-            f'-annotate +{width1+width2}+{height-25} "{self.episode_text}"',
-            f'"PNG32:{self.__SERIES_COUNT_TEXT.resolve()}"',
-        ])
-
-        self.image_magick.run(command)
-
-        return self.__SERIES_COUNT_TEXT
-
-
-    def _combine_titled_image_series_count_text(self, titled_image: Path,
-                                                series_count_image: Path)->Path:
-        """
-        Combine the titled image (image+gradient+episode title) and the series
-        count image (optional season number+optional dot+episode number) into a
-        single image. This is written into the output image for this object.
-
-        :param      titled_image:       Path to the titled image to add.
-        :param      series_count_image: Path to the series count transparent
-                                        image to add.
-
-        :returns:   Path to the created image (the output file).
-        """
-
-        command = ' '.join([
-            f'composite',
-            f'-gravity center',
-            f'-geometry +0+790.2',
-            f'"{series_count_image.resolve()}"',
-            f'"{titled_image.resolve()}"',
+            f'-annotate +0+800 "{series_count_text}"',
             f'"{self.output_file.resolve()}"',
         ])
 
@@ -433,25 +332,8 @@ class WhiteTextStandard(CardType):
         # Add either one or two lines of episode text 
         titled_image = self._add_title_text(gradient_image)
 
-        # Create the output directory and any necessary parents 
-        self.output_file.parent.mkdir(parents=True, exist_ok=True)
-
-        # If season text is hidden, just add episode text 
-        if self.hide_season:
-            self._add_series_count_text_no_season(titled_image)
-        else:
-            # If adding season text, create intermediate images and combine them
-            series_count_image = self._create_series_count_text_image(
-                **self._get_series_count_text_dimensions()
-            )
-            self._combine_titled_image_series_count_text(
-                titled_image,
-                series_count_image
-            )
+        # Add season/episode text
+        self._add_series_count_text(titled_image)
 
         # Delete all intermediate images
-        images = [gradient_image, titled_image]
-        if not self.hide_season:
-            images.append(series_count_image)
-
-        self.image_magick.delete_intermediate_images(*images)
+        self.image_magick.delete_intermediate_images(gradient_image, titled_image)
