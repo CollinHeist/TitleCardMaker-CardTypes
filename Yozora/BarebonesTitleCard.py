@@ -5,7 +5,7 @@ from num2words import num2words
 
 from modules.CardType import CardType
 from modules.Debug import log
-from modules.RemoveFile import RemoteFile
+from modules.RemoteFile import RemoteFile
 
 class BarebonesTitleCard(CardType):
     """
@@ -31,7 +31,7 @@ class BarebonesTitleCard(CardType):
     """Characteristics of the episode text"""
     EPISODE_TEXT_FORMAT = 'EPISODE {episode_number}'
     EPISODE_TEXT_COLOR = '#FFFFFF'
-    EPISODE_TEXT_FONT = RemoteFile('Yozora', 'ref/barebones/Montserrat-SemiBold.ttf'
+    EPISODE_TEXT_FONT = RemoteFile('Yozora', 'ref/barebones/Montserrat-SemiBold.ttf')
 
     """Whether this class uses season titles for the purpose of archives"""
     USES_SEASON_TITLE = False
