@@ -7,13 +7,11 @@ from modules.RemoteFile import RemoteFile
 
 class RetroTitleCard(CardType):
     """
-    This class describes lyonza's CardType based on Wvdh's
-    "WhiteTextBroadcast" card to show SxxExx format instead of absolute numbering
     """
 
 
     """Directory where all reference files used by this card are stored"""
-    REF_DIRECTORY = Path(__file__).parent / 'ref' / 'retro'
+    REF_DIRECTORY = Path(__file__).parent.parent / 'ref' / 'retro'
 
     """Characteristics for title splitting by this class"""
     TITLE_CHARACTERISTICS = {
@@ -37,12 +35,12 @@ class RetroTitleCard(CardType):
     EPISODE_TEXT_FORMAT = "S{season_number:02}E{episode_number:02}"
     
     """Source path for the gradient image overlayed over all title cards"""
-    __GRADIENT_IMAGE_PLAY = REF_DIRECTORY / 'gradient_play.png'
-    __GRADIENT_IMAGE_REWIND = REF_DIRECTORY / 'gradient_rewind.png'
+    __GRADIENT_IMAGE_PLAY = RemoteFile('Yozora', 'ref/retro/gradient_play.png')
+    __GRADIENT_IMAGE_REWIND = RemoteFile('Yozora', 'ref/retro/gradient_rewind.png')
 
     """Default fonts and color for series count text"""
-    SEASON_COUNT_FONT = REF_DIRECTORY / 'retro.ttf'
-    EPISODE_COUNT_FONT = REF_DIRECTORY / 'retro.ttf'
+    SEASON_COUNT_FONT = RemoteFile('Yozora', 'ref/retro/retro.ttf')
+    EPISODE_COUNT_FONT = RemoteFile('Yozora', 'ref/retro/retro.ttf')
     SERIES_COUNT_TEXT_COLOR = '#FFFFFF'
 
     """Paths to intermediate files that are deleted after the card is created"""
@@ -53,7 +51,7 @@ class RetroTitleCard(CardType):
     __slots__ = ('source_file', 'output_file', 'title',
                  'episode_text', 'font', 'font_size', 'title_color',
                  'hide_season', 'blur', 'vertical_shift', 'interline_spacing',
-                 'kerning', 'stroke_width')
+                 'watched', 'kerning', 'stroke_width')
 
 
     def __init__(self, source: Path, output_file: Path, title: str,

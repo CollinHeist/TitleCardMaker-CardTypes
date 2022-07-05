@@ -5,6 +5,7 @@ from num2words import num2words
 
 from modules.CardType import CardType
 from modules.Debug import log
+from modules.RemoveFile import RemoteFile
 
 class BarebonesTitleCard(CardType):
     """
@@ -13,7 +14,7 @@ class BarebonesTitleCard(CardType):
     """
 
     """Directory where all reference files used by this card are stored"""
-    REF_DIRECTORY = Path(__file__).parent / 'ref' / 'barebones'
+    REF_DIRECTORY = Path(__file__).parent.parent / 'ref' / 'barebones'
 
     """Characteristics for title splitting by this class"""
     TITLE_CHARACTERISTICS = {
@@ -23,14 +24,14 @@ class BarebonesTitleCard(CardType):
     }
 
     """Characteristics of the default title font"""
-    TITLE_FONT = str((REF_DIRECTORY/'Montserrat-Bold.ttf').resolve())
+    TITLE_FONT = str(RemoteFile('Yozora', 'ref/barebones/Montserrat-Bold.ttf'))
     TITLE_COLOR = '#FFFFFF'
     FONT_REPLACEMENTS = {}
 
     """Characteristics of the episode text"""
     EPISODE_TEXT_FORMAT = 'EPISODE {episode_number}'
     EPISODE_TEXT_COLOR = '#FFFFFF'
-    EPISODE_TEXT_FONT = REF_DIRECTORY / 'Montserrat-SemiBold.ttf'
+    EPISODE_TEXT_FONT = RemoteFile('Yozora', 'ref/barebones/Montserrat-SemiBold.ttf'
 
     """Whether this class uses season titles for the purpose of archives"""
     USES_SEASON_TITLE = False
@@ -119,45 +120,6 @@ class BarebonesTitleCard(CardType):
         self.image_magick.run(command)
 
         return self.__RESIZED_SOURCE
-
-    def __modify_episode_text(self, text: str) -> str:
-        """
-        Modify the given episode text (such as "EPISODE 1" or "CHAPTER 1") to fit
-        the theme of this card. This removes preface text like episode, chapter,
-        or part; and converts numeric episode numbers to their text equivalent.
-        For example:
-        >>> self.__modify_episode_text('Episode 9')
-        'NINE'
-        >>> self.__modify_episode_text('PART 14')
-        'FOURTEEN'
-        
-        :param      text:   The episode text to modify.
-        
-        :returns:   The modified episode text with preface text removed, numbers
-                    replaced with words, and converted to uppercase. If numbers
-                    cannot be replaced, that step is skipped.
-        """
-
-        # Convert to uppercase, remove space padding
-        modified_text = text.upper().strip()
-
-        # Remove preface text - if CHAPTER or EPISODE, set object episode prefix
-        if match(rf'CHAPTER\s*(\d+)', modified_text):
-            self.episode_prefix = 'CHAPTER'
-            modified_text = modified_text.replace('CHAPTER', '')
-        elif match(rf'EPISODE\s*(\d+)', modified_text):
-            self.episode_prefix = 'EPISODE'
-            modified_text = modified_text.replace('EPISODE', '')
-        elif match(rf'PART\s*(\d+)', modified_text):
-            self.episode_prefix = 'PART'
-            modified_text = modified_text.replace('PART', '')
-
-        try:
-            # Only digit episode text remains, return as a number (i.e. "two")
-            return num2words(int(modified_text.strip())).upper()
-        except ValueError:
-            # Not just a digit, return as-is
-            return modified_text.strip()
 
     def __add_title_text(self) -> list:
         """
