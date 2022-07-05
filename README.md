@@ -20,6 +20,10 @@ In order to contribute your own custom Card Type to this repository, follow thes
 | Wdvh | `Wdvh/WhiteTextStandard` | <img src="https://user-images.githubusercontent.com/17693271/169709359-ffc9e109-b327-44e9-b78a-7276f77fe917.jpg" height="200"/> |
 | Wdvh | `Wdvh/WhiteTextAbsolute` | <img src="https://user-images.githubusercontent.com/17693271/169709482-6bb023ab-4986-464e-88d6-0e05ad75d0d3.jpg" height="200"/>
 | Yozora | `Yozora/SlimTitleCard` | <img src="https://cdn.discordapp.com/attachments/975108033531219979/977614937457303602/S01E04.jpg" height="200"/> |
+| Yozora | `Yozora/BarebonesTitleCard` | <img src="https://i.ibb.co/tBPsxpc/Westworld-2016-S04-E01.jpg" height="200"/> |
+| Yozora | `Yozora/RetroTitleCard` | <img src="https://i.ibb.co/0tnJJ6P/Stranger-Things-2016-S03-E02.jpg" height="200"/> |
+
+
 | CollinHeist | `CollinHeist/BetterStandardTitleCard` | <img src="https://user-images.githubusercontent.com/17693271/169563977-a4711317-afc8-426f-ab85-9f4c76037dc0.jpg" height="200"/> |
 
 # Using a Custom Card Type
