@@ -21,7 +21,7 @@ class RetroTitleCard(CardType):
     }
 
     """Default font characteristics for the title text"""
-    TITLE_FONT = str((REF_DIRECTORY / 'retro.ttf').resolve())
+    TITLE_FONT = str(RemoteFile('Yozora', 'ref/retro/retro.ttf'))
     TITLE_COLOR = '#FFFFFF'
     FONT_REPLACEMENTS = {'[': '(', ']': ')', '(': '[', ')': ']', '―': '-',
                          '…': '...'}
