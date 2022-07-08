@@ -1,4 +1,4 @@
-# `StandardAllBoldCard`
+# `CollinHeist/StandardAllBoldCard`
 ## Description
 This is _very_ slight modification of the [StandardTitleCard](https://github.com/CollinHeist/TitleCardMaker/wiki/StandardTitleCard) that uses the same (bolded) font for both the season _and_ episode text - as opposed to _just_ the season text on the `StandardTitleCard`.
 
@@ -8,7 +8,7 @@ This is _very_ slight modification of the [StandardTitleCard](https://github.com
 ## Features
 Exactly the same features as the basic [StandardTitleCard](https://github.com/CollinHeist/TitleCardMaker/wiki/StandardTitleCard).
 
-# `BetterStandardTitleCard`
+# `CollinHeist/BetterStandardTitleCard`
 ## Description
 This is an example custom CardType mainly meant to showcase the ability to remotely load card types. It's an intentionally bad-looking modification of the [StandardTitleCard](https://github.com/CollinHeist/TitleCardMaker/wiki/StandardTitleCard).
 
