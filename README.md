@@ -27,6 +27,7 @@ In order to contribute your own custom Card Type to this repository, follow thes
 | Yozora | `Yozora/RetroTitleCard` | <img src="https://i.ibb.co/0tnJJ6P/Stranger-Things-2016-S03-E02.jpg" height="200"/> |
 | lyonza | `lyonza/WhiteTextBroadcast` | <img src="https://user-images.githubusercontent.com/1803189/171089736-f60a6ff2-0914-432a-a45d-145323d39c42.jpg" height="200"/> |
 | Beedman | `Beedman/GradientLogoTitleCard` | <img src="https://github.com/Beedman/TitleCardMaker-CardTypes/blob/master/Beedman/The%20Afterparty%20(2022)%20-%20S01E02%20-%20Brett.jpg?raw=true" height="200"/> |
+| CollinHeist | `CollinHeist/StandardAllBoldCard` | <img src="https://user-images.githubusercontent.com/17693271/178048413-7d4c72a4-398a-489b-8974-df7299fad6ad.jpg" height="200"/> |
 
 # Using a Custom Card Type
 The [available card types](#available-card-types) can all be specified within the Maker by adding the following:
