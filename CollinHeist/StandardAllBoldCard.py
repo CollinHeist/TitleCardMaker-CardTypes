@@ -31,7 +31,7 @@ class StandardAllBoldCard(CardType):
     USES_SEASON_TITLE = True
 
     """Standard class has standard archive name"""
-    ARCHIVE_NAME = 'standard'
+    ARCHIVE_NAME = 'All Bold Style'
 
     """Default fonts and color for series count text"""
     COUNT_FONT = REF_DIRECTORY / 'Proxima Nova Semibold.otf'
