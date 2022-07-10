@@ -217,7 +217,7 @@ class WhiteTextTitleOnlyLogo(CardType):
             f'-annotate +0+{vertical_shift} "{self.title}"',
             f'-fill "{self.title_color}"',
             f'-annotate +0+{vertical_shift} "{self.title}"',
-            f'"{self.__LOGO_WITH_TITLE.resolve()}"',
+            f'"{self.output_file.resolve()}"',
         ])
 
         self.image_magick.run(command)
