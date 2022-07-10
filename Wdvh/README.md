@@ -20,6 +20,7 @@ These are modification of the [StandardTitleCard](https://github.com/CollinHeist
 
 - Uses the TerminalDosis-Bold font for Titles and Sequel Neue for the season and episode numbers.
 - Has White as font color with a dark blue stroke.
+
 ## Star Wars
 
 A variation of the standard Star Wars Card for Shows Like Obi-Wan Kenobi that use Part/Chapter and similar as episode titles.
@@ -31,3 +32,23 @@ A variation of the standard Star Wars Card for Shows Like Obi-Wan Kenobi that us
 ## Features
 
 - uses a different position and gradient for the title.
+
+## White Text Logo Cards
+
+### White Text Standard Logo
+
+<img src="https://github.com/Wdvh/TitleCardMaker-CardTypes/blob/3c0de1939e43d0f9f45a2fb47b87adc60d9aba27/Wdvh/WhiteTextStandardLogoPreview.jpg" width="1000"/>
+
+### White Text Absolute Logo
+
+<img src="https://github.com/Wdvh/TitleCardMaker-CardTypes/blob/3c0de1939e43d0f9f45a2fb47b87adc60d9aba27/Wdvh/WhiteTextAbsoluteLogoPreview.jpg" width="1000"/>
+
+### White Text Title Only Logo
+
+<img src="https://github.com/Wdvh/TitleCardMaker-CardTypes/blob/3c0de1939e43d0f9f45a2fb47b87adc60d9aba27/Wdvh/WhiteTextTitleOnlyLogoPreview.jpg" width="1000"/>
+
+## Features
+
+- All 3 cards use only the show logo and a background color instead of the usual still from the episode.
+- Logo and color must be defined in the series.yml.
+- Can be used to make a non spoiler version for unwatched episodes.
