@@ -18,18 +18,18 @@ In order to contribute your own custom Card Type to this repository, follow thes
 # Available Card Types
 | Creator | `card_type` Specification | Example |
 | :---: | :---: | :--- |
-| Wdvh | `Wdvh/StarWarsTitleOnly` | <img src="https://github.com/Wdvh/TitleCardMaker-CardTypes/blob/c14f1b3759983a63e66982ba6517e2bc3f651dca/Wdvh/S01E01.jpg" height="200"/> |
 | Wdvh | `Wdvh/WhiteTextStandard` | <img src="https://user-images.githubusercontent.com/17693271/169709359-ffc9e109-b327-44e9-b78a-7276f77fe917.jpg" height="200"/> |
 | Wdvh | `Wdvh/WhiteTextAbsolute` | <img src="https://user-images.githubusercontent.com/17693271/169709482-6bb023ab-4986-464e-88d6-0e05ad75d0d3.jpg" height="200"/> |
-| Wdvh | `Wdvh/WhiteTextTitleOnly` | <img src="https://github.com/CollinHeist/TitleCardMaker-CardTypes/blob/110c2ec729dbb20d8ed461e7cc5a07c54540f842/Wdvh/S01E07.jpg" height="200"/> |
-| Wdvh | `Wdvh/WhiteTextStandardLogo` | <img src="https://github.com/Wdvh/TitleCardMaker-CardTypes/blob/3c0de1939e43d0f9f45a2fb47b87adc60d9aba27/Wdvh/WhiteTextStandardLogoPreview.jpg" height="200"/> |
-| Wdvh | `Wdvh/WhiteTextAbsoluteLogo` | <img src="https://github.com/Wdvh/TitleCardMaker-CardTypes/blob/3c0de1939e43d0f9f45a2fb47b87adc60d9aba27/Wdvh/WhiteTextAbsoluteLogoPreview.jpg" height="200"/> |
-| Wdvh | `Wdvh/WhiteTextTitleOnlyLogo` | <img src="https://github.com/Wdvh/TitleCardMaker-CardTypes/blob/3c0de1939e43d0f9f45a2fb47b87adc60d9aba27/Wdvh/WhiteTextTitleOnlyLogoPreview.jpg" height="200"/>
-| Yozora | `Yozora/BarebonesTitleCard` | <img src="https://i.ibb.co/tBPsxpc/Westworld-2016-S04-E01.jpg" height="200"/> |
-| Yozora | `Yozora/SlimTitleCard` | <img src="https://cdn.discordapp.com/attachments/975108033531219979/977614937457303602/S01E04.jpg" height="200"/> |
-| Yozora | `Yozora/RetroTitleCard` | <img src="https://i.ibb.co/0tnJJ6P/Stranger-Things-2016-S03-E02.jpg" height="200"/> |
+| Wdvh | `Wdvh/WhiteTextTitleOnly` | <img src="https://user-images.githubusercontent.com/17693271/178131552-4ca8cb30-067e-4e04-9d68-472a8f384345.jpg" height="200"/> |
 | lyonza | `lyonza/WhiteTextBroadcast` | <img src="https://user-images.githubusercontent.com/1803189/171089736-f60a6ff2-0914-432a-a45d-145323d39c42.jpg" height="200"/> |
-| Beedman | `Beedman/GradientLogoTitleCard` | <img src="https://github.com/Beedman/TitleCardMaker-CardTypes/blob/master/Beedman/The%20Afterparty%20(2022)%20-%20S01E02%20-%20Brett.jpg?raw=true" height="200"/> |
+| Wdvh | `Wdvh/StarWarsTitleOnly` | <img src="https://user-images.githubusercontent.com/17693271/178131539-c7b55ced-b9ba-4564-8153-a998454e1742.jpg" height="200"/> |
+| Beedman | `Beedman/GradientLogoTitleCard` | <img src="https://user-images.githubusercontent.com/17693271/178131602-8d93401b-4b5a-4301-8248-42705547ec6f.jpg" height="200"/> |
+| Yozora | `Yozora/SlimTitleCard` | <img src="https://cdn.discordapp.com/attachments/975108033531219979/977614937457303602/S01E04.jpg" height="200"/> |
+| Yozora | `Yozora/BarebonesTitleCard` | <img src="https://user-images.githubusercontent.com/17693271/178131581-055fd7ca-0bda-464a-9e4d-67c88adb0a06.jpg" height="200"/> |
+| Yozora | `Yozora/RetroTitleCard` | <img src="https://user-images.githubusercontent.com/17693271/178131717-e9c387f7-625c-4654-a49d-93595687e359.jpg" height="200"/> |
+| Wdvh | `Wdvh/WhiteTextAbsoluteLogo` | <img src="https://user-images.githubusercontent.com/17693271/178131676-300601a4-bbdb-46ee-8f78-aa859d13d50c.jpg" height="200"/> |
+| Wdvh | `Wdvh/WhiteTextStandardLogo` | <img src="https://user-images.githubusercontent.com/17693271/178131565-5351dd98-201e-4f70-a8ff-2311687ed981.jpg" height="200"/> |
+| Wdvh | `Wdvh/WhiteTextTitleOnlyLogo` | <img src="https://user-images.githubusercontent.com/17693271/178131633-23a312ac-4e5f-4d1a-87cb-60b865a51fe7.jpg" height="200"/> |
 | CollinHeist | `CollinHeist/StandardAllBoldCard` | <img src="https://user-images.githubusercontent.com/17693271/178048413-7d4c72a4-398a-489b-8974-df7299fad6ad.jpg" height="200"/> |
 
 # Using a Custom Card Type
