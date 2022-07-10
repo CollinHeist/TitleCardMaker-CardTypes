@@ -54,7 +54,7 @@ class WhiteTextStandardLogo(CardType):
     def __init__(self, *, output_file: Path, title: str, season_text: str,
                  episode_text: str, font: str, font_size: float,
                  title_color: str, hide_season: bool, season_number: int=1,
-                 episode_number: int=1, separator: str='•', blur: bool=False,
+                 episode_number: int=1, separator: str='-', blur: bool=False,
                  vertical_shift: int=0, kerning: float=1.0,
                  interline_spacing: int=0, stroke_width: float=1.0,
                  logo: str=None,  background: str='#000000', **kwargs) -> None:
