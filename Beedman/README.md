@@ -14,7 +14,7 @@ series:
 ```
 
 ## Example Cards
-<img src="https://github.com/Beedman/TitleCardMaker-CardTypes/blob/d272f087043facaf444426963dc07e682108d898/Beedman/example.jpg" width="1000"/>
+<img src="https://user-images.githubusercontent.com/17693271/178131817-2bb6b271-6c56-4c2c-a8a2-f7e6c8012fe0.jpg" width="1000"/>
 
 ## Features
 - Logo and text
