@@ -30,7 +30,7 @@ class WhiteTextTitleOnly(CardType):
     USES_SEASON_TITLE = False
 
     """Standard class has standard archive name"""
-    ARCHIVE_NAME = 'Title Only Style'
+    ARCHIVE_NAME = 'White Text Title Only Style'
     
     """Source path for the gradient image overlayed over all title cards"""
     __GRADIENT_IMAGE = REF_DIRECTORY / 'GRADIENT.png'

@@ -1,13 +1,12 @@
 from pathlib import Path
-from re import findall
 
 from modules.CardType import CardType
 from modules.Debug import log
 from modules.RemoteFile import RemoteFile
 
-class WhiteTextAbsolute(CardType):
+class WhiteTextTitleOnlyLogo(CardType):
     """
-    This class describes Wdvh's absolute CardType intended for absolute episode ordering
+    This class describes Wdvh's title only title CardType
     """
 
     """Directory where all reference files used by this card are stored"""
@@ -30,13 +29,11 @@ class WhiteTextAbsolute(CardType):
     """Whether this CardType uses season titles for archival purposes"""
     USES_SEASON_TITLE = False
 
+    """Whether this CardType uses unique source images"""
+    USES_UNIQUE_SOURCES = False
+
     """Standard class has standard archive name"""
-    ARCHIVE_NAME = 'White Text Absolute Ordering Style'
-    
-    EPISODE_TEXT_FORMAT = "E{abs_number:02}"
-    
-    """Source path for the gradient image overlayed over all title cards"""
-    __GRADIENT_IMAGE = RemoteFile('Wdvh', 'GRADIENTABS.png')
+    ARCHIVE_NAME = 'White Text Title Only Logo Style'
 
     """Default fonts and color for series count text"""
     SEASON_COUNT_FONT = REF_DIRECTORY / 'Sequel-Neue.otf'
@@ -44,22 +41,20 @@ class WhiteTextAbsolute(CardType):
     SERIES_COUNT_TEXT_COLOR = '#FFFFFF'
 
     """Paths to intermediate files that are deleted after the card is created"""
-    __SOURCE_WITH_GRADIENT = CardType.TEMP_DIR / 'source_gradient.png'
-    __GRADIENT_WITH_TITLE = CardType.TEMP_DIR / 'gradient_title.png'
-    __SERIES_COUNT_TEXT = CardType.TEMP_DIR / 'series_count_text.png'
+    __RESIZED_LOGO = CardType.TEMP_DIR / 'resized_logo.png'
+    __BACKDROP_WITH_LOGO = CardType.TEMP_DIR / 'backdrop_logo.png'
+    __LOGO_WITH_TITLE = CardType.TEMP_DIR / 'logo_title.png'
 
-    __slots__ = ('source_file', 'output_file', 'title',
-                 'episode_text', 'font', 'font_size', 'title_color',
-                 'hide_season', 'blur', 'vertical_shift', 'interline_spacing',
-                 'kerning', 'stroke_width')
-
+    __slots__ = ('source_file', 'output_file', 'title', 'font', 'font_size',
+                 'title_color', 'hide_season', 'blur', 'vertical_shift',
+                 'interline_spacing', 'kerning', 'stroke_width')
 
     def __init__(self, source: Path, output_file: Path, title: str,
-                 episode_text: str, font: str,
-                 font_size: float, title_color: str,
-                 blur: bool=False, vertical_shift: int=0,
-                 interline_spacing: int=0, kerning: float=1.0,
-                 stroke_width: float=1.0, *args, **kwargs) -> None:
+                 font: str, font_size: float,
+                 title_color: str, blur: bool=False,
+                 vertical_shift: int=0, kerning: float=1.0,
+                 interline_spacing: int=0, stroke_width: float=1.0,
+                 logo: str=None,  background: str='#000000', **kwargs) -> None:
         """
         Initialize the TitleCardMaker object. This primarily just stores
         instance variables for later use in `create()`. If the provided font
@@ -67,11 +62,8 @@ class WhiteTextAbsolute(CardType):
 
         :param  source:             Source image.
         :param  output_file:        Output file.
-        :param  title_top_line:     Episode title.
-        :param  episode_text:       Text to use as episode count text.
-        :param  font:               Font to use for the episode title. MUST be a
-                                    a valid ImageMagick font, or filepath to a
-                                    font.
+        :param  title:              Episode title.
+        :param  font:               Font to use for the episode title.
         :param  font_size:          Scalar to apply to the title font size.
         :param  title_color:        Color to use for the episode title.
         :param  blur:               Whether to blur the source image.
@@ -87,12 +79,17 @@ class WhiteTextAbsolute(CardType):
         # Initialize the parent class - this sets up an ImageMagickInterface
         super().__init__()
 
-        self.source_file = source
+        # Look for logo if it's a format string
+        if isinstance(logo, str):
+            # Use either original or modified logo file
+            self.logo = Path(logo)
+        else:
+            self.logo = None
+
         self.output_file = output_file
 
         # Ensure characters that need to be escaped are
         self.title = self.image_magick.escape_chars(title)
-        self.episode_text = self.image_magick.escape_chars(episode_text.upper())
 
         self.font = font
         self.font_size = font_size
@@ -102,6 +99,10 @@ class WhiteTextAbsolute(CardType):
         self.interline_spacing = interline_spacing
         self.kerning = kerning
         self.stroke_width = stroke_width
+
+        # Miscellaneous attributes
+        self.blur = blur
+        self.background = background
 
 
     def __title_text_global_effects(self) -> list:
@@ -142,127 +143,86 @@ class WhiteTextAbsolute(CardType):
         ]
 
 
-    def __series_count_text_global_effects(self) -> list:
+    def _resize_logo(self) -> Path:
         """
-        ImageMagick commands for global text effects applied to all series count
-        text (season/episode count and dot).
-        
-        :returns:   List of ImageMagick commands.
-        """
-
-        return [
-            f'-kerning 5.42',
-            f'-pointsize 120',
-        ]
-
-
-    def __series_count_text_black_stroke(self) -> list:
-        """
-        ImageMagick commands for adding the necessary black stroke effects to
-        series count text.
-        
-        :returns:   List of ImageMagick commands.
-        """
-
-        return [
-            f'-fill white',
-            f'-stroke "#062A40"',
-            f'-strokewidth 2',
-        ]
-
-
-    def __series_count_text_effects(self) -> list:
-        """
-        ImageMagick commands for adding the necessary text effects to the series
-        count text.
-        
-        :returns:   List of ImageMagick commands.
-        """
-
-        return [
-            f'-fill white',
-            f'-stroke "#062A40"',
-            f'-strokewidth 2',
-        ]
-
-
-    def _add_gradient(self) -> Path:
-        """
-        Add the static gradient to this object's source image.
+        Resize the logo into at most a 1875x1030 bounding box.
         
         :returns:   Path to the created image.
         """
 
         command = ' '.join([
-            f'convert "{self.source_file.resolve()}"',
-            f'+profile "*"',
-            f'-gravity center',
-            f'-resize "{self.TITLE_CARD_SIZE}^"',
-            f'-extent "{self.TITLE_CARD_SIZE}"',
-            f'-blur {self.BLUR_PROFILE}' if self.blur else '',
-            f'"{self.__GRADIENT_IMAGE.resolve()}"',
-            f'-background None',
-            f'-layers Flatten',
-            f'"{self.__SOURCE_WITH_GRADIENT.resolve()}"',
+            f'convert',
+            f'"{self.logo.resolve()}"',
+            f'-resize x1030',
+            f'-resize 1875x1030\>',
+            f'"{self.__RESIZED_LOGO.resolve()}"',
         ])
 
         self.image_magick.run(command)
 
-        return self.__SOURCE_WITH_GRADIENT
+        return self.__RESIZED_LOGO
 
 
-    def _add_title_text(self, gradient_image: Path) -> Path:
+    def _add_logo_to_backdrop(self, resized_logo: Path) -> Path:
+        """
+        Add the resized logo to a fixed color backdrop.
+        
+        :returns:   Path to the created image.
+        """
+
+        # Get height of the resized logo to determine offset
+        height_command = ' '.join([
+            f'identify',
+            f'-format "%h"',
+            f'"{resized_logo.resolve()}"',
+        ])
+
+        height = int(self.image_magick.run_get_output(height_command))
+
+        # Get offset of where to place logo onto card
+        offset = 60 + ((1030 - height) // 2)
+
+        command = ' '.join([
+            f'convert',
+            f'-size "{self.TITLE_CARD_SIZE}"',  # Create backdrop
+            f'xc:"{self.background}"',          # Fill canvas with color
+            f'"{resized_logo.resolve()}"',
+            f'-set colorspace sRGB',
+            f'-gravity north',
+            f'-geometry "+0+{offset}"',         # Put logo on backdrop
+            f'-composite "{self.__BACKDROP_WITH_LOGO.resolve()}"',
+        ])
+
+        self.image_magick.run(command)
+
+        return self.__BACKDROP_WITH_LOGO
+
+
+    def _add_title_text(self, backdrop_logo: Path) -> Path:
         """
         Adds episode title text to the provide image.
 
-        :param      gradient_image: The image with gradient added.
+        :param      backdrop_logo:  The backdrop and logo image.
         
-        :returns:   Path to the created image that has a gradient and the title
-                    text added.
+        :returns:   Path to the created image that has the title text added.
         """
 
-        vertical_shift = 50 + self.vertical_shift
+        vertical_shift = 245 + self.vertical_shift
 
         command = ' '.join([
-            f'convert "{gradient_image.resolve()}"',
+            f'convert "{backdrop_logo.resolve()}"',
+            f'-blur {self.BLUR_PROFILE}' if self.blur else '',
             *self.__title_text_global_effects(),
             *self.__title_text_black_stroke(),
             f'-annotate +0+{vertical_shift} "{self.title}"',
             f'-fill "{self.title_color}"',
             f'-annotate +0+{vertical_shift} "{self.title}"',
-            f'"{self.__GRADIENT_WITH_TITLE.resolve()}"',
-        ])
-
-        self.image_magick.run(command)
-
-        return self.__GRADIENT_WITH_TITLE
-
-
-    def _add_series_count_text_no_season(self, titled_image: Path) -> Path:
-        """
-        Adds the series count text without season title/number.
-        
-        :param      titled_image:  The titled image to add text to.
-
-        :returns:   Path to the created image (the output file).
-        """
-
-        command = ' '.join([
-            f'convert "{titled_image.resolve()}"',
-            *self.__series_count_text_global_effects(),
-            f'-font "{self.EPISODE_COUNT_FONT.resolve()}"',
-            f'-gravity west',
-            *self.__series_count_text_black_stroke(),
-            f'-annotate +100-750 "{self.episode_text}"',
-            *self.__series_count_text_effects(),
-            f'-annotate +100-750 "{self.episode_text}"',
             f'"{self.output_file.resolve()}"',
         ])
 
         self.image_magick.run(command)
 
         return self.output_file
-
 
     @staticmethod
     def is_custom_font(font: 'Font') -> bool:
@@ -275,10 +235,10 @@ class WhiteTextAbsolute(CardType):
         :returns:   True if a custom font is indicated, False otherwise.
         """
 
-        return ((font.file != WhiteTextAbsolute.TITLE_FONT)
+        return ((font.file != WhiteTextTitleOnlyLogo.TITLE_FONT)
             or (font.size != 1.0)
-            or (font.color != WhiteTextAbsolute.TITLE_COLOR)
-            or (font.replacements != WhiteTextAbsolute.FONT_REPLACEMENTS)
+            or (font.color != WhiteTextTitleOnlyLogo.TITLE_COLOR)
+            or (font.replacements != WhiteTextTitleOnlyLogo.FONT_REPLACEMENTS)
             or (font.vertical_shift != 0)
             or (font.interline_spacing != 0)
             or (font.kerning != 1.0)
@@ -296,7 +256,7 @@ class WhiteTextAbsolute(CardType):
                                             customized.
         :param      episode_text_format:    The episode text format in use.
         
-        :returns:   True if custom season titles are indicated, False otherwise.
+        :returns:   False, as season titles are not used by this card.
         """
 
         return False
@@ -308,17 +268,27 @@ class WhiteTextAbsolute(CardType):
         defined title card.
         """
         
-        # Add the gradient to the source image (always)
-        gradient_image = self._add_gradient()
-
-        # Add either one or two lines of episode text 
-        titled_image = self._add_title_text(gradient_image)
-
+        
         # Create the output directory and any necessary parents 
         self.output_file.parent.mkdir(parents=True, exist_ok=True)
+        
+        # Skip card if logo doesn't exist
+        if self.logo is None:
+            log.error(f'Logo file not specified')
+            return None
+        elif not self.logo.exists():
+            log.error(f'Logo file "{self.logo.resolve()}" does not exist')
+            return None
 
-        # Add episode text 
-        self._add_series_count_text_no_season(titled_image)
+        # Resize logo
+        resized_logo = self._resize_logo()
+        
+        # Create backdrop+logo image
+        backdrop_logo = self._add_logo_to_backdrop(resized_logo)
+
+        # Add either one or two lines of episode text 
+        self._add_title_text(backdrop_logo)
 
         # Delete all intermediate images
-        self.image_magick.delete_intermediate_images(gradient_image, titled_image)
+        images = [resized_logo, backdrop_logo]
+        self.image_magick.delete_intermediate_images(*images)
