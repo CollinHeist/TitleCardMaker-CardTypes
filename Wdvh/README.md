@@ -6,15 +6,15 @@ These are modification of the [StandardTitleCard](https://github.com/CollinHeist
 
 ### White Text Standard
 
-<img src="https://github.com/CollinHeist/TitleCardMaker-CardTypes/blob/485023a2b44addc7d565679b2f599805faeae966/Wdvh/whitetextstandardpreview.jpg" width="1000"/>
+<img src="https://user-images.githubusercontent.com/17693271/169709359-ffc9e109-b327-44e9-b78a-7276f77fe917.jpg" width="1000"/>
 
 ### White Text Absolute
 
-<img src="https://github.com/CollinHeist/TitleCardMaker-CardTypes/blob/485023a2b44addc7d565679b2f599805faeae966/Wdvh/whitetextabsolutepreview.jpg" width="1000"/>
+<img src="https://user-images.githubusercontent.com/17693271/169709482-6bb023ab-4986-464e-88d6-0e05ad75d0d3.jpg" width="1000"/>
 
 ### White Text Title Only
 
-<img src="https://github.com/Wdvh/TitleCardMaker-CardTypes/blob/110c2ec729dbb20d8ed461e7cc5a07c54540f842/Wdvh/WhiteTextTitleOnlypreview.jpg" width="1000"/>
+<img src="https://user-images.githubusercontent.com/17693271/178131552-4ca8cb30-067e-4e04-9d68-472a8f384345.jpg" width="1000"/>
 
 ## Features
 
@@ -27,25 +27,24 @@ A variation of the standard Star Wars Card for Shows Like Obi-Wan Kenobi that us
 
 ### Star Wars Title Only
 
-<img src="https://github.com/Wdvh/TitleCardMaker-CardTypes/blob/c14f1b3759983a63e66982ba6517e2bc3f651dca/Wdvh/S01E01.jpg" width="1000"/>
+<img src="https://user-images.githubusercontent.com/17693271/178131539-c7b55ced-b9ba-4564-8153-a998454e1742.jpg" width="1000"/>
 
 ## Features
 
 - uses a different position and gradient for the title.
 
 ## White Text Logo Cards
-
 ### White Text Standard Logo
 
-<img src="https://github.com/Wdvh/TitleCardMaker-CardTypes/blob/3c0de1939e43d0f9f45a2fb47b87adc60d9aba27/Wdvh/WhiteTextStandardLogoPreview.jpg" width="1000"/>
+<img src="https://user-images.githubusercontent.com/17693271/178131565-5351dd98-201e-4f70-a8ff-2311687ed981.jpg" width="1000"/>
 
 ### White Text Absolute Logo
 
-<img src="https://github.com/Wdvh/TitleCardMaker-CardTypes/blob/3c0de1939e43d0f9f45a2fb47b87adc60d9aba27/Wdvh/WhiteTextAbsoluteLogoPreview.jpg" width="1000"/>
+<img src="https://user-images.githubusercontent.com/17693271/178131676-300601a4-bbdb-46ee-8f78-aa859d13d50c.jpg" width="1000"/>
 
 ### White Text Title Only Logo
 
-<img src="https://github.com/Wdvh/TitleCardMaker-CardTypes/blob/3c0de1939e43d0f9f45a2fb47b87adc60d9aba27/Wdvh/WhiteTextTitleOnlyLogoPreview.jpg" width="1000"/>
+<img src="https://user-images.githubusercontent.com/17693271/178131633-23a312ac-4e5f-4d1a-87cb-60b865a51fe7.jpg" width="1000"/>
 
 ## Features
 
