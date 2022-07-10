@@ -90,7 +90,6 @@ class WhiteTextAbsoluteLogo(CardType):
 
         # Look for logo if it's a format string
         if isinstance(logo, str):
-            # Use either original or modified logo file
             self.logo = Path(logo)
         else:
             self.logo = None
