@@ -51,7 +51,7 @@ class BarebonesTitleCard(CardType):
 
     
     def __init__(self, source: Path, output_file: Path, title: str,
-                 episode_text: str, font: str, title_color: str,font_size:float,
+                 episode_text: str, title_color: str, font_size:float,
                  episode_text_color: str=EPISODE_TEXT_COLOR, blur: bool=False,
                  stroke_width: float=1.0, **kwargs) -> None:
         """
@@ -132,7 +132,7 @@ class BarebonesTitleCard(CardType):
         font_size = 124 * self.font_size
 
         return [
-            f'\( -font "{self.TITLE_FONT}"',
+            f'\( -font "{self.font}"',
             f'-gravity northwest',
             f'-pointsize {font_size}',
             f'-kerning 0.5',
@@ -245,8 +245,7 @@ class BarebonesTitleCard(CardType):
 
         standard_etf = BarebonesTitleCard.EPISODE_TEXT_FORMAT.upper()
 
-        return (custom_episode_map or
-                episode_text_format.upper() != standard_etf)
+        return episode_text_format.upper() != standard_etf
 
 
     def create(self) -> None:
