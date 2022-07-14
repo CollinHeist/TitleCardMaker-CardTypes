@@ -51,7 +51,7 @@ class BarebonesTitleCard(CardType):
 
     
     def __init__(self, source: Path, output_file: Path, title: str,
-                 episode_text: str, title_color: str, font_size:float,
+                 episode_text: str, font: str, title_color: str, font_size:float,
                  episode_text_color: str=EPISODE_TEXT_COLOR, blur: bool=False,
                  stroke_width: float=1.0, **kwargs) -> None:
         """
