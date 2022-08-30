@@ -1,55 +1,9 @@
 from pathlib import Path
-import re
-from re import findall
-import subprocess
+from re import findall, compile as re_compile
 
 from modules.CardType import CardType
 from modules.Debug import log
 from modules.RemoteFile import RemoteFile
-
-def _hex_to_rgb(value):
-    value = value.lstrip('#')
-    lv = len(value)
-    return tuple(int(value[i:i + lv // 3], 16) for i in range(0, lv, lv // 3))
-
-def _get_logo_color(self):
-
-    command = ' '.join([
-        f'magick convert "{self.logo}"',
-        f'-scale 100x100!',
-        f'-depth 8 +dither',
-        f'-colors 16',
-        f'-format "%c" histogram:info:'
-    ])
-    colordata = subprocess.check_output(command, universal_newlines=True)
-    pattern = re.compile(r'[\s]*(\d*)?:\s.*\s(#\w{8}).*\n?')
-    cdata = {k: [num, hex] for k, (num, hex) in enumerate(findall(pattern, colordata), start=1)}
-    translist = []
-    pixcount = []
-    if self.title_color != 'auto':
-        return self.title_color, 'none'
-    for key, pair in cdata.items():
-        h = int(pair[1][-2:], 16)
-        if h < 75:
-            translist.append(key)
-        else:
-            pixcount.append(int(pair[0]))
-    for key in translist:
-        del cdata[key]
-    pixcount.sort(reverse=True)
-    pairs = list(cdata.values())
-    for num in pixcount:
-        hexcolor = next(x[1][:7] for x in pairs if int(x[0])==num)
-        rgb = _hex_to_rgb(hexcolor)
-        if min(rgb) > 240:
-            continue
-        elif max(rgb) < 15:
-            continue
-        else:
-            return hexcolor, rgb
-    return '#ebebeb', (235, 235, 235)
-
-                
 
 class TitleColorMatch(CardType):
     """
@@ -62,7 +16,6 @@ class TitleColorMatch(CardType):
     
     """Directory where all reference files used by this card are stored"""
     REF_DIRECTORY = Path(__file__).parent.parent / 'ref'
-
 
     """Characteristics for title splitting by this class"""
     TITLE_CHARACTERISTICS = {
@@ -85,7 +38,6 @@ class TitleColorMatch(CardType):
     """Archive name for this card type"""
     ARCHIVE_NAME = 'Title Color Match Style'
 
-
     """Source path for the gradient image overlayed over all title cards"""
     __GRADIENT_IMAGE = str(RemoteFile('azuravian', 'leftgradient.png'))
 
@@ -97,14 +49,17 @@ class TitleColorMatch(CardType):
     """Paths to intermediate files that are deleted after the card is created"""
     __RESIZED_LOGO = CardType.TEMP_DIR / 'resized_logo.png'
     __SOURCE_WITH_GRADIENT = CardType.TEMP_DIR / 'source_gradient.png'
-    __BACKDROP_WITH_LOGO = CardType.TEMP_DIR / 'backdrop_logo.png'
     __GRADIENT_WITH_TITLE = CardType.TEMP_DIR / 'gradient_title.png'
     __SERIES_COUNT_TEXT = CardType.TEMP_DIR / 'series_count_text.png'
+
+    """Regex to match colors/counts in ImageMagick histograms"""
+    __COLORDATA_REGEX = re_compile(r'[\s]*(\d*)?:\s.*\s(#\w{8}).*\n?')
 
     __slots__ = ('source_file', 'output_file', 'title', 'season_text',
                  'episode_text', 'font', 'font_size', 'title_color',
                  'hide_season', 'blur', 'vertical_shift', 'interline_spacing',
                  'kerning', 'stroke_width')
+
 
     def __init__(self, source: Path, output_file: Path, title: str,
                  season_text: str, episode_text: str, font: str,
@@ -306,6 +261,79 @@ class TitleColorMatch(CardType):
         self.image_magick.run(command)
 
         return self.__SOURCE_WITH_GRADIENT
+
+
+    def _hex_to_rgb(self, value: str) -> tuple[int, int, int]:
+        """
+        Convert the given hex color to an RGB tuple.
+
+        Args:
+            value: Hex value to convert
+
+        Returns:
+            Tuple of integers that are RGB.
+        """
+
+        value = value.lstrip('#')
+        lv = len(value)
+
+        return tuple(int(value[i:i + lv // 3], 16) for i in range(0, lv, lv//3))
+
+
+    def _get_logo_color(self) -> tuple[str, tuple[int, int, int]]:
+        """
+        Get the logo color for this card's logo.
+
+        Returns:
+            Tuple whose values are the title color text and the RGB color
+            values.
+        """
+
+        # If auto color wasn't indicated
+        if self.title_color.lower() != 'auto':
+            return self.title_color, None
+
+        # Command to get histogram of the colors in logo image
+        command = ' '.join([
+            f'convert "{self.logo.resolve()}"',
+            f'-scale 100x100!',
+            f'-depth 8 +dither',
+            f'-colors 16',
+            f'-format "%c" histogram:info:',
+        ])
+
+        # Get color data
+        colordata = self.image_magick.run_get_output(command)
+        cdata = {k: [num, hex] for k, (num, hex)
+                 in enumerate(findall(self.__COLORDATA_REGEX,colordata),start=1)}
+
+        translist = []
+        pixcount = []
+        for key, pair in cdata.items():
+            h = int(pair[1][-2:], 16)
+            if h < 75:
+                translist.append(key)
+            else:
+                pixcount.append(int(pair[0]))
+
+        for key in translist:
+            del cdata[key]
+
+        # Go through colors in descending order of appearance
+        pixcount.sort(reverse=True)
+        pairs = list(cdata.values())
+        for num in pixcount:
+            hexcolor = next(x[1][:7] for x in pairs if int(x[0])==num)
+            rgb = self._hex_to_rgb(hexcolor)
+            # Skip values that are too dark/light
+            if min(rgb) > 240 or max(rgb) < 15:
+                continue
+            else:
+                return hexcolor, rgb
+
+        # No valid colors identified, return defaults
+        return self.TITLE_COLOR, (235, 235, 235)
+
     
     def _add_title_text(self, gradient_image: Path) -> Path:
         """
@@ -317,12 +345,17 @@ class TitleColorMatch(CardType):
                     text added.
         """
         
-        t_color, rgb = _get_logo_color(self)
-        if rgb != 'none':
-            (r,g,b) = rgb
+        # Get the title color for this logo (if indicated)
+        t_color, rgb = self._get_logo_color()
+
+        # If a valid color was found, get apparant luminance
+        if rgb is not None:
+            r, g, b = rgb
             lum = (r*0.299 + g*0.587 + b*0.114)
         else:
             lum = 255
+
+        # Use white stroke only if luminance is very low
         stroke = 'black' if lum > 50 else 'white'
         vertical_shift = 125 + self.vertical_shift
 
@@ -488,13 +521,13 @@ class TitleColorMatch(CardType):
         """
 
         return ((font.file != TitleColorMatch.TITLE_FONT)
-            or (font.size != 1.0)
-            or (font.color != TitleColorMatch.TITLE_COLOR)
-            or (font.replacements != TitleColorMatch.FONT_REPLACEMENTS)
-            or (font.vertical_shift != 0)
-            or (font.interline_spacing != 0)
-            or (font.kerning != 1.0)
-            or (font.stroke_width != 1.0))
+             or (font.size != 1.0)
+             or (font.color != TitleColorMatch.TITLE_COLOR)
+             or (font.replacements != TitleColorMatch.FONT_REPLACEMENTS)
+             or (font.vertical_shift != 0)
+             or (font.interline_spacing != 0)
+             or (font.kerning != 1.0)
+             or (font.stroke_width != 1.0))
 
 
     @staticmethod
@@ -541,7 +574,7 @@ class TitleColorMatch(CardType):
         backdrop_logo = self._add_logo_to_backdrop(resized_logo, gradient_image)
 
         # Add either one or two lines of episode text 
-        titled_image = self._add_title_text(gradient_image)
+        titled_image = self._add_title_text(backdrop_logo)
 
         # If season text is hidden, just add episode text 
         if self.hide_season:
