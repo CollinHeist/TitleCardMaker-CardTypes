@@ -48,21 +48,23 @@ class RetroTitleCard(CardType):
     __GRADIENT_WITH_TITLE = CardType.TEMP_DIR / 'gradient_title.png'
     __SERIES_COUNT_TEXT = CardType.TEMP_DIR / 'series_count_text.png'
 
-    __slots__ = ('source_file', 'output_file', 'title',
-                 'episode_text', 'font', 'font_size', 'title_color',
-                 'hide_season', 'blur', 'vertical_shift', 'interline_spacing',
-                 'watched', 'kerning', 'stroke_width')
+    __slots__ = ('source_file', 'output_file', 'title', 'episode_text',
+                 'font', 'font_size', 'title_color', 'hide_season',
+                 'blur', 'vertical_shift', 'interline_spacing',
+                 'watched', 'kerning', 'stroke_width', 'disable_bw',
+                 'override_style')
 
 
     def __init__(self, source: Path, output_file: Path, title: str,
                  episode_text: str, font: str, font_size: float,
-                 title_color: str, watched: bool=True,blur: bool=False,
+                 title_color: str, watched: bool=True, blur: bool=False,
                  vertical_shift: int=0, interline_spacing: int=0,
-                 kerning: float=1.0, stroke_width: float=1.0, **kwargs) -> None:
+                 kerning: float=1.0, stroke_width: float=1.0,
+                 disable_bw: bool=False, override_style: str='',
+                 **kwargs) -> None:
         """
-        Initialize the TitleCardMaker object. This primarily just stores
-        instance variables for later use in `create()`. If the provided font
-        does not have a character in the title text, a space is used instead.
+        Initialize this object.
+        
         :param  source:             Source image.
         :param  output_file:        Output file.
         :param  title_top_line:     Episode title.
@@ -79,6 +81,10 @@ class RetroTitleCard(CardType):
         :param  kerning:            Scalar to apply to kerning of the title text.
         :param  stroke_width:       Scalar to apply to black stroke of the title
                                     text.
+        :param  disable_bw:         Whether to disable B/W modification based on
+                                    watch status.
+        :param  override_style:     Override the play/rewind style basd on watch
+                                    status. Should be 'rewind' or 'play'.
         :param  kwargs:             Unused arguments to permit generalized calls
                                     for any CardType.
         """
@@ -102,6 +108,10 @@ class RetroTitleCard(CardType):
         self.interline_spacing = interline_spacing
         self.kerning = kerning
         self.stroke_width = stroke_width
+        
+        # Store extras
+        self.disable_bw = disable_bw
+        self.override_style = override_style.lower()
 
 
     def __title_text_global_effects(self) -> list:
@@ -192,9 +202,13 @@ class RetroTitleCard(CardType):
         
         :returns:   Path to the created image.
         """
-
-        # Select gradient overlay based on watched status
-        if self.watched:
+        
+        # Select gradient overlay based on override/watch status
+        if self.override_style == 'rewind':
+            gradient_image = self.__GRADIENT_IMAGE_REWIND
+        elif self.override_style == 'play':
+            gradient_image = self.__GRADIENT_IMAGE_PLAY
+        elif self.watched:
             gradient_image = self.__GRADIENT_IMAGE_REWIND
         else:
             gradient_image = self.__GRADIENT_IMAGE_PLAY
@@ -209,7 +223,7 @@ class RetroTitleCard(CardType):
             f'"{gradient_image.resolve()}"',
             f'-background None',
             f'-layers Flatten',
-            f'-colorspace gray' if self.watched else '',
+            f'-colorspace gray' if self.watched and not self.disable_bw else '',
             f'"{self.__SOURCE_WITH_GRADIENT.resolve()}"',
         ])
 
