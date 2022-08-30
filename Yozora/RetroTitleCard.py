@@ -51,7 +51,7 @@ class RetroTitleCard(CardType):
     __slots__ = ('source_file', 'output_file', 'title', 'episode_text',
                  'font', 'font_size', 'title_color', 'hide_season',
                  'blur', 'vertical_shift', 'interline_spacing',
-                 'watched', 'kerning', 'stroke_width', 'disable_bw',
+                 'watched', 'kerning', 'stroke_width', 'override_bw',
                  'override_style')
 
 
@@ -60,7 +60,7 @@ class RetroTitleCard(CardType):
                  title_color: str, watched: bool=True, blur: bool=False,
                  vertical_shift: int=0, interline_spacing: int=0,
                  kerning: float=1.0, stroke_width: float=1.0,
-                 disable_bw: bool=False, override_style: str='',
+                 override_bw: str='', override_style: str='',
                  **kwargs) -> None:
         """
         Initialize this object.
@@ -110,7 +110,7 @@ class RetroTitleCard(CardType):
         self.stroke_width = stroke_width
         
         # Store extras
-        self.disable_bw = disable_bw
+        self.override_bw = override_bw.lower()
         self.override_style = override_style.lower()
 
 
@@ -212,6 +212,16 @@ class RetroTitleCard(CardType):
             gradient_image = self.__GRADIENT_IMAGE_REWIND
         else:
             gradient_image = self.__GRADIENT_IMAGE_PLAY
+            
+        # Determine colorspace (B+W/color) on override/watch status
+        if self.override_bw == 'bw':
+            colorspace = '-colorspace gray'
+        elif self.override_bw == 'color':
+            colorspace = ''
+        elif self.watched:
+            colorspace = '-colorspace gray'
+        else:
+            colorspace = ''
 
         command = ' '.join([
             f'convert "{self.source_file.resolve()}"',
@@ -223,7 +233,7 @@ class RetroTitleCard(CardType):
             f'"{gradient_image.resolve()}"',
             f'-background None',
             f'-layers Flatten',
-            f'-colorspace gray' if self.watched and not self.disable_bw else '',
+            f'{colorspace}',
             f'"{self.__SOURCE_WITH_GRADIENT.resolve()}"',
         ])
 
