@@ -31,6 +31,8 @@ In order to contribute your own custom Card Type to this repository, follow thes
 | Wdvh | `Wdvh/WhiteTextStandardLogo` | <img src="https://user-images.githubusercontent.com/17693271/178131565-5351dd98-201e-4f70-a8ff-2311687ed981.jpg" height="200"/> |
 | Wdvh | `Wdvh/WhiteTextTitleOnlyLogo` | <img src="https://user-images.githubusercontent.com/17693271/178131633-23a312ac-4e5f-4d1a-87cb-60b865a51fe7.jpg" height="200"/> |
 | CollinHeist | `CollinHeist/StandardAllBoldCard` | <img src="https://user-images.githubusercontent.com/17693271/178048413-7d4c72a4-398a-489b-8974-df7299fad6ad.jpg" height="200"/> |
+| azuravian | `azuravian/TitleColorMatch` | <img src="https://user-images.githubusercontent.com/7379812/187586521-353ba09f-30a8-424b-bbf3-ee9036c9e638.jpg"
+ height="200"/> |
 
 # Using a Custom Card Type
 The [available card types](#available-card-types) can all be specified within the Maker by adding the following:
