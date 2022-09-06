@@ -1,11 +1,11 @@
 from pathlib import Path
 from re import findall
 
-from modules.CardType import CardType
+from modules.BaseCardType import BaseCardType
 from modules.Debug import log
 from modules.RemoteFile import RemoteFile
 
-class GradientLogoTitleCard(CardType):
+class GradientLogoTitleCard(BaseCardType):
     """
     This class describes a type of CardType created by Beedman, and is 
     a modification of the StandardTitleCard class with a different gradient 
@@ -14,7 +14,6 @@ class GradientLogoTitleCard(CardType):
     
     """Directory where all reference files used by this card are stored"""
     REF_DIRECTORY = Path(__file__).parent.parent / 'ref'
-
 
     """Characteristics for title splitting by this class"""
     TITLE_CHARACTERISTICS = {
@@ -47,11 +46,11 @@ class GradientLogoTitleCard(CardType):
     SERIES_COUNT_TEXT_COLOR = '#CFCFCF'
 
     """Paths to intermediate files that are deleted after the card is created"""
-    __RESIZED_LOGO = CardType.TEMP_DIR / 'resized_logo.png'
-    __SOURCE_WITH_GRADIENT = CardType.TEMP_DIR / 'source_gradient.png'
-    __BACKDROP_WITH_LOGO = CardType.TEMP_DIR / 'backdrop_logo.png'
-    __GRADIENT_WITH_TITLE = CardType.TEMP_DIR / 'gradient_title.png'
-    __SERIES_COUNT_TEXT = CardType.TEMP_DIR / 'series_count_text.png'
+    __RESIZED_LOGO = BaseCardType.TEMP_DIR / 'resized_logo.png'
+    __SOURCE_WITH_GRADIENT = BaseCardType.TEMP_DIR / 'source_gradient.png'
+    __BACKDROP_WITH_LOGO = BaseCardType.TEMP_DIR / 'backdrop_logo.png'
+    __GRADIENT_WITH_TITLE = BaseCardType.TEMP_DIR / 'gradient_title.png'
+    __SERIES_COUNT_TEXT = BaseCardType.TEMP_DIR / 'series_count_text.png'
 
     __slots__ = ('source_file', 'output_file', 'title', 'season_text',
                  'episode_text', 'font', 'font_size', 'title_color',
