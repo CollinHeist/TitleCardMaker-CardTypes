@@ -1,10 +1,10 @@
 from pathlib import Path
 
-from modules.CardType import CardType
+from modules.BaseCardType import BaseCardType
 from modules.Debug import log
 from modules.RemoteFile import RemoteFile
 
-class WhiteTextTitleOnly(CardType):
+class WhiteTextTitleOnly(BaseCardType):
     """
     This class describes Wdvh's title only title CardType
     """
@@ -36,7 +36,7 @@ class WhiteTextTitleOnly(CardType):
     __GRADIENT_IMAGE = REF_DIRECTORY / 'GRADIENT.png'
 
     """Paths to intermediate files that are deleted after the card is created"""
-    __SOURCE_WITH_GRADIENT = CardType.TEMP_DIR / 'source_gradient.png'
+    __SOURCE_WITH_GRADIENT = BaseCardType.TEMP_DIR / 'source_gradient.png'
 
     __slots__ = ('source_file', 'output_file', 'title', 'font', 'font_size',
                  'title_color', 'hide_season', 'blur', 'vertical_shift',
@@ -48,7 +48,7 @@ class WhiteTextTitleOnly(CardType):
                  font_size: float, title_color: str,
                  blur: bool=False, vertical_shift: int=0,
                  interline_spacing: int=0, kerning: float=1.0,
-                 stroke_width: float=1.0, *args, **kwargs) -> None:
+                 stroke_width: float=1.0, **kwargs) -> None:
         """
         Initialize the TitleCardMaker object. This primarily just stores
         instance variables for later use in `create()`. If the provided font

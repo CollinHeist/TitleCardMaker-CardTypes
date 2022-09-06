@@ -1,11 +1,11 @@
 from pathlib import Path
 from re import findall, compile as re_compile
 
-from modules.CardType import CardType
+from modules.BaseCardType import BaseCardType
 from modules.Debug import log
 from modules.RemoteFile import RemoteFile
 
-class TitleColorMatch(CardType):
+class TitleColorMatch(BaseCardType):
     """
     This class describes a type of CardType created by azuravian, and is 
     a modification of Beedman's GradientLogoTitleCard class with a few changes, 
@@ -47,10 +47,10 @@ class TitleColorMatch(CardType):
     SERIES_COUNT_TEXT_COLOR = '#CFCFCF'
 
     """Paths to intermediate files that are deleted after the card is created"""
-    __RESIZED_LOGO = CardType.TEMP_DIR / 'resized_logo.png'
-    __SOURCE_WITH_GRADIENT = CardType.TEMP_DIR / 'source_gradient.png'
-    __GRADIENT_WITH_TITLE = CardType.TEMP_DIR / 'gradient_title.png'
-    __SERIES_COUNT_TEXT = CardType.TEMP_DIR / 'series_count_text.png'
+    __RESIZED_LOGO = BaseCardType.TEMP_DIR / 'resized_logo.png'
+    __SOURCE_WITH_GRADIENT = BaseCardType.TEMP_DIR / 'source_gradient.png'
+    __GRADIENT_WITH_TITLE = BaseCardType.TEMP_DIR / 'gradient_title.png'
+    __SERIES_COUNT_TEXT = BaseCardType.TEMP_DIR / 'series_count_text.png'
 
     """Regex to match colors/counts in ImageMagick histograms"""
     __COLORDATA_REGEX = re_compile(r'[\s]*(\d*)?:\s.*\s(#\w{8}).*\n?')

@@ -1,10 +1,10 @@
 from pathlib import Path
 
-from modules.CardType import CardType
+from modules.BaseCardType import BaseCardType
 from modules.Debug import log
 from modules.RemoteFile import RemoteFile
 
-class WhiteTextTitleOnlyLogo(CardType):
+class WhiteTextTitleOnlyLogo(BaseCardType):
     """
     This class describes Wdvh's title only title CardType
     """
@@ -41,9 +41,10 @@ class WhiteTextTitleOnlyLogo(CardType):
     SERIES_COUNT_TEXT_COLOR = '#FFFFFF'
 
     """Paths to intermediate files that are deleted after the card is created"""
-    __RESIZED_LOGO = CardType.TEMP_DIR / 'resized_logo.png'
-    __BACKDROP_WITH_LOGO = CardType.TEMP_DIR / 'backdrop_logo.png'
-    __LOGO_WITH_TITLE = CardType.TEMP_DIR / 'logo_title.png'
+    __RESIZED_LOGO = BaseCardType.TEMP_DIR / 'resized_logo.png'
+    __BACKDROP_WITH_LOGO = BaseCardType.TEMP_DIR / 'backdrop_logo.png'
+    __LOGO_WITH_TITLE = BaseCardType.TEMP_DIR / 'logo_title.png'
+
 
     __slots__ = ('source_file', 'output_file', 'title', 'font', 'font_size',
                  'title_color', 'hide_season', 'blur', 'vertical_shift',
