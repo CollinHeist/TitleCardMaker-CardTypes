@@ -2,11 +2,11 @@ from pathlib import Path
 from random import random
 from re import findall
 
-from modules.CardType import CardType
+from modules.BaseCardType import BaseCardType
 from modules.RemoteFile import RemoteFile
 from modules.Debug import log
 
-class BetterStandardTitleCard(CardType):
+class BetterStandardTitleCard(BaseCardType):
     """
     This class describes a BETTER version of the StandardTitleCard type, and is
     primarily for demonstrative purposes.
@@ -39,9 +39,9 @@ class BetterStandardTitleCard(CardType):
     __GRADIENT_IMAGE: Path = REF_DIRECTORY / 'GRADIENT.png'
 
     """Paths to intermediate files that are deleted after the card is created"""
-    __SOURCE_WITH_GRADIENT = CardType.TEMP_DIR / 'source_gradient.png'
-    __GRADIENT_WITH_TITLE = CardType.TEMP_DIR / 'gradient_title.png'
-    __SERIES_COUNT_TEXT = CardType.TEMP_DIR / 'series_count_text.png'
+    __SOURCE_WITH_GRADIENT = BaseCardType.TEMP_DIR / 'source_gradient.png'
+    __GRADIENT_WITH_TITLE = BaseCardType.TEMP_DIR / 'gradient_title.png'
+    __SERIES_COUNT_TEXT = BaseCardType.TEMP_DIR / 'series_count_text.png'
 
     __slots__ = ('souce_file', 'output_file', 'title', 'season_text',
                  'episode_text', 'font_size', 'hide_season', 'vertical_shift',
