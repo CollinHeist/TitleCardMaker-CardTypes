@@ -40,7 +40,7 @@ class BarebonesTitleCard(BaseCardType):
     ARCHIVE_NAME = 'Barebones Style'
 
     """Paths to intermediate files that are deleted after the card is created"""
-    __RESIZED_SOURCE = CardType.TEMP_DIR / 'resized_source.png'
+    __RESIZED_SOURCE = BaseCardType.TEMP_DIR / 'resized_source.png'
 
     __slots__ = ('source_file', 'output_file', 'title', 'hide_episode_text', 
                  'episode_text', 'font', 'font_size', 'title_color', 'blur',
