@@ -1,14 +1,14 @@
 from pathlib import Path
-from re import findall
 
-from modules.CardType import CardType
+from modules.BaseCardType import BaseCardType
 from modules.Debug import log
 from modules.RemoteFile import RemoteFile
 
-class RetroTitleCard(CardType):
+class RetroTitleCard(BaseCardType):
     """
+    This class describes a CardType designed by Yozora. This card type is retro-
+    themed, and features either a Rewind/Play overlay.
     """
-
 
     """Directory where all reference files used by this card are stored"""
     REF_DIRECTORY = Path(__file__).parent.parent / 'ref' / 'retro'
@@ -44,9 +44,9 @@ class RetroTitleCard(CardType):
     SERIES_COUNT_TEXT_COLOR = '#FFFFFF'
 
     """Paths to intermediate files that are deleted after the card is created"""
-    __SOURCE_WITH_GRADIENT = CardType.TEMP_DIR / 'source_gradient.png'
-    __GRADIENT_WITH_TITLE = CardType.TEMP_DIR / 'gradient_title.png'
-    __SERIES_COUNT_TEXT = CardType.TEMP_DIR / 'series_count_text.png'
+    __SOURCE_WITH_GRADIENT = BaseCardType.TEMP_DIR / 'source_gradient.png'
+    __GRADIENT_WITH_TITLE = BaseCardType.TEMP_DIR / 'gradient_title.png'
+    __SERIES_COUNT_TEXT = BaseCardType.TEMP_DIR / 'series_count_text.png'
 
     __slots__ = ('source_file', 'output_file', 'title', 'episode_text',
                  'font', 'font_size', 'title_color', 'hide_season',

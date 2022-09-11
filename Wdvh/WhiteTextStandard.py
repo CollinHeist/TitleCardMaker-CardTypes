@@ -1,11 +1,10 @@
 from pathlib import Path
-from re import findall
 
-from modules.CardType import CardType
+from modules.BaseCardType import BaseCardType
 from modules.RemoteFile import RemoteFile
 from modules.Debug import log
 
-class WhiteTextStandard(CardType):
+class WhiteTextStandard(BaseCardType):
     """
     This class describes a type of CardType that produces the 'generic' title
     cards based on Reddit user /u/UniversalPolymath. This card supports 
@@ -45,8 +44,8 @@ class WhiteTextStandard(CardType):
     SERIES_COUNT_TEXT_COLOR = '#FFFFFF'
 
     """Paths to intermediate files that are deleted after the card is created"""
-    __SOURCE_WITH_GRADIENT = CardType.TEMP_DIR / 'source_gradient.png'
-    __GRADIENT_WITH_TITLE = CardType.TEMP_DIR / 'gradient_title.png'
+    __SOURCE_WITH_GRADIENT = BaseCardType.TEMP_DIR / 'source_gradient.png'
+    __GRADIENT_WITH_TITLE = BaseCardType.TEMP_DIR / 'gradient_title.png'
 
     __slots__ = ('source_file', 'output_file', 'title', 'season_text',
                  'episode_text', 'font', 'font_size', 'title_color',
@@ -59,7 +58,7 @@ class WhiteTextStandard(CardType):
                  font_size: float, title_color: str, hide_season: bool,
                  separator: str='-', blur: bool=False, vertical_shift: int=0,
                  interline_spacing: int=0, kerning: float=1.0,
-                 stroke_width: float=1.0, *args, **kwargs) -> None:
+                 stroke_width: float=1.0, **kwargs) -> None:
         """
         Initialize the TitleCardMaker object. This primarily just stores
         instance variables for later use in `create()`. If the provided font

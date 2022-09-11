@@ -3,11 +3,11 @@ from re import match
 
 from num2words import num2words
 
-from modules.CardType import CardType
+from modules.BaseCardType import BaseCardType
 from modules.Debug import log
 from modules.RemoteFile import RemoteFile
 
-class BarebonesTitleCard(CardType):
+class BarebonesTitleCard(BaseCardType):
     """
     This class describes a type of ImageMaker that produces title cards in the
     theme of Star Wars cards as designed by reddit user /u/Olivier_286.
@@ -38,9 +38,6 @@ class BarebonesTitleCard(CardType):
 
     """How to name archive directories for this type of card"""
     ARCHIVE_NAME = 'Barebones Style'
-
-    """Path to the reference star image to overlay on all source images"""
-    __GRADIENT_IMAGE = REF_DIRECTORY / 'gradient.png'
 
     """Paths to intermediate files that are deleted after the card is created"""
     __RESIZED_SOURCE = CardType.TEMP_DIR / 'resized_source.png'

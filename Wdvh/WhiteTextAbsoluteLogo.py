@@ -1,11 +1,11 @@
 from pathlib import Path
 from re import findall
 
-from modules.CardType import CardType
+from modules.BaseCardType import BaseCardType
 from modules.Debug import log
 from modules.RemoteFile import RemoteFile
 
-class WhiteTextAbsoluteLogo(CardType):
+class WhiteTextAbsoluteLogo(BaseCardType):
     """
     This class describes Wdvh's absolute CardType intended for absolute episode ordering
     """
@@ -44,15 +44,15 @@ class WhiteTextAbsoluteLogo(CardType):
     SERIES_COUNT_TEXT_COLOR = '#FFFFFF'
 
     """Paths to intermediate files that are deleted after the card is created"""
-    __RESIZED_LOGO = CardType.TEMP_DIR / 'resized_logo.png'
-    __BACKDROP_WITH_LOGO = CardType.TEMP_DIR / 'backdrop_logo.png'
-    __LOGO_WITH_TITLE = CardType.TEMP_DIR / 'logo_title.png'
-    __SERIES_COUNT_TEXT = CardType.TEMP_DIR / 'series_count_text.png'
+    __RESIZED_LOGO = BaseCardType.TEMP_DIR / 'resized_logo.png'
+    __BACKDROP_WITH_LOGO = BaseCardType.TEMP_DIR / 'backdrop_logo.png'
+    __LOGO_WITH_TITLE = BaseCardType.TEMP_DIR / 'logo_title.png'
 
     __slots__ = ('source_file', 'output_file', 'title',
                  'episode_text', 'font', 'font_size', 'title_color',
                  'hide_season', 'blur', 'vertical_shift', 'interline_spacing',
                  'kerning', 'stroke_width')
+
 
     def __init__(self, source: Path, output_file: Path, title: str,
                  episode_text: str, font: str,
@@ -373,4 +373,3 @@ class WhiteTextAbsoluteLogo(CardType):
 
         # Delete all intermediate images
         self.image_magick.delete_intermediate_images(backdrop_logo, titled_image)
-

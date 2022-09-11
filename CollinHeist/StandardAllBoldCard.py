@@ -1,11 +1,11 @@
 from pathlib import Path
 from re import findall
 
-from modules.CardType import CardType
+from modules.BaseCardType import BaseCardType
 from modules.Debug import log
 from modules.RemoteFile import RemoteFile
 
-class StandardAllBoldCard(CardType):
+class StandardAllBoldCard(BaseCardType):
     """
     This class describes a type of CardType is identical to the
     StandardTitleCard, except season and episode text is bolded

@@ -3,11 +3,11 @@ from re import match
 
 from num2words import num2words
 
-from modules.CardType import CardType
+from modules.BaseCardType import BaseCardType
 from modules.Debug import log
 from modules.RemoteFile import RemoteFile
 
-class StarWarsTitleOnly (CardType):
+class StarWarsTitleOnly (BaseCardType):
     """
     This class describes a type of ImageMaker that produces title cards in the
     theme of Star Wars cards as designed by reddit user /u/Olivier_286. These
@@ -46,8 +46,7 @@ class StarWarsTitleOnly (CardType):
     __STAR_GRADIENT_IMAGE = RemoteFile('Wdvh', 'star_gradient_title_only.png')
 
     """Paths to intermediate files that are deleted after the card is created"""
-    __SOURCE_WITH_STARS = CardType.TEMP_DIR / 'source_gradient.png'
-
+    __SOURCE_WITH_STARS = BaseCardType.TEMP_DIR / 'source_gradient.png'
 
     __slots__ = ('source_file', 'output_file', 'title', 'blur')
 
@@ -187,5 +186,3 @@ class StarWarsTitleOnly (CardType):
 
         # Delete all intermediate images
         self.image_magick.delete_intermediate_images(star_image)
-
-        
