@@ -46,51 +46,47 @@ class WhiteTextStandardLogo(BaseCardType):
     __LOGO_WITH_TITLE = BaseCardType.TEMP_DIR / 'logo_title.png'
     __SERIES_COUNT_TEXT = BaseCardType.TEMP_DIR / 'series_count_text.png'
 
-    __slots__ = ('source_file', 'output_file', 'title', 'season_text',
-                 'episode_text', 'font', 'font_size', 'title_color',
-                 'hide_season', 'separator', 'blur', 'vertical_shift', 
-                 'interline_spacing', 'kerning', 'stroke_width')
+    __slots__ = (
+        'logo', 'output_file', 'title', 'season_text', 'episode_text', 'font',
+        'font_size', 'title_color', 'hide_season', 'separator','vertical_shift', 
+        'interline_spacing', 'kerning', 'stroke_width', 'background',
+    )
 
 
-    def __init__(self, *, output_file: Path, title: str, season_text: str,
+    def __init__(self, output_file: Path, title: str, season_text: str,
                  episode_text: str, font: str, font_size: float,
                  title_color: str, hide_season: bool, season_number: int=1,
                  episode_number: int=1, separator: str='-', blur: bool=False,
-                 vertical_shift: int=0, kerning: float=1.0,
-                 interline_spacing: int=0, stroke_width: float=1.0,
-                 logo: str=None,  background: str='#000000', **kwargs) -> None:
+                 grayscale: bool=False, vertical_shift: int=0,
+                 kerning: float=1.0, interline_spacing: int=0,
+                 stroke_width: float=1.0, logo: str=None, 
+                 background: str='#000000', **kwargs) -> None:
         """
-        Initialize the TitleCardMaker object. This primarily just stores
-        instance variables for later use in `create()`. If the provided font
-        does not have a character in the title text, a space is used instead.
+        Initialize this CardType object.
 
-        :param  source:             Source image.
-        :param  output_file:        Output file.
-        :param  title_top_line:     Episode title.
-        :param  season_text:        Text to use as season count text. Ignored if
-                                    hide_season is True.
-        :param  episode_text:       Text to use as episode count text.
-        :param  separator:          Character to use to separate season and
-                                    episode text.
-        :param  font:               Font to use for the episode title. MUST be a
-                                    a valid ImageMagick font, or filepath to a
-                                    font.
-        :param  font_size:          Scalar to apply to the title font size.
-        :param  title_color:        Color to use for the episode title.
-        :param  hide_season:        Whether to omit the season text (and joining
-                                    character) from the title card completely.
-        :param  blur:               Whether to blur the source image.
-        :param  vertical_shift:     Pixels to adjust title vertical shift by.
-        :param  interline_spacing:  Pixels to adjust title interline spacing by.
-        :param  kerning:            Scalar to apply to kerning of the title text.
-        :param  stroke_width:       Scalar to apply to black stroke of the title
-                                    text.
-        :param  args and kwargs:    Unused arguments to permit generalized calls
-                                    for any CardType.
+        Args:
+            output_file: Output file where to create the card.
+            title: Title text to add to created card.
+            season_text: Season text to add to created card.
+            episode_text: Episode text to add to created card.
+            font: Font name or path (as string) to use for episode title.
+            font_size: Scalar to apply to title font size.
+            season_number: Season number for the card.
+            episode_number: Episode number for the card.
+            title_color: Color to use for title text.
+            hide_season: Whether to ignore season_text.
+            separator: Character to use to separate season and episode text.
+            blur: Whether to blur the source image.
+            grayscale: Whether to make the source image grayscale.
+            vertical_shift: Pixel count to adjust the title vertical offset by.
+            interline_spacing: Pixel count to adjust title interline spacing by.
+            kerning: Scalar to apply to kerning of the title text.
+            stroke_width: Scalar to apply to black stroke of the title text.
+            kwargs: Unused arguments.
         """
         
         # Initialize the parent class - this sets up an ImageMagickInterface
-        super().__init__()
+        super().__init__(blur, grayscale)
 
         # Look for logo if it's a format string
         if isinstance(logo, str):
@@ -116,15 +112,10 @@ class WhiteTextStandardLogo(BaseCardType):
         self.font_size = font_size
         self.title_color = title_color
         self.hide_season = hide_season
-        self.separator = separator
-        self.blur = blur
         self.vertical_shift = vertical_shift
         self.interline_spacing = interline_spacing
         self.kerning = kerning
         self.stroke_width = stroke_width
-
-        # Miscellaneous attributes
-        self.blur = blur
         self.background = background
         self.separator = separator
 
@@ -279,7 +270,7 @@ class WhiteTextStandardLogo(BaseCardType):
 
         command = ' '.join([
             f'convert "{backdrop_logo.resolve()}"',
-            f'-blur {self.BLUR_PROFILE}' if self.blur else '',
+            *self.resize_and_style,
             *self.__title_text_global_effects(),
             *self.__title_text_black_stroke(),
             f'-annotate +0+{vertical_shift} "{self.title}"',

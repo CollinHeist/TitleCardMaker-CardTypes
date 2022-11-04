@@ -42,30 +42,38 @@ class BarebonesTitleCard(BaseCardType):
     """Paths to intermediate files that are deleted after the card is created"""
     __RESIZED_SOURCE = BaseCardType.TEMP_DIR / 'resized_source.png'
 
-    __slots__ = ('source_file', 'output_file', 'title', 'hide_episode_text', 
-                 'episode_text', 'font', 'font_size', 'title_color', 'blur',
-                 'episode_text_color', 'stroke_width')
+    __slots__ = (
+        'source_file', 'output_file', 'title', 'hide_episode_text', 
+        'episode_text', 'font', 'font_size', 'title_color',
+        'episode_text_color', 'stroke_width'
+    )
 
     
     def __init__(self, source: Path, output_file: Path, title: str,
-                 episode_text: str, font: str, title_color: str, font_size:float,
-                 episode_text_color: str=EPISODE_TEXT_COLOR, blur: bool=False,
+                 episode_text: str, font: str, font_size: float,
+                 title_color: str, episode_text_color: str=EPISODE_TEXT_COLOR,
+                 blur: bool=False, grayscale: bool=False,
                  stroke_width: float=1.0, **kwargs) -> None:
         """
-        Constructs a new instance.
-        
-        :param      source:         Source image for this card.
-        :param      output_file:    Output filepath for this card.
-        :param      title:          The title for this card.
-        :param      episode_text:   The episode text for this card.
-        :param      font:           Font to use for the episode title.
-        :param      blur:           Whether to blur the source image.
-        :param      kwargs:         Unused arguments to permit generalized
-                                    function calls for any CardType.
+        Initialize this CardType object.
+
+        Args:
+            source: Source image to base the card on.
+            output_file: Output file where to create the card.
+            title: Title text to add to created card.
+            episode_text: Episode text to add to created card.
+            font: Font name or path (as string) to use for episode title.
+            font_size: Scalar to apply to title font size.
+            title_color: Color to use for title text.
+            episode_text_color: Color for the episode text.
+            blur: Whether to blur the source image.
+            grayscale: Whether to make the source image grayscale.
+            stroke_width: Scalar to apply to black stroke of the title text.
+            kwargs: Unused arguments.
         """
         
         # Initialize the parent class - this sets up an ImageMagickInterface
-        super().__init__()
+        super().__init__(blur, grayscale)
 
         # Store source and output file
         self.source_file = source
@@ -91,9 +99,6 @@ class BarebonesTitleCard(BaseCardType):
         self.episode_text_color = episode_text_color
         self.stroke_width = stroke_width
 
-        # Store blur flag
-        self.blur = blur
-
 
     def __resize_source(self, source: Path) -> Path:
         """
@@ -106,11 +111,7 @@ class BarebonesTitleCard(BaseCardType):
 
         command = ' '.join([
             f'convert "{source.resolve()}"',
-            f'+profile "*"',
-            f'-gravity center',
-            f'-resize "{self.TITLE_CARD_SIZE}^"',
-            f'-extent "{self.TITLE_CARD_SIZE}"',
-            f'-blur {self.BLUR_PROFILE}' if self.blur else '',
+            *self.resize_and_style,
             f'"{self.__RESIZED_SOURCE.resolve()}"',
         ])
 

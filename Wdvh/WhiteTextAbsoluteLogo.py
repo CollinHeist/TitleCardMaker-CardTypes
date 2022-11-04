@@ -1,5 +1,4 @@
 from pathlib import Path
-from re import findall
 
 from modules.BaseCardType import BaseCardType
 from modules.Debug import log
@@ -7,7 +6,8 @@ from modules.RemoteFile import RemoteFile
 
 class WhiteTextAbsoluteLogo(BaseCardType):
     """
-    This class describes Wdvh's absolute CardType intended for absolute episode ordering
+    This class describes Wdvh's absolute CardType intended for absolute episode
+    ordering.
     """
 
     """Directory where all reference files used by this card are stored"""
@@ -48,45 +48,41 @@ class WhiteTextAbsoluteLogo(BaseCardType):
     __BACKDROP_WITH_LOGO = BaseCardType.TEMP_DIR / 'backdrop_logo.png'
     __LOGO_WITH_TITLE = BaseCardType.TEMP_DIR / 'logo_title.png'
 
-    __slots__ = ('source_file', 'output_file', 'title',
-                 'episode_text', 'font', 'font_size', 'title_color',
-                 'hide_season', 'blur', 'vertical_shift', 'interline_spacing',
-                 'kerning', 'stroke_width')
+    __slots__ = (
+        'logo', 'output_file', 'title', 'episode_text', 'font', 'font_size',
+        'title_color', 'vertical_shift', 'interline_spacing', 'kerning',
+        'stroke_width', 'background'
+    )
 
 
-    def __init__(self, source: Path, output_file: Path, title: str,
-                 episode_text: str, font: str,
-                 font_size: float, title_color: str,
-                 blur: bool=False, vertical_shift: int=0,
+    def __init__(self, output_file: Path, title: str, episode_text: str,
+                 font: str, font_size: float, title_color: str,
+                 blur: bool=False, grayscale: bool=False, vertical_shift: int=0,
                  interline_spacing: int=0, kerning: float=1.0,
-                 stroke_width: float=1.0,
-                 logo: str=None,  background: str='#000000', **kwargs) -> None:
+                 stroke_width: float=1.0, logo: str=None,
+                 background: str='#000000', **kwargs) -> None:
         """
-        Initialize the TitleCardMaker object. This primarily just stores
-        instance variables for later use in `create()`. If the provided font
-        does not have a character in the title text, a space is used instead.
+        Initialize this CardType object.
 
-        :param  source:             Source image.
-        :param  output_file:        Output file.
-        :param  title_top_line:     Episode title.
-        :param  episode_text:       Text to use as episode count text.
-        :param  font:               Font to use for the episode title. MUST be a
-                                    a valid ImageMagick font, or filepath to a
-                                    font.
-        :param  font_size:          Scalar to apply to the title font size.
-        :param  title_color:        Color to use for the episode title.
-        :param  blur:               Whether to blur the source image.
-        :param  vertical_shift:     Pixels to adjust title vertical shift by.
-        :param  interline_spacing:  Pixels to adjust title interline spacing by.
-        :param  kerning:            Scalar to apply to kerning of the title text.
-        :param  stroke_width:       Scalar to apply to black stroke of the title
-                                    text.
-        :param  args and kwargs:    Unused arguments to permit generalized calls
-                                    for any CardType.
+        Args:
+            output_file: Output file where to create the card.
+            title: Title text to add to created card.
+            episode_text: Episode text to add to created card.
+            font: Font name or path (as string) to use for episode title.
+            font_size: Scalar to apply to title font size.
+            title_color: Color to use for title text.
+            blur: Whether to blur the source image.
+            grayscale: Whether to make the source image grayscale.
+            vertical_shift: Pixel count to adjust the title vertical offset by.
+            interline_spacing: Pixel count to adjust title interline spacing by.
+            kerning: Scalar to apply to kerning of the title text.
+            stroke_width: Scalar to apply to black stroke of the title text.
+            background: Background color of the image.
+            kwargs: Unused arguments.
         """
         
         # Initialize the parent class - this sets up an ImageMagickInterface
-        super().__init__()
+        super().__init__(blur, grayscale)
 
         # Look for logo if it's a format string
         if isinstance(logo, str):
@@ -108,9 +104,6 @@ class WhiteTextAbsoluteLogo(BaseCardType):
         self.interline_spacing = interline_spacing
         self.kerning = kerning
         self.stroke_width = stroke_width
-
-        # Miscellaneous attributes
-        self.blur = blur
         self.background = background
 
 
@@ -264,7 +257,7 @@ class WhiteTextAbsoluteLogo(BaseCardType):
 
         command = ' '.join([
             f'convert "{backdrop_logo.resolve()}"',
-            f'-blur {self.BLUR_PROFILE}' if self.blur else '',
+            *self.resize_and_style,
             *self.__title_text_global_effects(),
             *self.__title_text_black_stroke(),
             f'-annotate +0+{vertical_shift} "{self.title}"',

@@ -48,23 +48,25 @@ class StarWarsTitleOnly (BaseCardType):
     """Paths to intermediate files that are deleted after the card is created"""
     __SOURCE_WITH_STARS = BaseCardType.TEMP_DIR / 'source_gradient.png'
 
-    __slots__ = ('source_file', 'output_file', 'title', 'blur')
+    __slots__ = ('source_file', 'output_file', 'title')
 
     
-    def __init__(self, source: Path, output_file: Path, title: str, blur: bool=False, *args, **kwargs) -> None:
+    def __init__(self, source: Path, output_file: Path, title: str,
+                 blur: bool=False, grayscale: bool=False, **kwargs) -> None:
         """
-        Constructs a new instance.
-        
-        :param      source:             Source image for this card.
-        :param      output_file:        Output filepath for this card.
-        :param      title:              The title for this card.
-        :param      blur:               Whether to blur the source image.
-        :param      args and kwargs:    Unused arguments to permit generalized
-                                        function calls for any CardType.
+        Initialize this CardType object.
+
+        Args:
+            source: Source image to base the card on.
+            output_file: Output file where to create the card.
+            title: Title text to add to created card.
+            blur: Whether to blur the source image.
+            grayscale: Whether to make the source image grayscale.
+            kwargs: Unused arguments.
         """
         
         # Initialize the parent class - this sets up an ImageMagickInterface
-        super().__init__()
+        super().__init__(blur, grayscale)
 
         # Store source and output file
         self.source_file = source
@@ -72,9 +74,6 @@ class StarWarsTitleOnly (BaseCardType):
 
         # Store episode title
         self.title = self.image_magick.escape_chars(title.upper())
-
-        # Store blur flag
-        self.blur = blur
 
 
     def __add_star_gradient(self, source: Path) -> Path:
@@ -88,11 +87,7 @@ class StarWarsTitleOnly (BaseCardType):
 
         command = ' '.join([
             f'convert "{source.resolve()}"',
-            f'+profile "*"',
-            f'-gravity center',
-            f'-resize "{self.TITLE_CARD_SIZE}^"',
-            f'-extent "{self.TITLE_CARD_SIZE}"',
-            f'-blur {self.BLUR_PROFILE}' if self.blur else '',
+            *self.resize_and_style,
             f'"{self.__STAR_GRADIENT_IMAGE.resolve()}"',
             f'-background None',
             f'-layers Flatten',

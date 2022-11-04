@@ -6,7 +6,7 @@ from modules.RemoteFile import RemoteFile
 
 class WhiteTextTitleOnlyLogo(BaseCardType):
     """
-    This class describes Wdvh's title only title CardType
+    This class describes Wdvh's title only title CardType.
     """
 
     """Directory where all reference files used by this card are stored"""
@@ -43,46 +43,43 @@ class WhiteTextTitleOnlyLogo(BaseCardType):
     """Paths to intermediate files that are deleted after the card is created"""
     __RESIZED_LOGO = BaseCardType.TEMP_DIR / 'resized_logo.png'
     __BACKDROP_WITH_LOGO = BaseCardType.TEMP_DIR / 'backdrop_logo.png'
-    __LOGO_WITH_TITLE = BaseCardType.TEMP_DIR / 'logo_title.png'
+
+    __slots__ = (
+        'logo', 'output_file', 'title', 'font', 'font_size', 'title_color',
+        'vertical_shift', 'interline_spacing', 'kerning', 'stroke_width',
+        'background',
+    )
 
 
-    __slots__ = ('source_file', 'output_file', 'title', 'font', 'font_size',
-                 'title_color', 'hide_season', 'blur', 'vertical_shift',
-                 'interline_spacing', 'kerning', 'stroke_width')
-
-    def __init__(self, source: Path, output_file: Path, title: str,
-                 font: str, font_size: float,
-                 title_color: str, blur: bool=False,
-                 vertical_shift: int=0, kerning: float=1.0,
-                 interline_spacing: int=0, stroke_width: float=1.0,
-                 logo: str=None,  background: str='#000000', **kwargs) -> None:
+    def __init__(self, output_file: Path, title: str, font: str,
+                 font_size: float, title_color: str, blur: bool=False,
+                 grayscale: bool=False, vertical_shift: int=0,
+                 kerning: float=1.0, interline_spacing: int=0,
+                 stroke_width: float=1.0, logo: str=None, 
+                 background: str='#000000', **kwargs) -> None:
         """
-        Initialize the TitleCardMaker object. This primarily just stores
-        instance variables for later use in `create()`. If the provided font
-        does not have a character in the title text, a space is used instead.
+        Initialize this CardType object.
 
-        :param  source:             Source image.
-        :param  output_file:        Output file.
-        :param  title:              Episode title.
-        :param  font:               Font to use for the episode title.
-        :param  font_size:          Scalar to apply to the title font size.
-        :param  title_color:        Color to use for the episode title.
-        :param  blur:               Whether to blur the source image.
-        :param  vertical_shift:     Pixels to adjust title vertical shift by.
-        :param  interline_spacing:  Pixels to adjust title interline spacing by.
-        :param  kerning:            Scalar to apply to kerning of the title text.
-        :param  stroke_width:       Scalar to apply to black stroke of the title
-                                    text.
-        :param  args and kwargs:    Unused arguments to permit generalized calls
-                                    for any CardType.
+        Args:
+            output_file: Output file where to create the card.
+            title: Title text to add to created card.
+            font: Font name or path (as string) to use for episode title.
+            font_size: Scalar to apply to title font size.
+            title_color: Color to use for title text.
+            blur: Whether to blur the source image.
+            grayscale: Whether to make the source image grayscale.
+            vertical_shift: Pixel count to adjust the title vertical offset by.
+            interline_spacing: Pixel count to adjust title interline spacing by.
+            kerning: Scalar to apply to kerning of the title text.
+            stroke_width: Scalar to apply to black stroke of the title text.
+            kwargs: Unused arguments.
         """
         
         # Initialize the parent class - this sets up an ImageMagickInterface
-        super().__init__()
+        super().__init__(blur, grayscale)
 
-        # Look for logo if it's a format string
+        # Convert logo to Path
         if isinstance(logo, str):
-            # Use either original or modified logo file
             self.logo = Path(logo)
         else:
             self.logo = None
@@ -100,9 +97,6 @@ class WhiteTextTitleOnlyLogo(BaseCardType):
         self.interline_spacing = interline_spacing
         self.kerning = kerning
         self.stroke_width = stroke_width
-
-        # Miscellaneous attributes
-        self.blur = blur
         self.background = background
 
 
@@ -212,7 +206,7 @@ class WhiteTextTitleOnlyLogo(BaseCardType):
 
         command = ' '.join([
             f'convert "{backdrop_logo.resolve()}"',
-            f'-blur {self.BLUR_PROFILE}' if self.blur else '',
+            *self.resize_and_style,
             *self.__title_text_global_effects(),
             *self.__title_text_black_stroke(),
             f'-annotate +0+{vertical_shift} "{self.title}"',
@@ -269,10 +263,6 @@ class WhiteTextTitleOnlyLogo(BaseCardType):
         defined title card.
         """
         
-        
-        # Create the output directory and any necessary parents 
-        self.output_file.parent.mkdir(parents=True, exist_ok=True)
-        
         # Skip card if logo doesn't exist
         if self.logo is None:
             log.error(f'Logo file not specified')
@@ -291,5 +281,4 @@ class WhiteTextTitleOnlyLogo(BaseCardType):
         self._add_title_text(backdrop_logo)
 
         # Delete all intermediate images
-        images = [resized_logo, backdrop_logo]
-        self.image_magick.delete_intermediate_images(*images)
+        self.image_magick.delete_intermediate_images(resized_logo,backdrop_logo)

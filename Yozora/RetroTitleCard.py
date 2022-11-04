@@ -46,51 +46,51 @@ class RetroTitleCard(BaseCardType):
     """Paths to intermediate files that are deleted after the card is created"""
     __SOURCE_WITH_GRADIENT = BaseCardType.TEMP_DIR / 'source_gradient.png'
     __GRADIENT_WITH_TITLE = BaseCardType.TEMP_DIR / 'gradient_title.png'
-    __SERIES_COUNT_TEXT = BaseCardType.TEMP_DIR / 'series_count_text.png'
 
-    __slots__ = ('source_file', 'output_file', 'title', 'episode_text',
-                 'font', 'font_size', 'title_color', 'hide_season',
-                 'blur', 'vertical_shift', 'interline_spacing',
-                 'watched', 'kerning', 'stroke_width', 'override_bw',
-                 'override_style')
+    __slots__ = (
+        'source_file', 'output_file', 'title', 'episode_text', 'font',
+        'font_size', 'title_color', 'watched', 'vertical_shift',
+        'interline_spacing', 'kerning', 'stroke_width', 'override_bw',
+        'override_style'
+    )
 
 
     def __init__(self, source: Path, output_file: Path, title: str,
                  episode_text: str, font: str, font_size: float,
                  title_color: str, watched: bool=True, blur: bool=False,
-                 vertical_shift: int=0, interline_spacing: int=0,
-                 kerning: float=1.0, stroke_width: float=1.0,
-                 override_bw: str='', override_style: str='',
-                 **kwargs) -> None:
+                 grayscale: bool=False, vertical_shift: int=0,
+                 interline_spacing: int=0, kerning: float=1.0,
+                 stroke_width: float=1.0, override_bw: str='',
+                 override_style: str='', **kwargs) -> None:
         """
-        Initialize this object.
-        
-        :param  source:             Source image.
-        :param  output_file:        Output file.
-        :param  title_top_line:     Episode title.
-        :param  episode_text:       Text to use as episode count text.
-        :param  font:               Font to use for the episode title. MUST be a
-                                    a valid ImageMagick font, or filepath to a
-                                    font.
-        :param  font_size:          Scalar to apply to the title font size.
-        :param  title_color:        Color to use for the episode title.
-        :param  watched:            Whether this episode has been watched.
-        :param  blur:               Whether to blur the source image.
-        :param  vertical_shift:     Pixels to adjust title vertical shift by.
-        :param  interline_spacing:  Pixels to adjust title interline spacing by.
-        :param  kerning:            Scalar to apply to kerning of the title text.
-        :param  stroke_width:       Scalar to apply to black stroke of the title
-                                    text.
-        :param  disable_bw:         Whether to disable B/W modification based on
-                                    watch status.
-        :param  override_style:     Override the play/rewind style basd on watch
-                                    status. Should be 'rewind' or 'play'.
-        :param  kwargs:             Unused arguments to permit generalized calls
-                                    for any CardType.
+        Initialize this CardType object.
+
+        Args:
+            source: Source image to base the card on.
+            output_file: Output file where to create the card.
+            title: Title text to add to created card.
+            season_text: Season text to add to created card.
+            episode_text: Episode text to add to created card.
+            font: Font name or path (as string) to use for episode title.
+            font_size: Scalar to apply to title font size.
+            title_color: Color to use for title text.
+            watched: Whether this episode has been watched.
+            hide_season: Whether to ignore season_text.
+            separator: Character to use to separate season and episode text.
+            blur: Whether to blur the source image.
+            grayscale: Whether to make the source image grayscale.
+            vertical_shift: Pixel count to adjust the title vertical offset by.
+            interline_spacing: Pixel count to adjust title interline spacing by.
+            kerning: Scalar to apply to kerning of the title text.
+            stroke_width: Scalar to apply to black stroke of the title text.
+            override_bw: Override B/W modification based on watch status.
+            override_style: Override the play/rewind style basd on watch status.
+                Should be 'rewind' or 'play'.
+            kwargs: Unused arguments.
         """
         
         # Initialize the parent class - this sets up an ImageMagickInterface
-        super().__init__()
+        super().__init__(blur, grayscale)
 
         self.source_file = source
         self.output_file = output_file
@@ -103,7 +103,6 @@ class RetroTitleCard(BaseCardType):
         self.font_size = font_size
         self.title_color = title_color
         self.watched = watched
-        self.blur = blur
         self.vertical_shift = vertical_shift
         self.interline_spacing = interline_spacing
         self.kerning = kerning
@@ -225,11 +224,7 @@ class RetroTitleCard(BaseCardType):
 
         command = ' '.join([
             f'convert "{self.source_file.resolve()}"',
-            f'+profile "*"',
-            f'-gravity east',
-            f'-resize "{self.TITLE_CARD_SIZE}^"',
-            f'-extent "{self.TITLE_CARD_SIZE}"',
-            f'-blur {self.BLUR_PROFILE}' if self.blur else '',
+            *self.resize_and_style,
             f'"{gradient_image.resolve()}"',
             f'-background None',
             f'-layers Flatten',
