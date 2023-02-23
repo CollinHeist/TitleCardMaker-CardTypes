@@ -2,6 +2,7 @@ from pathlib import Path
 from re import findall, compile as re_compile
 
 from modules.BaseCardType import BaseCardType
+from modules.CleanPath import CleanPath
 from modules.Debug import log
 from modules.RemoteFile import RemoteFile
 
@@ -65,9 +66,16 @@ class TitleColorMatch(BaseCardType):
     def __init__(self, source: Path, output_file: Path, title: str,
                  season_text: str, episode_text: str, font: str,
                  font_size: float, title_color: str, hide_season: bool,
-                 blur: bool=False, grayscale: bool=False, vertical_shift: int=0,
-                 interline_spacing: int=0, kerning: float=1.0,
-                 stroke_width: float=1.0, logo: str=None, **kwargs) -> None:
+                 vertical_shift: int=0,
+                 interline_spacing: int=0,
+                 kerning: float=1.0,
+                 stroke_width: float=1.0,
+                 season_number: int=1,
+                 episode_number: int=1,
+                 blur: bool=False,
+                 grayscale: bool=False,
+                 logo: str=None,
+                 **unused) -> None:
         """
         Initialize the TitleCardMaker object. This primarily just stores
         instance variables for later use in `create()`. If the provided font
@@ -98,8 +106,17 @@ class TitleColorMatch(BaseCardType):
         super().__init__(blur, grayscale)
 
         self.source_file = source
-        self.logo = Path(logo) if logo is not None else None
         self.output_file = output_file
+        if logo is None:
+            self.logo = None
+        else:
+            try:
+                logo = logo.format(season_number=season_number,
+                                   episode_number=episode_number)
+                self.logo = Path(CleanPath(logo).sanitize())
+            except Exception as e:
+                self.valid = False
+                log.exception(f'Invalid logo file "{logo}"', e)
 
         # Ensure characters that need to be escaped are
         self.title = self.image_magick.escape_chars(title)
