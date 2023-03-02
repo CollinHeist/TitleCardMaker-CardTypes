@@ -266,8 +266,10 @@ class TitleColorMatch(BaseCardType):
             f'convert "{gradient_image.resolve()}"',
             f'"{resized_logo.resolve()}"',
             f'-gravity northwest',
-            f'-define colorspace:auto-grayscale=false -type truecolor',  #keep color logo on a black and white image
-            f'-geometry "+50+50"',         # Put logo on backdrop
+            # Keep color logo on a black and white image
+            f'-define colorspace:auto-grayscale=false',
+            f'-type TrueColorAlpha',  
+            f'-geometry "+50+50"',
             f'-composite "{self.__SOURCE_WITH_GRADIENT.resolve()}"',
         ])
 
