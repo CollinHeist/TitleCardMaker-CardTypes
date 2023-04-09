@@ -9,8 +9,8 @@ from modules.RemoteFile import RemoteFile
 
 class BarebonesTitleCard(BaseCardType):
     """
-    This class describes a type of ImageMaker that produces title cards in the
-    theme of Star Wars cards as designed by reddit user /u/Olivier_286.
+    Yozora's barebones card type that is inspired by the Olivier and
+    StarWars card types.
     """
 
     """Directory where all reference files used by this card are stored"""
@@ -49,11 +49,19 @@ class BarebonesTitleCard(BaseCardType):
     )
 
     
-    def __init__(self, source: Path, output_file: Path, title: str,
-                 episode_text: str, font: str, font_size: float,
-                 title_color: str, episode_text_color: str=EPISODE_TEXT_COLOR,
-                 blur: bool=False, grayscale: bool=False,
-                 stroke_width: float=1.0, **kwargs) -> None:
+    def __init__(self, *,
+            source: Path,
+            output_file: Path,
+            title: str,
+            episode_text: str,
+            font: str,
+            font_size: float,
+            title_color: str,
+            episode_text_color: str = EPISODE_TEXT_COLOR,
+            blur: bool = False,
+            grayscale: bool = False,
+            stroke_width: float = 1.0,
+            **unused) -> None:
         """
         Initialize this CardType object.
 
@@ -69,7 +77,7 @@ class BarebonesTitleCard(BaseCardType):
             blur: Whether to blur the source image.
             grayscale: Whether to make the source image grayscale.
             stroke_width: Scalar to apply to black stroke of the title text.
-            kwargs: Unused arguments.
+            unused: Unused arguments.
         """
         
         # Initialize the parent class - this sets up an ImageMagickInterface
@@ -119,7 +127,7 @@ class BarebonesTitleCard(BaseCardType):
 
         return self.__RESIZED_SOURCE
 
-    def __add_title_text(self) -> list:
+    def __add_title_text(self) -> list[str]:
         """
         ImageMagick commands to add the episode title text to an image.
         
@@ -146,7 +154,7 @@ class BarebonesTitleCard(BaseCardType):
         ]
 
 
-    def __add_episode_text(self) -> list:
+    def __add_episode_text(self) -> list[str]:
         """
         ImageMagick commands to add the episode text to an image.
         
@@ -216,12 +224,14 @@ class BarebonesTitleCard(BaseCardType):
     @staticmethod
     def is_custom_font(font: 'Font') -> bool:
         """
-        Determines whether the given arguments represent a custom font for this
-        card. This CardType does not use custom fonts, so this is always False.
+        Determines whether the given font characteristics constitute a
+        default or custom font.
         
-        :param      font:   The Font being evaluated.
+        Args:
+            font: The Font being evaluated.
         
-        :returns:   False, as fonts are not customizable with this card.
+        Returns:
+            True if a custom font is indicated, False otherwise.
         """
 
         return ((font.file != BarebonesTitleCard.TITLE_FONT)
@@ -231,18 +241,18 @@ class BarebonesTitleCard(BaseCardType):
 
 
     @staticmethod
-    def is_custom_season_titles(custom_episode_map: bool, 
-                                episode_text_format: str) -> bool:
+    def is_custom_season_titles(
+            custom_episode_map: bool, episode_text_format: str) -> bool:
         """
-        Determines whether the given attributes constitute custom or generic
-        season titles.
+        Determines whether the given attributes constitute custom or
+        generic season titles.
         
-        :param      episode_text_format:    The episode text format in use.
-        :param      args and kwargs:        Generic arguments to permit 
-                                            generalized function calls for any
-                                            CardType.
+        Args:
+            custom_episode_map: Whether the EpisodeMap was customized.
+            episode_text_format: The episode text format in use.
         
-        :returns:   True if custom season titles are indicated, False otherwise.
+        Returns:
+            True if custom season titles are indicated, False otherwise.
         """
 
         standard_etf = BarebonesTitleCard.EPISODE_TEXT_FORMAT.upper()
