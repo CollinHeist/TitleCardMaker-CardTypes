@@ -198,6 +198,7 @@ class StandardAllBoldCard(BaseCardType):
             f'-stroke "{self.SERIES_COUNT_TEXT_COLOR}"',
             f'-strokewidth 0.75',
             f'-annotate +0+697.2 "{series_count_text}"',
+            *self.resize_output,
             f'"{self.output_file.resolve()}"',
         ])
 

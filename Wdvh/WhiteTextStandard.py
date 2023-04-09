@@ -258,6 +258,7 @@ class WhiteTextStandard(BaseCardType):
             f'-annotate +0+800 "{series_count_text}"',
             *self.__series_count_text_effects(),
             f'-annotate +0+800 "{series_count_text}"',
+            *self.resize_output,
             f'"{self.output_file.resolve()}"',
         ])
 

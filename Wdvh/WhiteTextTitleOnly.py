@@ -165,6 +165,7 @@ class WhiteTextTitleOnly(BaseCardType):
             f'-annotate +0+{vertical_shift} "{self.title}"',
             f'-fill "{self.title_color}"',
             f'-annotate +0+{vertical_shift} "{self.title}"',
+            *self.resize_output,
             f'"{self.output_file.resolve()}"',
         ])
 

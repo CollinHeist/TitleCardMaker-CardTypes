@@ -180,6 +180,7 @@ class BarebonesTitleCard(BaseCardType):
         command = ' '.join([
             f'convert "{resized_source.resolve()}"',
             *self.__add_title_text(),
+            *self.resize_output,
             f'"{self.output_file.resolve()}"',
         ])
 
@@ -201,6 +202,7 @@ class BarebonesTitleCard(BaseCardType):
             f'convert "{resized_source.resolve()}"',
             *self.__add_title_text(),
             *self.__add_episode_text(),
+            *self.resize_output,
             f'"{self.output_file.resolve()}"',
         ])
 

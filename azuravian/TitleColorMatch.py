@@ -407,6 +407,7 @@ class TitleColorMatch(BaseCardType):
             f'-annotate +50+50 "{self.episode_text}"',
             *self.__series_count_text_effects(),
             f'-annotate +50+50 "{self.episode_text}"',
+            *self.resize_output,
             f'"{self.output_file.resolve()}"',
         ])
 
@@ -516,6 +517,7 @@ class TitleColorMatch(BaseCardType):
             f'-geometry +50+50',
             f'"{series_count_image.resolve()}"',
             f'"{titled_image.resolve()}"',
+            *self.resize_output,
             f'"{self.output_file.resolve()}"',
         ])
 

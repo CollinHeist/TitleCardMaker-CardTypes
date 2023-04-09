@@ -250,6 +250,7 @@ class BetterStandardTitleCard(BaseCardType):
             f'-annotate +0+697.2 "{self.episode_text}"',
             *self.__series_count_text_effects(),
             f'-annotate +0+697.2 "{self.episode_text}"',
+            *self.resize_output,
             f'"{self.output_file.resolve()}"',
         ])
 
@@ -359,6 +360,7 @@ class BetterStandardTitleCard(BaseCardType):
             f'-geometry +0+690.2',
             f'"{series_count_image.resolve()}"',
             f'"{titled_image.resolve()}"',
+            *self.resize_output,
             f'"{self.output_file.resolve()}"',
         ])
 
@@ -430,9 +432,6 @@ class BetterStandardTitleCard(BaseCardType):
 
         # Add either one or two lines of episode text 
         titled_image = self._add_title_text(gradient_image)
-
-        # Create the output directory and any necessary parents 
-        self.output_file.parent.mkdir(parents=True, exist_ok=True)
 
         # If season text is hidden, just add episode text 
         if self.hide_season:

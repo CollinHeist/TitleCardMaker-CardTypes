@@ -289,6 +289,7 @@ class WhiteTextAbsoluteLogo(BaseCardType):
             f'-annotate +100-750 "{self.episode_text}"',
             *self.__series_count_text_effects(),
             f'-annotate +100-750 "{self.episode_text}"',
+            *self.resize_output,
             f'"{self.output_file.resolve()}"',
         ])
 
@@ -357,9 +358,6 @@ class WhiteTextAbsoluteLogo(BaseCardType):
 
         # Add either one or two lines of episode text 
         titled_image = self._add_title_text(backdrop_logo)
-
-        # Create the output directory and any necessary parents 
-        self.output_file.parent.mkdir(parents=True, exist_ok=True)
 
         # Add episode text 
         self._add_series_count_text_no_season(titled_image)

@@ -130,6 +130,7 @@ class StarWarsTitleOnly (BaseCardType):
         command = ' '.join([
             f'convert "{gradient_source.resolve()}"',
             *self.__add_title_text(),
+            *self.resize_output,
             f'"{self.output_file.resolve()}"',
         ])
 

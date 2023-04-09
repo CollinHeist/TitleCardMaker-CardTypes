@@ -282,6 +282,7 @@ class RetroTitleCard(BaseCardType):
             f'-annotate +200+229 "{self.episode_text}"',
             *self.__series_count_text_effects(),
             f'-annotate +200+229 "{self.episode_text}"',
+            *self.resize_output,
             f'"{self.output_file.resolve()}"',
         ])
 
@@ -339,9 +340,6 @@ class RetroTitleCard(BaseCardType):
 
         # Add either one or two lines of episode text 
         titled_image = self._add_title_text(gradient_image)
-
-        # Create the output directory and any necessary parents 
-        self.output_file.parent.mkdir(parents=True, exist_ok=True)
 
         # Add episode text 
         self._add_series_count_text(titled_image)
