@@ -7,7 +7,8 @@ from modules.RemoteFile import RemoteFile
 
 class WhiteTextAbsolute(BaseCardType):
     """
-    This class describes Wdvh's absolute CardType intended for absolute episode ordering
+    This class describes Wdvh's absolute CardType intended for absolute
+    episode ordering
     """
 
     """Directory where all reference files used by this card are stored"""
@@ -54,11 +55,21 @@ class WhiteTextAbsolute(BaseCardType):
     )
 
 
-    def __init__(self, source: Path, output_file: Path, title: str,
-                 episode_text: str, font: str, font_size: float,
-                 title_color: str, blur: bool=False, grayscale: bool=False,
-                 vertical_shift: int=0, interline_spacing: int=0,
-                 kerning: float=1.0, stroke_width: float=1.0, **kwargs) -> None:
+    def __init__(self, *,
+            source: Path,
+            output_file: Path,
+            title: str,
+            episode_text: str,
+            font: str,
+            font_size: float,
+            title_color: str,
+            blur: bool = False,
+            grayscale: bool = False,
+            vertical_shift: int = 0,
+            interline_spacing: int = 0,
+            kerning: float = 1.0,
+            stroke_width: float = 1.0,
+            **unused) -> None:
         """
         Initialize this CardType object.
 
@@ -101,12 +112,13 @@ class WhiteTextAbsolute(BaseCardType):
         self.stroke_width = stroke_width
 
 
-    def __title_text_global_effects(self) -> list:
+    def __title_text_global_effects(self) -> list[str]:
         """
         ImageMagick commands to implement the title text's global effects.
         Specifically the the font, kerning, fontsize, and center gravity.
         
-        :returns:   List of ImageMagick commands.
+        Returns:
+            List of ImageMagick commands.
         """
 
         font_size = 180 * self.font_size
@@ -123,11 +135,12 @@ class WhiteTextAbsolute(BaseCardType):
         ]   
 
 
-    def __title_text_black_stroke(self) -> list:
+    def __title_text_black_stroke(self) -> list[str]:
         """
         ImageMagick commands to implement the title text's black stroke.
         
-        :returns:   List of ImageMagick commands.
+        Returns:
+            List of ImageMagick commands.
         """
 
         stroke_width = 4.0 * self.stroke_width
@@ -139,12 +152,13 @@ class WhiteTextAbsolute(BaseCardType):
         ]
 
 
-    def __series_count_text_global_effects(self) -> list:
+    def __series_count_text_global_effects(self) -> list[str]:
         """
         ImageMagick commands for global text effects applied to all series count
         text (season/episode count and dot).
         
-        :returns:   List of ImageMagick commands.
+        Returns:
+            List of ImageMagick commands.
         """
 
         return [
@@ -153,12 +167,13 @@ class WhiteTextAbsolute(BaseCardType):
         ]
 
 
-    def __series_count_text_black_stroke(self) -> list:
+    def __series_count_text_black_stroke(self) -> list[str]:
         """
         ImageMagick commands for adding the necessary black stroke effects to
         series count text.
         
-        :returns:   List of ImageMagick commands.
+        Returns:
+            List of ImageMagick commands.
         """
 
         return [
@@ -168,12 +183,13 @@ class WhiteTextAbsolute(BaseCardType):
         ]
 
 
-    def __series_count_text_effects(self) -> list:
+    def __series_count_text_effects(self) -> list[str]:
         """
         ImageMagick commands for adding the necessary text effects to the series
         count text.
         
-        :returns:   List of ImageMagick commands.
+        Returns:
+            List of ImageMagick commands.
         """
 
         return [
@@ -187,7 +203,8 @@ class WhiteTextAbsolute(BaseCardType):
         """
         Add the static gradient to this object's source image.
         
-        :returns:   Path to the created image.
+        Returns:
+            Path to the created image.
         """
 
         command = ' '.join([
@@ -261,12 +278,14 @@ class WhiteTextAbsolute(BaseCardType):
     @staticmethod
     def is_custom_font(font: 'Font') -> bool:
         """
-        Determines whether the given font characteristics constitute a default
-        or custom font.
+        Determines whether the given font characteristics constitute a
+        default or custom font.
         
-        :param      font:   The Font being evaluated.
+        Args:
+            font: The Font being evaluated.
         
-        :returns:   True if a custom font is indicated, False otherwise.
+        Returns:
+            True if a custom font is indicated, False otherwise.
         """
 
         return ((font.file != WhiteTextAbsolute.TITLE_FONT)
@@ -280,17 +299,18 @@ class WhiteTextAbsolute(BaseCardType):
 
 
     @staticmethod
-    def is_custom_season_titles(custom_episode_map: bool, 
-                                episode_text_format: str) -> bool:
+    def is_custom_season_titles(
+            custom_episode_map: bool, episode_text_format: str) -> bool:
         """
-        Determines whether the given attributes constitute custom or generic
-        season titles.
+        Determines whether the given attributes constitute custom or
+        generic season titles.
         
-        :param      custom_episode_map:     Whether the EpisodeMap was
-                                            customized.
-        :param      episode_text_format:    The episode text format in use.
+        Args:
+            custom_episode_map: Whether the EpisodeMap was customized.
+            episode_text_format: The episode text format in use.
         
-        :returns:   True if custom season titles are indicated, False otherwise.
+        Returns:
+            False. Custom season titles are not used.
         """
 
         return False
@@ -298,8 +318,8 @@ class WhiteTextAbsolute(BaseCardType):
 
     def create(self) -> None:
         """
-        Make the necessary ImageMagick and system calls to create this object's
-        defined title card.
+        Make the necessary ImageMagick and system calls to create this
+        object's defined title card.
         """
         
         # Add the gradient to the source image (always)

@@ -1,5 +1,6 @@
 from pathlib import Path
 from re import findall, compile as re_compile
+from typing import Optional
 
 from modules.BaseCardType import BaseCardType
 from modules.CleanPath import CleanPath
@@ -9,10 +10,10 @@ from modules.RemoteFile import RemoteFile
 class TitleColorMatch(BaseCardType):
     """
     This class describes a type of CardType created by azuravian, and is 
-    a modification of Beedman's GradientLogoTitleCard class with a few changes, 
-    specifically the ability to autoselect a font color that matches the logo, 
-    as well as trimming the logo of any extra transparent space that makes its 
-    location incorrect.
+    a modification of Beedman's GradientLogoTitleCard class with a few
+    changes,  specifically the ability to autoselect a font color that
+    matches the logo, as well as trimming the logo of any extra
+    transparent space that makes its  location incorrect.
     """
     
     """Directory where all reference files used by this card are stored"""
@@ -30,8 +31,9 @@ class TitleColorMatch(BaseCardType):
     TITLE_COLOR = '#EBEBEB'
 
     """Default characters to replace in the generic font"""
-    FONT_REPLACEMENTS = {'[': '(', ']': ')', '(': '[', ')': ']', '―': '-',
-                         '…': '...'}
+    FONT_REPLACEMENTS = {
+        '[': '(', ']': ')', '(': '[', ')': ']', '―': '-', '…': '...'
+    }
 
     """Whether this CardType uses season titles for archival purposes"""
     USES_SEASON_TITLE = True
@@ -63,23 +65,28 @@ class TitleColorMatch(BaseCardType):
     )
 
 
-    def __init__(self, source: Path, output_file: Path, title: str,
-                 season_text: str, episode_text: str, font: str,
-                 font_size: float, title_color: str, hide_season: bool,
-                 vertical_shift: int=0,
-                 interline_spacing: int=0,
-                 kerning: float=1.0,
-                 stroke_width: float=1.0,
-                 season_number: int=1,
-                 episode_number: int=1,
-                 blur: bool=False,
-                 grayscale: bool=False,
-                 logo: str=None,
-                 **unused) -> None:
+    def __init__(self,
+            source: Path,
+            output_file: Path,
+            title: str,
+            season_text: str,
+            episode_text: str,
+            font: str,
+            font_size: float,
+            title_color: str,
+            hide_season: bool = False,
+            vertical_shift: int = 0,
+            interline_spacing: int = 0,
+            kerning: float = 1.0,
+            stroke_width: float = 1.0,
+            season_number: int = 1,
+            episode_number: int = 1,
+            blur: bool = False,
+            grayscale: bool = False,
+            logo: Optional[str] = None,
+            **unused) -> None:
         """
-        Initialize the TitleCardMaker object. This primarily just stores
-        instance variables for later use in `create()`. If the provided font
-        does not have a character in the title text, a space is used instead.
+        Construct a new instance of this card.
 
         Args:
             source: Source image.
@@ -90,14 +97,15 @@ class TitleColorMatch(BaseCardType):
             font: Font to use for the episode title.
             font_size: Scalar to apply to the title font size.
             title_color: Color to use for the episode title.
-            hide_season: Whether to omit the season text (and joining character)
-                from the title card completely.
+            hide_season: Whether to omit the season text (and joining
+                character) from the title card completely.
             blur: Whether to blur the source image.
             grayscale: Whether to make the source image grayscale.
             vertical_shift: Pixels to adjust title vertical shift by.
-            interline_spacing: Pixels to adjust title interline spacing by.
+            interline_spacing: Pixels to adjust title interline spacing.
             kerning: Scalar to apply to kerning of the title text.
-            stroke_width: Scalar to apply to black stroke of the title text.
+            stroke_width: Scalar to apply to black stroke of the title
+                text.
             logo: Filepath to the logo file.
             kwargs: Unused arguments.
         """
@@ -134,12 +142,14 @@ class TitleColorMatch(BaseCardType):
         self.stroke_width = stroke_width
 
 
-    def __title_text_global_effects(self) -> list:
+    def __title_text_global_effects(self) -> list[str]:
         """
-        ImageMagick commands to implement the title text's global effects.
-        Specifically the the font, kerning, fontsize, and center gravity.
+        ImageMagick commands to implement the title text's global
+        effects. Specifically the the font, kerning, fontsize, and
+        center gravity.
         
-        :returns:   List of ImageMagick commands.
+        Returns:
+            List of ImageMagick commands.
         """
 
         font_size = 157.41 * self.font_size
@@ -156,11 +166,12 @@ class TitleColorMatch(BaseCardType):
         ]   
 
 
-    def __title_text_black_stroke(self, stroke) -> list:
+    def __title_text_black_stroke(self, stroke) -> list[str]:
         """
         ImageMagick commands to implement the title text's black stroke.
         
-        :returns:   List of ImageMagick commands.
+        Returns:
+            List of ImageMagick commands.
         """
 
         stroke_width = 3.0 * self.stroke_width
@@ -177,7 +188,8 @@ class TitleColorMatch(BaseCardType):
         ImageMagick commands for global text effects applied to all series count
         text (season/episode count and dot).
         
-        :returns:   List of ImageMagick commands.
+        Returns:
+            List of ImageMagick commands.
         """
 
         return [
@@ -191,7 +203,8 @@ class TitleColorMatch(BaseCardType):
         ImageMagick commands for adding the necessary black stroke effects to
         series count text.
         
-        :returns:   List of ImageMagick commands.
+        Returns:
+            List of ImageMagick commands.
         """
 
         return [
@@ -206,7 +219,8 @@ class TitleColorMatch(BaseCardType):
         ImageMagick commands for adding the necessary text effects to the series
         count text.
         
-        :returns:   List of ImageMagick commands.
+        Returns:
+            List of ImageMagick commands.
         """
 
         return [
@@ -219,7 +233,8 @@ class TitleColorMatch(BaseCardType):
         """
         Resize the logo into at most a 1155x650 bounding box.
         
-        :returns:   Path to the created image.
+        Returns:
+            Path to the created image.
         """
         
         command = ' '.join([
@@ -239,7 +254,8 @@ class TitleColorMatch(BaseCardType):
         """
         Add the static gradient to this object's source image.
         
-        :returns:   Path to the created image.
+        Returns:
+            Path to the created image.
         """
 
         command = ' '.join([
@@ -259,7 +275,8 @@ class TitleColorMatch(BaseCardType):
         """
         Add the resized logo to the same intermediate image as above because that's what worked.
         
-        :returns:   Path to the created image.
+        Returns:
+            Path to the created image.
         """
 
         command = ' '.join([

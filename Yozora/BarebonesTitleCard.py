@@ -123,7 +123,8 @@ class BarebonesTitleCard(BaseCardType):
         """
         ImageMagick commands to add the episode title text to an image.
         
-        :returns:   List of ImageMagick commands.
+        Returns:
+            List of ImageMagick commands.
         """
 
         stroke_width = 6.0 * self.stroke_width
@@ -149,7 +150,8 @@ class BarebonesTitleCard(BaseCardType):
         """
         ImageMagick commands to add the episode text to an image.
         
-        :returns:   List of ImageMagick commands.
+        Returns:
+            List of ImageMagick commands.
         """
 
         return [

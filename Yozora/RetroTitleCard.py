@@ -6,8 +6,8 @@ from modules.RemoteFile import RemoteFile
 
 class RetroTitleCard(BaseCardType):
     """
-    This class describes a CardType designed by Yozora. This card type is retro-
-    themed, and features either a Rewind/Play overlay.
+    This class describes a CardType designed by Yozora. This card type
+    is retro-themed, and features either a Rewind/Play overlay.
     """
 
     """Directory where all reference files used by this card are stored"""
@@ -23,8 +23,9 @@ class RetroTitleCard(BaseCardType):
     """Default font characteristics for the title text"""
     TITLE_FONT = str(RemoteFile('Yozora', 'ref/retro/retro.ttf'))
     TITLE_COLOR = '#FFFFFF'
-    FONT_REPLACEMENTS = {'[': '(', ']': ')', '(': '[', ')': ']', '―': '-',
-                         '…': '...'}
+    FONT_REPLACEMENTS = {
+        '[': '(', ']': ')', '(': '[', ')': ']', '―': '-', '…': '...'
+    }
 
     """Whether this CardType uses season titles for archival purposes"""
     USES_SEASON_TITLE = True
@@ -55,13 +56,24 @@ class RetroTitleCard(BaseCardType):
     )
 
 
-    def __init__(self, source: Path, output_file: Path, title: str,
-                 episode_text: str, font: str, font_size: float,
-                 title_color: str, watched: bool=True, blur: bool=False,
-                 grayscale: bool=False, vertical_shift: int=0,
-                 interline_spacing: int=0, kerning: float=1.0,
-                 stroke_width: float=1.0, override_bw: str='',
-                 override_style: str='', **kwargs) -> None:
+    def __init__(self, *,
+            source: Path,
+            output_file: Path,
+            title: str,
+            episode_text: str,
+            font: str,
+            font_size: float,
+            title_color: str,
+            watched: bool = True,
+            blur: bool = False,
+            grayscale: bool = False,
+            vertical_shift: int = 0,
+            interline_spacing: int = 0,
+            kerning: float = 1.0,
+            stroke_width: float = 1.0,
+            override_bw: str = '',
+            override_style: str = '',
+            **unused) -> None:
         """
         Initialize this CardType object.
 
@@ -86,7 +98,7 @@ class RetroTitleCard(BaseCardType):
             override_bw: Override B/W modification based on watch status.
             override_style: Override the play/rewind style basd on watch status.
                 Should be 'rewind' or 'play'.
-            kwargs: Unused arguments.
+            unused: Unused arguments.
         """
         
         # Initialize the parent class - this sets up an ImageMagickInterface
@@ -113,12 +125,13 @@ class RetroTitleCard(BaseCardType):
         self.override_style = override_style.lower()
 
 
-    def __title_text_global_effects(self) -> list:
+    def __title_text_global_effects(self) -> list[str]:
         """
         ImageMagick commands to implement the title text's global effects.
         Specifically the the font, kerning, fontsize, and center gravity.
         
-        :returns:   List of ImageMagick commands.
+        Returns:
+            List of ImageMagick commands.
         """
 
         font_size = 150 * self.font_size
@@ -135,11 +148,12 @@ class RetroTitleCard(BaseCardType):
         ]   
 
 
-    def __title_text_black_stroke(self) -> list:
+    def __title_text_black_stroke(self) -> list[str]:
         """
         ImageMagick commands to implement the title text's black stroke.
         
-        :returns:   List of ImageMagick commands.
+        Returns:
+            List of ImageMagick commands.
         """
 
         stroke_width = 3.0 * self.stroke_width
@@ -151,12 +165,13 @@ class RetroTitleCard(BaseCardType):
         ]
 
 
-    def __series_count_text_global_effects(self) -> list:
+    def __series_count_text_global_effects(self) -> list[str]:
         """
         ImageMagick commands for global text effects applied to all series count
         text (season/episode count and dot).
         
-        :returns:   List of ImageMagick commands.
+        Returns:
+            List of ImageMagick commands.
         """
 
         return [
@@ -165,12 +180,13 @@ class RetroTitleCard(BaseCardType):
         ]
 
 
-    def __series_count_text_black_stroke(self) -> list:
+    def __series_count_text_black_stroke(self) -> list[str]:
         """
         ImageMagick commands for adding the necessary black stroke effects to
         series count text.
         
-        :returns:   List of ImageMagick commands.
+        Returns:
+            List of ImageMagick commands.
         """
 
         return [
@@ -180,12 +196,13 @@ class RetroTitleCard(BaseCardType):
         ]
 
 
-    def __series_count_text_effects(self) -> list:
+    def __series_count_text_effects(self) -> list[str]:
         """
         ImageMagick commands for adding the necessary text effects to the series
         count text.
         
-        :returns:   List of ImageMagick commands.
+        Returns:
+            List of ImageMagick commands.
         """
 
         return [
@@ -199,7 +216,8 @@ class RetroTitleCard(BaseCardType):
         """
         Add the static gradient to this object's source image.
         
-        :returns:   Path to the created image.
+        Returns:
+            Path to the created image.
         """
         
         # Select gradient overlay based on override/watch status
@@ -294,18 +312,19 @@ class RetroTitleCard(BaseCardType):
     @staticmethod
     def is_custom_font(font: 'Font') -> bool:
         """
-        Determines whether the given font characteristics constitute a default
-        or custom font.
+        Determines whether the given font characteristics constitute a
+        default or custom font.
         
-        :param      font:   The Font being evaluated.
+        Args:
+            font: The Font being evaluated.
         
-        :returns:   True if a custom font is indicated, False otherwise.
+        Returns:
+            True if a custom font is indicated, False otherwise.
         """
 
         return ((font.file != RetroTitleCard.TITLE_FONT)
             or (font.size != 1.0)
             or (font.color != RetroTitleCard.TITLE_COLOR)
-            or (font.replacements != RetroTitleCard.FONT_REPLACEMENTS)
             or (font.vertical_shift != 0)
             or (font.interline_spacing != 0)
             or (font.kerning != 1.0)
@@ -313,17 +332,18 @@ class RetroTitleCard(BaseCardType):
 
 
     @staticmethod
-    def is_custom_season_titles(custom_episode_map: bool, 
-                                episode_text_format: str) -> bool:
+    def is_custom_season_titles(
+            custom_episode_map: bool, episode_text_format: str) -> bool:
         """
-        Determines whether the given attributes constitute custom or generic
-        season titles.
+        Determines whether the given attributes constitute custom or
+        generic season titles.
         
-        :param      custom_episode_map:     Whether the EpisodeMap was
-                                            customized.
-        :param      episode_text_format:    The episode text format in use.
+        Args:
+            custom_episode_map: Whether the EpisodeMap was customized.
+            episode_text_format: The episode text format in use.
         
-        :returns:   True if custom season titles are indicated, False otherwise.
+        Returns:
+            False, as custom season titles are not used.
         """
 
         return False
@@ -331,8 +351,8 @@ class RetroTitleCard(BaseCardType):
 
     def create(self) -> None:
         """
-        Make the necessary ImageMagick and system calls to create this object's
-        defined title card.
+        Make the necessary ImageMagick and system calls to create this
+        object's defined title card.
         """
         
         # Add the gradient to the source image (always)

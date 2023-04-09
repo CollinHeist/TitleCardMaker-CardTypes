@@ -51,8 +51,13 @@ class StarWarsTitleOnly (BaseCardType):
     __slots__ = ('source_file', 'output_file', 'title')
 
     
-    def __init__(self, source: Path, output_file: Path, title: str,
-                 blur: bool=False, grayscale: bool=False, **kwargs) -> None:
+    def __init__(self, *,
+            source: Path,
+            output_file: Path,
+            title: str,
+            blur: bool = False,
+            grayscale: bool = False,
+            **unused) -> None:
         """
         Initialize this CardType object.
 
@@ -82,7 +87,8 @@ class StarWarsTitleOnly (BaseCardType):
         
         :param      source: The source image to modify.
         
-        :returns:   Path to the created image.
+        Returns:
+            Path to the created image.
         """
 
         command = ' '.join([
@@ -99,11 +105,12 @@ class StarWarsTitleOnly (BaseCardType):
         return self.__SOURCE_WITH_STARS
 
 
-    def __add_title_text(self) -> list:
+    def __add_title_text(self) -> list[str]:
         """
         ImageMagick commands to add the episode title text to an image.
         
-        :returns:   List of ImageMagick commands.
+        Returns:
+            List of ImageMagick commands.
         """
 
         return [
@@ -142,37 +149,42 @@ class StarWarsTitleOnly (BaseCardType):
     @staticmethod
     def is_custom_font(font: 'Font') -> bool:
         """
-        Determines whether the given arguments represent a custom font for this
-        card. This CardType does not use custom fonts, so this is always False.
+        Determines whether the given font characteristics constitute a
+        default or custom font.
         
-        :param      font:   The Font being evaluated.
+        Args:
+            font: The Font being evaluated.
         
-        :returns:   False, as fonts are not customizable with this card.
+        Returns:
+            False, as custom fonts are not used.
         """
 
         return False
 
 
     @staticmethod
-    def is_custom_season_titles(episode_text_format: str,
-                                *args, **kwargs) -> bool:
+    def is_custom_season_titles(
+            custom_episode_map: bool, episode_text_format: str) -> bool:
         """
-        Determines whether the given attributes constitute custom or generic
-        season titles.
+        Determines whether the given attributes constitute custom or
+        generic season titles.
         
-        :param      episode_text_format:    The episode text format in use.
-        :param      args and kwargs:        Generic arguments to permit 
-                                            generalized function calls for any
-                                            CardType.
+        Args:
+            custom_episode_map: Whether the EpisodeMap was customized.
+            episode_text_format: The episode text format in use.
         
-        :returns:   False, as season titles are not utilized.
+        Returns:
+            False. Custom season titles are not used.
         """
         
         return False
 
 
     def create(self) -> None:
-        """Create the title card as defined by this object."""
+        """
+        Make the necessary ImageMagick and system calls to create this
+        object's defined title card.
+        """
 
         # Add the starry gradient to the source image
         star_image = self.__add_star_gradient(self.source_file)
