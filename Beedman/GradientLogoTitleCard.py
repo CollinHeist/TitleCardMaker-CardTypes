@@ -420,11 +420,12 @@ class GradientLogoTitleCard(BaseCardType):
         """
 
         command = ' '.join([
-            f'composite',
+            f'convert',
             f'-gravity southwest',
             f'-geometry +50+50',
             f'"{series_count_image.resolve()}"',
             f'"{titled_image.resolve()}"',
+            f'-composite',
             *self.resize_output,
             f'"{self.output_file.resolve()}"',
         ])

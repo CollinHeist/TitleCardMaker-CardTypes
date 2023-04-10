@@ -112,9 +112,11 @@ class BarebonesTitleCard(BaseCardType):
         """
         Resize the source image.
         
-        :param      source: The source image to modify.
+        Args:
+            source: The source image to modify.
         
-        :returns:   Path to the resized image.
+        Returns:
+            Path to the resized image.
         """
 
         command = ' '.join([
@@ -182,9 +184,11 @@ class BarebonesTitleCard(BaseCardType):
         """
         Add the title to the given image.
         
-        :param      resized_source: Resized source image.
+        Args:
+            resized_source: Resized source image.
         
-        :returns:   Path to the created image (the output file).
+        Returns:
+            Path to the created image (the output file).
         """
 
         command = ' '.join([
@@ -203,9 +207,11 @@ class BarebonesTitleCard(BaseCardType):
         """
         Add the title and episode text to the given image.
         
-        :param      resized_source: Resized source image.
+        Args:
+            resized_source: Resized source image.
         
-        :returns:   Path to the created image (the output file).
+        Returns:
+            Path to the created image (the output file).
         """
 
         command = ' '.join([

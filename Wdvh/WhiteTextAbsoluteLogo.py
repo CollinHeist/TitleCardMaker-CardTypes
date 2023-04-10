@@ -318,7 +318,6 @@ class WhiteTextAbsoluteLogo(BaseCardType):
 
     @staticmethod
     def is_custom_font(font: 'Font') -> bool:
-        
         """
         Determines whether the given font characteristics constitute a
         default or custom font.
