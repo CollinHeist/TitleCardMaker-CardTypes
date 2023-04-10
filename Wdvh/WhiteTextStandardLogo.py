@@ -1,5 +1,6 @@
 from pathlib import Path
 from re import findall
+from typing import Optional
 
 from modules.BaseCardType import BaseCardType
 from modules.RemoteFile import RemoteFile
@@ -7,6 +8,7 @@ from modules.Debug import log
 
 class WhiteTextStandardLogo(BaseCardType):
     """
+    WDVH's WhiteTextStandardLogo card type.
     """
 
     """Directory where all reference files used by this card are stored"""
@@ -53,14 +55,26 @@ class WhiteTextStandardLogo(BaseCardType):
     )
 
 
-    def __init__(self, output_file: Path, title: str, season_text: str,
-                 episode_text: str, font: str, font_size: float,
-                 title_color: str, hide_season: bool, season_number: int=1,
-                 episode_number: int=1, separator: str='-', blur: bool=False,
-                 grayscale: bool=False, vertical_shift: int=0,
-                 kerning: float=1.0, interline_spacing: int=0,
-                 stroke_width: float=1.0, logo: str=None, 
-                 background: str='#000000', **kwargs) -> None:
+    def __init__(self,
+            output_file: Path,
+            title: str,
+            season_text: str,
+            episode_text: str,
+            font: str,
+            font_size: float,
+            title_color: str,
+            hide_season: bool,
+            season_number: int = 1,
+            episode_number: int = 1,
+            separator: str = '-',
+            blur: bool=False,
+            grayscale: bool = False,
+            vertical_shift: int = 0,
+            kerning: float = 1.0,
+            interline_spacing: int = 0,
+            stroke_width: float = 1.0,
+            logo: Optional[str] = None, 
+            background: str = '#000000', **kwargs) -> None:
         """
         Initialize this CardType object.
 
@@ -120,12 +134,13 @@ class WhiteTextStandardLogo(BaseCardType):
         self.separator = separator
 
 
-    def __title_text_global_effects(self) -> list:
+    def __title_text_global_effects(self) -> list[str]:
         """
         ImageMagick commands to implement the title text's global effects.
         Specifically the the font, kerning, fontsize, and center gravity.
         
-        :returns:   List of ImageMagick commands.
+        Returns:
+            List of ImageMagick commands.
         """
 
         font_size = 180 * self.font_size
@@ -142,11 +157,12 @@ class WhiteTextStandardLogo(BaseCardType):
         ]   
 
 
-    def __title_text_black_stroke(self) -> list:
+    def __title_text_black_stroke(self) -> list[str]:
         """
         ImageMagick commands to implement the title text's black stroke.
         
-        :returns:   List of ImageMagick commands.
+        Returns:
+            List of ImageMagick commands.
         """
 
         stroke_width = 4.0 * self.stroke_width
@@ -158,12 +174,13 @@ class WhiteTextStandardLogo(BaseCardType):
         ]
 
 
-    def __series_count_text_global_effects(self) -> list:
+    def __series_count_text_global_effects(self) -> list[str]:
         """
         ImageMagick commands for global text effects applied to all series count
         text (season/episode count and dot).
         
-        :returns:   List of ImageMagick commands.
+        Returns:
+            List of ImageMagick commands.
         """
 
         return [
@@ -172,12 +189,13 @@ class WhiteTextStandardLogo(BaseCardType):
         ]
 
 
-    def __series_count_text_black_stroke(self) -> list:
+    def __series_count_text_black_stroke(self) -> list[str]:
         """
         ImageMagick commands for adding the necessary black stroke effects to
         series count text.
         
-        :returns:   List of ImageMagick commands.
+        Returns:
+            List of ImageMagick commands.
         """
 
         return [
@@ -187,12 +205,13 @@ class WhiteTextStandardLogo(BaseCardType):
         ]
 
 
-    def __series_count_text_effects(self) -> list:
+    def __series_count_text_effects(self) -> list[str]:
         """
         ImageMagick commands for adding the necessary text effects to the series
         count text.
         
-        :returns:   List of ImageMagick commands.
+        Returns:
+            List of ImageMagick commands.
         """
 
         return [
@@ -206,7 +225,8 @@ class WhiteTextStandardLogo(BaseCardType):
         """
         Resize the logo into at most a 1875x1030 bounding box.
         
-        :returns:   Path to the created image.
+        Returns:
+            Path to the created image.
         """
 
         command = ' '.join([
@@ -226,7 +246,8 @@ class WhiteTextStandardLogo(BaseCardType):
         """
         Add the resized logo to a fixed color backdrop.
         
-        :returns:   Path to the created image.
+        Returns:
+            Path to the created image.
         """
 
         # Get height of the resized logo to determine offset
@@ -302,6 +323,7 @@ class WhiteTextStandardLogo(BaseCardType):
             f'-annotate +0+697.2 "{self.episode_text}"',
             *self.__series_count_text_effects(),
             f'-annotate +0+697.2 "{self.episode_text}"',
+            *self.resize_output,
             f'"{self.output_file.resolve()}"',
         ])
 
@@ -353,8 +375,8 @@ class WhiteTextStandardLogo(BaseCardType):
         }
 
 
-    def _create_series_count_text_image(self, width: float, width1: float,
-                                        width2: float, height: float) -> Path:
+    def _create_series_count_text_image(self,
+            width: float, width1: float, width2: float, height: float) -> Path:
         """
         Creates an image with only series count text. This image is transparent,
         and not any wider than is necessary (as indicated by `dimensions`).
@@ -411,6 +433,7 @@ class WhiteTextStandardLogo(BaseCardType):
             f'-geometry +0+690.2',
             f'"{series_count_image.resolve()}"',
             f'"{titled_image.resolve()}"',
+            *self.resize_output,
             f'"{self.output_file.resolve()}"',
         ])
 
@@ -422,12 +445,14 @@ class WhiteTextStandardLogo(BaseCardType):
     @staticmethod
     def is_custom_font(font: 'Font') -> bool:
         """
-        Determines whether the given font characteristics constitute a default
-        or custom font.
+        Determines whether the given font characteristics constitute a
+        default or custom font.
         
-        :param      font:   The Font being evaluated.
+        Args:
+            font: The Font being evaluated.
         
-        :returns:   True if a custom font is indicated, False otherwise.
+        Returns:
+            True if a custom font is indicated, False otherwise.
         """
 
         return ((font.file != WhiteTextStandardLogo.TITLE_FONT)
@@ -441,17 +466,18 @@ class WhiteTextStandardLogo(BaseCardType):
 
 
     @staticmethod
-    def is_custom_season_titles(custom_episode_map: bool, 
-                                episode_text_format: str) -> bool:
+    def is_custom_season_titles(
+            custom_episode_map: bool, episode_text_format: str) -> bool:
         """
-        Determines whether the given attributes constitute custom or generic
-        season titles.
+        Determines whether the given attributes constitute custom or
+        generic season titles.
         
-        :param      custom_episode_map:     Whether the EpisodeMap was
-                                            customized.
-        :param      episode_text_format:    The episode text format in use.
+        Args:
+            custom_episode_map: Whether the EpisodeMap was customized.
+            episode_text_format: The episode text format in use.
         
-        :returns:   True if custom season titles are indicated, False otherwise.
+        Returns:
+            True if custom season title are indicated. False otherwise.
         """
 
         standard_etf = WhiteTextStandardLogo.EPISODE_TEXT_FORMAT.upper()
@@ -462,8 +488,8 @@ class WhiteTextStandardLogo(BaseCardType):
 
     def create(self) -> None:
         """
-        Make the necessary ImageMagick and system calls to create this object's
-        defined title card.
+        Make the necessary ImageMagick and system calls to create this
+        object's defined title card.
         """
         
         # Skip card if logo doesn't exist

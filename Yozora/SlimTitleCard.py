@@ -28,8 +28,9 @@ class SlimTitleCard(BaseCardType):
     TITLE_COLOR = '#FFFFFF'
 
     """Default characters to replace in the generic font"""
-    FONT_REPLACEMENTS = {'…': '...', '[': '(', ']': ')', '(': '[', ')': ']', 
-                         '―': '-'}
+    FONT_REPLACEMENTS = {
+        '…': '...', '[': '(', ']': ')', '(': '[', ')': ']', '―': '-'
+    }
 
     """Whether this CardType uses season titles for archival purposes"""
     USES_SEASON_TITLE = True
@@ -57,12 +58,23 @@ class SlimTitleCard(BaseCardType):
     )
 
 
-    def __init__(self, source: Path, output_file: Path, title: str,
-                 season_text: str, episode_text: str, font: str,
-                 font_size: float, title_color: str, hide_season: bool,
-                 blur: bool=False, grayscale: bool=False, vertical_shift: int=0,
-                 interline_spacing: int=0, kerning: float=1.0,
-                 stroke_width: float=1.0, **kwargs) -> None:
+    def __init__(self,
+            source: Path,
+            output_file: Path,
+            title: str,
+            season_text: str,
+            episode_text: str,
+            font: str,
+            font_size: float,
+            title_color: str,
+            hide_season: bool = False,
+            blur: bool = False,
+            grayscale: bool = False,
+            vertical_shift: int = 0,
+            interline_spacing: int = 0,
+            kerning: float = 1.0,
+            stroke_width: float = 1.0,
+            **unused) -> None:
         """
         Initialize this CardType object.
 
@@ -82,7 +94,7 @@ class SlimTitleCard(BaseCardType):
             interline_spacing: Pixel count to adjust title interline spacing by.
             kerning: Scalar to apply to kerning of the title text.
             stroke_width: Scalar to apply to black stroke of the title text.
-            kwargs: Unused arguments.
+            unused: Unused arguments.
         """
         
         # Initialize the parent class - this sets up an ImageMagickInterface
@@ -106,12 +118,13 @@ class SlimTitleCard(BaseCardType):
         self.stroke_width = stroke_width
 
 
-    def __title_text_global_effects(self) -> list:
+    def __title_text_global_effects(self) -> list[str]:
         """
         ImageMagick commands to implement the title text's global effects.
         Specifically the the font, kerning, fontsize, and center gravity.
         
-        :returns:   List of ImageMagick commands.
+        Returns:
+            List of ImageMagick commands.
         """
 
         font_size = 157.41 * self.font_size
@@ -128,11 +141,12 @@ class SlimTitleCard(BaseCardType):
         ]   
 
 
-    def __title_text_black_stroke(self) -> list:
+    def __title_text_black_stroke(self) -> list[str]:
         """
         ImageMagick commands to implement the title text's black stroke.
         
-        :returns:   List of ImageMagick commands.
+        Returns:
+            List of ImageMagick commands.
         """
 
         stroke_width = 1.0 * self.stroke_width
@@ -144,12 +158,13 @@ class SlimTitleCard(BaseCardType):
         ]
 
 
-    def __series_count_text_global_effects(self) -> list:
+    def __series_count_text_global_effects(self) -> list[str]:
         """
         ImageMagick commands for global text effects applied to all series count
         text (season/episode count and dot).
         
-        :returns:   List of ImageMagick commands.
+        Returns:
+            List of ImageMagick commands.
         """
 
         return [
@@ -158,12 +173,13 @@ class SlimTitleCard(BaseCardType):
         ]
 
 
-    def __series_count_text_black_stroke(self) -> list:
+    def __series_count_text_black_stroke(self) -> list[str]:
         """
         ImageMagick commands for adding the necessary black stroke effects to
         series count text.
         
-        :returns:   List of ImageMagick commands.
+        Returns:
+            List of ImageMagick commands.
         """
 
         return [
@@ -173,12 +189,13 @@ class SlimTitleCard(BaseCardType):
         ]
 
 
-    def __series_count_text_effects(self) -> list:
+    def __series_count_text_effects(self) -> list[str]:
         """
         ImageMagick commands for adding the necessary text effects to the series
         count text.
         
-        :returns:   List of ImageMagick commands.
+        Returns:
+            List of ImageMagick commands.
         """
 
         return [
@@ -192,7 +209,8 @@ class SlimTitleCard(BaseCardType):
         """
         Add the static gradient to this object's source image.
         
-        :returns:   Path to the created image.
+        Returns:
+            Path to the created image.
         """
 
         command = ' '.join([
@@ -254,6 +272,7 @@ class SlimTitleCard(BaseCardType):
             f'-annotate +0+697.2 "{self.episode_text}"',
             *self.__series_count_text_effects(),
             f'-annotate +0+697.2 "{self.episode_text}"',
+            *self.resize_output,
             f'"{self.output_file.resolve()}"',
         ])
 
@@ -374,12 +393,14 @@ class SlimTitleCard(BaseCardType):
     @staticmethod
     def is_custom_font(font: 'Font') -> bool:
         """
-        Determines whether the given font characteristics constitute a default
-        or custom font.
+        Determines whether the given font characteristics constitute a
+        default or custom font.
         
-        :param      font:   The Font being evaluated.
+        Args:
+            font: The Font being evaluated.
         
-        :returns:   True if a custom font is indicated, False otherwise.
+        Returns:
+            True if a custom font is indicated, False otherwise.
         """
 
         return ((font.file != SlimTitleCard.TITLE_FONT)
@@ -392,11 +413,11 @@ class SlimTitleCard(BaseCardType):
 
 
     @staticmethod
-    def is_custom_season_titles(custom_episode_map: bool, 
-                                episode_text_format: str) -> bool:
+    def is_custom_season_titles(
+            custom_episode_map: bool, episode_text_format: str) -> bool:
         """
-        Determine whether the given attributes constitute custom or generic
-        season titles.
+        Determines whether the given attributes constitute custom or
+        generic season titles.
         
         Args:
             custom_episode_map: Whether the EpisodeMap was customized.
@@ -415,8 +436,8 @@ class SlimTitleCard(BaseCardType):
 
     def create(self) -> None:
         """
-        Make the necessary ImageMagick and system calls to create this object's
-        defined title card.
+        Make the necessary ImageMagick and system calls to create this
+        object's defined title card.
         """
         
         # Add the gradient to the source image (always)

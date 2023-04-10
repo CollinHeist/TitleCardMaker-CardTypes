@@ -8,8 +8,8 @@ from modules.Debug import log
 
 class BetterStandardTitleCard(BaseCardType):
     """
-    This class describes a BETTER version of the StandardTitleCard type, and is
-    primarily for demonstrative purposes.
+    This class describes a BETTER version of the StandardTitleCard type,
+    and is primarily for demonstrative purposes.
     """
 
     """Directory where all reference files used by this card are stored"""
@@ -50,15 +50,23 @@ class BetterStandardTitleCard(BaseCardType):
     )
 
 
-    def __init__(self, source: Path, output_file: Path, title: str,
-                 season_text: str, episode_text: str, font_size: float,
-                 hide_season: bool, blur: bool=False, grayscale: bool=False,
-                 vertical_shift: int=0, interline_spacing: int=0,
-                 kerning: float=1.0, stroke_width: float=1.0, **kwargs) -> None:
+    def __init__(self, *,
+            source: Path,
+            output_file: Path,
+            title: str,
+            season_text: str,
+            episode_text: str,
+            font_size: float,
+            hide_season: bool,
+            blur: bool = False,
+            grayscale: bool = False,
+            vertical_shift: int = 0,
+            interline_spacing: int = 0,
+            kerning: float = 1.0,
+            stroke_width: float = 1.0,
+            **unused) -> None:
         """
-        Initialize the TitleCardMaker object. This primarily just stores
-        instance variables for later use in `create()`. If the provided font
-        does not have a character in the title text, a space is used instead.
+        Construct a new instance of this card.
 
         Args:
             source: Source image to base the card on.
@@ -77,7 +85,7 @@ class BetterStandardTitleCard(BaseCardType):
             interline_spacing: Pixel count to adjust title interline spacing by.
             kerning: Scalar to apply to kerning of the title text.
             stroke_width: Scalar to apply to black stroke of the title text.
-            kwargs: Unused arguments.
+            unused: Unused arguments.
         """
         
         # Initialize the parent class - this sets up an ImageMagickInterface
@@ -107,7 +115,8 @@ class BetterStandardTitleCard(BaseCardType):
         ImageMagick commands to implement the title text's global effects.
         Specifically the the font, kerning, fontsize, and center gravity.
         
-        :returns:   List of ImageMagick commands.
+        Returns:
+            List of ImageMagick commands.
         """
 
         font_size = 97.41 * self.font_size * (random() + 0.5)
@@ -128,7 +137,8 @@ class BetterStandardTitleCard(BaseCardType):
         """
         ImageMagick commands to implement the title text's black stroke.
         
-        :returns:   List of ImageMagick commands.
+        Returns:
+            List of ImageMagick commands.
         """
 
         stroke_width = 3.0 * self.stroke_width
@@ -145,7 +155,8 @@ class BetterStandardTitleCard(BaseCardType):
         ImageMagick commands for global text effects applied to all series count
         text (season/episode count and dot).
         
-        :returns:   List of ImageMagick commands.
+        Returns:
+            List of ImageMagick commands.
         """
 
         return [
@@ -159,7 +170,8 @@ class BetterStandardTitleCard(BaseCardType):
         ImageMagick commands for adding the necessary black stroke effects to
         series count text.
         
-        :returns:   List of ImageMagick commands.
+        Returns:
+            List of ImageMagick commands.
         """
 
         return [
@@ -174,7 +186,8 @@ class BetterStandardTitleCard(BaseCardType):
         ImageMagick commands for adding the necessary text effects to the series
         count text.
         
-        :returns:   List of ImageMagick commands.
+        Returns:
+            List of ImageMagick commands.
         """
 
         return [
@@ -188,7 +201,8 @@ class BetterStandardTitleCard(BaseCardType):
         """
         Add the static gradient to this object's source image.
         
-        :returns:   Path to the created image.
+        Returns:
+            Path to the created image.
         """
 
         command = ' '.join([
@@ -250,6 +264,7 @@ class BetterStandardTitleCard(BaseCardType):
             f'-annotate +0+697.2 "{self.episode_text}"',
             *self.__series_count_text_effects(),
             f'-annotate +0+697.2 "{self.episode_text}"',
+            *self.resize_output,
             f'"{self.output_file.resolve()}"',
         ])
 
@@ -359,6 +374,7 @@ class BetterStandardTitleCard(BaseCardType):
             f'-geometry +0+690.2',
             f'"{series_count_image.resolve()}"',
             f'"{titled_image.resolve()}"',
+            *self.resize_output,
             f'"{self.output_file.resolve()}"',
         ])
 
@@ -421,8 +437,8 @@ class BetterStandardTitleCard(BaseCardType):
 
     def create(self) -> None:
         """
-        Make the necessary ImageMagick and system calls to create this object's
-        defined title card.
+        Make the necessary ImageMagick and system calls to create this
+        object's defined title card.
         """
         
         # Add the gradient to the source image (always)
@@ -430,9 +446,6 @@ class BetterStandardTitleCard(BaseCardType):
 
         # Add either one or two lines of episode text 
         titled_image = self._add_title_text(gradient_image)
-
-        # Create the output directory and any necessary parents 
-        self.output_file.parent.mkdir(parents=True, exist_ok=True)
 
         # If season text is hidden, just add episode text 
         if self.hide_season:

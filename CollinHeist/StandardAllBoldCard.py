@@ -24,8 +24,9 @@ class StandardAllBoldCard(BaseCardType):
     """Characteristics of the default title font"""
     TITLE_FONT = str((REF_DIRECTORY / 'Sequel-Neue.otf').resolve())
     TITLE_COLOR = '#EBEBEB'
-    FONT_REPLACEMENTS = {'[': '(', ']': ')', '(': '[', ')': ']', '―': '-',
-                         '…': '...'}
+    FONT_REPLACEMENTS = {
+        '[': '(', ']': ')', '(': '[', ')': ']', '―': '-', '…': '...'
+    }
 
     """Whether this CardType uses season titles for archival purposes"""
     USES_SEASON_TITLE = True
@@ -40,22 +41,33 @@ class StandardAllBoldCard(BaseCardType):
     """Source path for the gradient image overlayed over all title cards"""
     __GRADIENT_IMAGE = REF_DIRECTORY / 'GRADIENT.png'
 
-    __slots__ = ('source_file', 'output_file', 'title', 'season_text',
-                 'episode_text', 'font', 'font_size', 'title_color',
-                 'hide_season', 'separator', 'blur', 'vertical_shift', 
-                 'interline_spacing', 'kerning', 'stroke_width')
+    __slots__ = (
+        'source_file', 'output_file', 'title', 'season_text', 'episode_text',
+        'font', 'font_size', 'title_color', 'hide_season', 'separator', 'blur',
+        'vertical_shift', 'interline_spacing', 'kerning', 'stroke_width'
+    )
 
 
-    def __init__(self, source: Path, output_file: Path, title: str,
-                 season_text: str, episode_text: str, font: str,
-                 font_size: float, title_color: str, hide_season: bool,
-                 separator: str='•', blur: bool=False, grayscale: bool=False,
-                 vertical_shift: int=0, interline_spacing: int=0,
-                 kerning: float=1.0, stroke_width: float=1.0, **kwargs) -> None:
+    def __init__(self, *,
+            source: Path,
+            output_file: Path,
+            title: str,
+            season_text: str,
+            episode_text: str,
+            font: str,
+            font_size: float,
+            title_color: str,
+            hide_season: bool = False,
+            separator: str = '•',
+            blur: bool = False,
+            grayscale: bool = False,
+            vertical_shift: int = 0,
+            interline_spacing: int = 0,
+            kerning: float = 1.0,
+            stroke_width: float = 1.0,
+            **unused) -> None:
         """
-        Initialize the TitleCardMaker object. This primarily just stores
-        instance variables for later use in `create()`. If the provided font
-        does not have a character in the title text, a space is used instead.
+        Construct a new instance of this card.
 
         Args:
             source: Source image to base the card on.
@@ -102,12 +114,14 @@ class StandardAllBoldCard(BaseCardType):
     @staticmethod
     def is_custom_font(font: 'Font') -> bool:
         """
-        Determine whether the given font characteristics constitute a default or
-        custom font.
-        
-        :param      font:   The Font being evaluated.
-        
-        :returns:   True if a custom font is indicated, False otherwise.
+        Determines whether the given arguments represent a custom font
+        for this card. This CardType only uses custom font cases.
+
+        Args:
+            font: The Font being evaluated.
+
+        Returns:
+            True if a custom font is indicated, False otherwise.
         """
 
         return ((font.file != StandardAllBoldCard.TITLE_FONT)
@@ -123,14 +137,15 @@ class StandardAllBoldCard(BaseCardType):
     def is_custom_season_titles(custom_episode_map: bool, 
                                 episode_text_format: str) -> bool:
         """
-        Determine whether the given attributes constitute custom or generic
-        season titles.
-        
-        :param      custom_episode_map:     Whether the EpisodeMap was
-                                            customized.
-        :param      episode_text_format:    The episode text format in use.
-        
-        :returns:   True if custom season titles are indicated, False otherwise.
+        Determines whether the given attributes constitute custom or
+        generic season titles.
+
+        Args:
+            custom_episode_map: Whether the EpisodeMap was customized.
+            episode_text_format: The episode text format in use.
+
+        Returns:
+            True if custom season titles are indicated, False otherwise.
         """
 
         standard_etf = StandardAllBoldCard.EPISODE_TEXT_FORMAT.upper()
@@ -141,8 +156,8 @@ class StandardAllBoldCard(BaseCardType):
 
     def create(self) -> None:
         """
-        Make the necessary ImageMagick and system calls to create this object's
-        defined title card.
+        Make the necessary ImageMagick and system calls to create this
+        object's defined title card.
         """
 
         font_size = 157.41 * self.font_size
@@ -198,6 +213,7 @@ class StandardAllBoldCard(BaseCardType):
             f'-stroke "{self.SERIES_COUNT_TEXT_COLOR}"',
             f'-strokewidth 0.75',
             f'-annotate +0+697.2 "{series_count_text}"',
+            *self.resize_output,
             f'"{self.output_file.resolve()}"',
         ])
 
