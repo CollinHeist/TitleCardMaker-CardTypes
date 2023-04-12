@@ -1,8 +1,12 @@
 from pathlib import Path
+from typing import Literal
 
 from modules.BaseCardType import BaseCardType
 from modules.Debug import log
 from modules.RemoteFile import RemoteFile
+
+OverrideBW = Literal['', 'bw', 'color']
+OverrideStyle = Literal['', 'rewind', 'play']
 
 class RetroTitleCard(BaseCardType):
     """
@@ -44,10 +48,6 @@ class RetroTitleCard(BaseCardType):
     EPISODE_COUNT_FONT = RemoteFile('Yozora', 'ref/retro/retro.ttf')
     SERIES_COUNT_TEXT_COLOR = '#FFFFFF'
 
-    """Paths to intermediate files that are deleted after the card is created"""
-    __SOURCE_WITH_GRADIENT = BaseCardType.TEMP_DIR / 'source_gradient.png'
-    __GRADIENT_WITH_TITLE = BaseCardType.TEMP_DIR / 'gradient_title.png'
-
     __slots__ = (
         'source_file', 'output_file', 'title', 'episode_text', 'font',
         'font_size', 'title_color', 'watched', 'vertical_shift',
@@ -64,15 +64,15 @@ class RetroTitleCard(BaseCardType):
             font: str,
             font_size: float,
             title_color: str,
-            watched: bool = True,
-            blur: bool = False,
-            grayscale: bool = False,
             vertical_shift: int = 0,
             interline_spacing: int = 0,
             kerning: float = 1.0,
+            watched: bool = True,
+            blur: bool = False,
+            grayscale: bool = False,
             stroke_width: float = 1.0,
-            override_bw: str = '',
-            override_style: str = '',
+            override_bw: OverrideBW = '',
+            override_style: OverrideStyle = '',
             **unused) -> None:
         """
         Initialize this CardType object.
@@ -95,9 +95,10 @@ class RetroTitleCard(BaseCardType):
             interline_spacing: Pixel count to adjust title interline spacing by.
             kerning: Scalar to apply to kerning of the title text.
             stroke_width: Scalar to apply to black stroke of the title text.
-            override_bw: Override B/W modification based on watch status.
-            override_style: Override the play/rewind style basd on watch status.
-                Should be 'rewind' or 'play'.
+            override_bw: Override B/W modification based on watch status. Should
+                be 'bw' or 'color'.
+            override_style: Override the play/rewind style based on watch
+                status. Should be 'rewind' or 'play'.
             unused: Unused arguments.
         """
         

@@ -7,10 +7,7 @@ from modules.Debug import log
 
 class SlimTitleCard(BaseCardType):
     """
-    This class describes a type of CardType that produces the 'generic' title
-    cards based on Reddit user /u/UniversalPolymath. This card supports 
-    customization of every aspect of the card, but does not use any arbitrary
-    data.
+    
     """
 
     """Directory where all reference files used by this card are stored"""
@@ -68,12 +65,12 @@ class SlimTitleCard(BaseCardType):
             font_size: float,
             title_color: str,
             hide_season: bool = False,
-            blur: bool = False,
-            grayscale: bool = False,
             vertical_shift: int = 0,
             interline_spacing: int = 0,
             kerning: float = 1.0,
             stroke_width: float = 1.0,
+            blur: bool = False,
+            grayscale: bool = False,
             **unused) -> None:
         """
         Initialize this CardType object.
