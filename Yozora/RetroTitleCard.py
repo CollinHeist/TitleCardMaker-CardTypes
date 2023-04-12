@@ -125,77 +125,6 @@ class RetroTitleCard(BaseCardType):
         self.override_style = override_style.lower()
 
 
-    def __title_text_global_effects(self) -> list[str]:
-        """
-        ImageMagick commands to implement the title text's global effects.
-        Specifically the the font, kerning, fontsize, and center gravity.
-        
-        Returns:
-            List of ImageMagick commands.
-        """
-
-        font_size = 150 * self.font_size
-        interline_spacing = -17 + self.interline_spacing
-        kerning = -1.25 * self.kerning
-
-        return [
-            f'-font "{self.font}"',
-            f'-kerning {kerning}',
-            f'-interword-spacing 50',
-            f'-interline-spacing {interline_spacing}',
-            f'-pointsize {font_size}',
-            f'-gravity southwest',
-        ]   
-
-
-    def __title_text_black_stroke(self) -> list[str]:
-        """
-        ImageMagick commands to implement the title text's black stroke.
-        
-        Returns:
-            List of ImageMagick commands.
-        """
-
-        stroke_width = 3.0 * self.stroke_width
-
-        return [
-            f'-fill black',
-            f'-stroke black',
-            f'-strokewidth {stroke_width}',
-        ]
-
-
-    def __series_count_text_global_effects(self) -> list[str]:
-        """
-        ImageMagick commands for global text effects applied to all series count
-        text (season/episode count and dot).
-        
-        Returns:
-            List of ImageMagick commands.
-        """
-
-        return [
-            f'-kerning 5.42',
-            f'-pointsize 100',
-        ]
-
-
-    def __series_count_text_black_stroke(self) -> list[str]:
-        """
-        ImageMagick commands for adding the necessary black stroke effects to
-        series count text.
-        
-        Returns:
-            List of ImageMagick commands.
-        """
-
-        return [
-            f'-fill black',
-            f'-stroke black',
-            f'-strokewidth 6',
-        ]
-
-
     def __series_count_text_effects(self) -> list[str]:
         """
         ImageMagick commands for adding the necessary text effects to the series
@@ -206,13 +135,12 @@ class RetroTitleCard(BaseCardType):
         """
 
         return [
-            f'-fill white',
-            f'-stroke black',
-            f'-strokewidth 0.75',
+            
         ]
 
 
-    def _add_gradient(self) -> Path:
+    @property
+    def add_gradient_commands(self) -> list[str]:
         """
         Add the static gradient to this object's source image.
         
@@ -240,73 +168,65 @@ class RetroTitleCard(BaseCardType):
         else:
             colorspace = ''
 
-        command = ' '.join([
-            f'convert "{self.source_file.resolve()}"',
-            *self.resize_and_style,
+        return [
             f'"{gradient_image.resolve()}"',
-            f'-background None',
-            f'-layers Flatten',
+            f'-composite',
             f'{colorspace}',
-            f'"{self.__SOURCE_WITH_GRADIENT.resolve()}"',
-        ])
-
-        self.image_magick.run(command)
-
-        return self.__SOURCE_WITH_GRADIENT
+        ]
 
 
-    def _add_title_text(self, gradient_image: Path) -> Path:
+    def title_text_commands(self) -> list[str]:
         """
         Adds episode title text to the provide image.
         
-        :param      gradient_image: The image with gradient added.
-        
-        :returns:   Path to the created image that has a gradient and the title
-                    text added.
+        Returns:
+            List of ImageMagick commands.
         """
 
+        font_size = 150 * self.font_size
+        interline_spacing = -17 + self.interline_spacing
+        kerning = -1.25 * self.kerning
+        stroke_width = 3.0 * self.stroke_width
         vertical_shift = 170 + self.vertical_shift
 
-        command = ' '.join([
-            f'convert "{gradient_image.resolve()}"',
-            *self.__title_text_global_effects(),
-            *self.__title_text_black_stroke(),
+        return [
+            f'-font "{self.font}"',
+            f'-kerning {kerning}',
+            f'-interword-spacing 50',
+            f'-interline-spacing {interline_spacing}',
+            f'-pointsize {font_size}',
+            f'-gravity southwest',
+            f'-fill black',
+            f'-stroke black',
+            f'-strokewidth {stroke_width}',
             f'-annotate +229+{vertical_shift} "{self.title}"',
             f'-fill "{self.title_color}"',
             f'-annotate +229+{vertical_shift} "{self.title}"',
-            f'"{self.__GRADIENT_WITH_TITLE.resolve()}"',
-        ])
-
-        self.image_magick.run(command)
-
-        return self.__GRADIENT_WITH_TITLE
+        ]
 
 
-    def _add_series_count_text(self, titled_image: Path) -> Path:
+    def index_text_commands(self) -> list[str]:
         """
         Adds the series count text.
         
-        :param      titled_image:  The titled image to add text to.
-
-        :returns:   Path to the created image (the output file).
+        Returns:
+            List of ImageMagick commands
         """
 
-        command = ' '.join([
-            f'convert "{titled_image.resolve()}"',
-            *self.__series_count_text_global_effects(),
+        return [
+            f'-kerning 5.42',
+            f'-pointsize 100',
             f'-font "{self.EPISODE_COUNT_FONT.resolve()}"',
             f'-gravity northeast',
-            *self.__series_count_text_black_stroke(),
+            f'-fill black',
+            f'-stroke black',
+            f'-strokewidth 6',
             f'-annotate +200+229 "{self.episode_text}"',
-            *self.__series_count_text_effects(),
+            f'-fill white',
+            f'-stroke black',
+            f'-strokewidth 0.75',
             f'-annotate +200+229 "{self.episode_text}"',
-            *self.resize_output,
-            f'"{self.output_file.resolve()}"',
-        ])
-
-        self.image_magick.run(command)
-
-        return self.output_file
+        ]
 
 
     @staticmethod
@@ -354,15 +274,14 @@ class RetroTitleCard(BaseCardType):
         Make the necessary ImageMagick and system calls to create this
         object's defined title card.
         """
-        
-        # Add the gradient to the source image (always)
-        gradient_image = self._add_gradient()
 
-        # Add either one or two lines of episode text 
-        titled_image = self._add_title_text(gradient_image)
+        command = ' '.join([
+            f'convert "{self.source_file.resolve()}"',
+            *self.resize_and_style,
+            *self.add_gradient_commands,
+            *self.title_text_commands,
+            *self.index_text_commands,
+            *self.resize_output,
+        ])
 
-        # Add episode text 
-        self._add_series_count_text(titled_image)
-
-        # Delete all intermediate images
-        self.image_magick.delete_intermediate_images(gradient_image, titled_image)
+        self.image_magick.run(command)
