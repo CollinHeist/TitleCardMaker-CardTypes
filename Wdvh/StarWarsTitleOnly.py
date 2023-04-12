@@ -1,13 +1,11 @@
 from pathlib import Path
-from re import match
 
-from num2words import num2words
 
 from modules.BaseCardType import BaseCardType
 from modules.Debug import log
 from modules.RemoteFile import RemoteFile
 
-class StarWarsTitleOnly (BaseCardType):
+class StarWarsTitleOnly(BaseCardType):
     """
     This class describes a type of ImageMaker that produces title cards in the
     theme of Star Wars cards as designed by reddit user /u/Olivier_286. These
@@ -45,9 +43,6 @@ class StarWarsTitleOnly (BaseCardType):
     """Path to the reference star image to overlay on all source images"""
     __STAR_GRADIENT_IMAGE = RemoteFile('Wdvh', 'star_gradient_title_only.png')
 
-    """Paths to intermediate files that are deleted after the card is created"""
-    __SOURCE_WITH_STARS = BaseCardType.TEMP_DIR / 'source_gradient.png'
-
     __slots__ = ('source_file', 'output_file', 'title')
 
     
@@ -79,71 +74,6 @@ class StarWarsTitleOnly (BaseCardType):
 
         # Store episode title
         self.title = self.image_magick.escape_chars(title.upper())
-
-
-    def __add_star_gradient(self, source: Path) -> Path:
-        """
-        Add the static star gradient to the given source image.
-        
-        :param      source: The source image to modify.
-        
-        Returns:
-            Path to the created image.
-        """
-
-        command = ' '.join([
-            f'convert "{source.resolve()}"',
-            *self.resize_and_style,
-            f'"{self.__STAR_GRADIENT_IMAGE.resolve()}"',
-            f'-background None',
-            f'-layers Flatten',
-            f'"{self.__SOURCE_WITH_STARS.resolve()}"',
-        ])
-
-        self.image_magick.run(command)
-
-        return self.__SOURCE_WITH_STARS
-
-
-    def __add_title_text(self) -> list[str]:
-        """
-        ImageMagick commands to add the episode title text to an image.
-        
-        Returns:
-            List of ImageMagick commands.
-        """
-
-        return [
-            f'-font "{self.TITLE_FONT}"',
-            f'-gravity northwest',
-            f'-pointsize 124',
-            f'-kerning 0.5',
-            f'-interline-spacing 20',
-            f'-fill "{self.TITLE_COLOR}"',
-            f'-annotate +320+1529 "{self.title}"',
-        ]
-
-
-    def __add_only_title(self, gradient_source: Path) -> Path:
-        """
-        Add the title to the given image.
-        
-        :param      gradient_source:    Source image with starry gradient
-                                        overlaid.
-        
-        :returns:   Path to the created image (the output file).
-        """
-
-        command = ' '.join([
-            f'convert "{gradient_source.resolve()}"',
-            *self.__add_title_text(),
-            *self.resize_output,
-            f'"{self.output_file.resolve()}"',
-        ])
-
-        self.image_magick.run(command)
-
-        return self.output_file
 
 
     @staticmethod
@@ -186,11 +116,24 @@ class StarWarsTitleOnly (BaseCardType):
         object's defined title card.
         """
 
-        # Add the starry gradient to the source image
-        star_image = self.__add_star_gradient(self.source_file)
+        command = ' '.join([
+            f'convert "{self.source_file.resolve()}"',
+            # Resize input and apply any style modifiers
+            *self.resize_and_style,
+            # Overlay the star gradient
+            f'"{self.__STAR_GRADIENT_IMAGE.resolve()}"',
+            f'-composite',
+            # Add title text
+            f'-font "{self.TITLE_FONT}"',
+            f'-gravity northwest',
+            f'-pointsize 124',
+            f'-kerning 0.5',
+            f'-interline-spacing 20',
+            f'-fill "{self.TITLE_COLOR}"',
+            f'-annotate +320+1529 "{self.title}"',
+            # Resize and write output
+            *self.resize_output,
+            f'"{self.output_file.resolve()}"',
+        ])
 
-        # Add text to starry image, result is output
-        self.__add_only_title(star_image)
-
-        # Delete all intermediate images
-        self.image_magick.delete_intermediate_images(star_image)
+        self.image_magick.run(command)
