@@ -1,0 +1,212 @@
+[
+    {
+        "name": "Title Color Match",
+        "identifier": "azuravian/TitleColorMatch",
+        "example": null,
+        "creators": ["Azuravian", "CollinHeist"],
+        "source": "remote",
+        "supports_custom_fonts": true,
+        "supports_custom_season_titles": true,
+        "supported_extras": [
+            {
+                "name": "Logo File",
+                "identifier": "logo",
+                "description": "Logo file to place on the card, and parse the auto-color from"
+            }
+        ]
+    }, {
+        "name": "Gradient Logo",
+        "identifier": "Beedman/GradientLogoTitleCard",
+        "example": null,
+        "creators": ["Beedman", "CollinHeist"],
+        "source": "remote",
+        "supports_custom_fonts": true,
+        "supports_custom_season_titles": true,
+        "supported_extras": [
+            {
+                "name": "Logo File",
+                "identifier": "logo",
+                "description": "Logo file to place on the card"
+            }
+        ]
+    }, {
+        "name": "Blacklist",
+        "identifier": "CollinHeist/BlacklistTitleCard",
+        "example": null,
+        "creators": ["CollinHeist"],
+        "source": "remote",
+        "supports_custom_fonts": true,
+        "supports_custom_season_titles": false,
+        "supported_extras": []
+    }, {
+        "name": "Standard (All Bold)",
+        "identifier": "CollinHeist/StandardAllBoldCard",
+        "example": null,
+        "creators": ["CollinHeist"],
+        "source": "remote",
+        "supports_custom_fonts": true,
+        "supports_custom_season_titles": true,
+        "supported_extras": [
+            {
+                "name": "Separator Character",
+                "identifier": "separator",
+                "description": "Character to separate the season and episode text"
+            }
+        ]
+    }, {
+        "name": "White Text Broadcast",
+        "identifier": "lyonza/WhiteTextBroadcast",
+        "example": null,
+        "creators": ["lyonza", "Wdvh", "CollinHeist"],
+        "source": "remote",
+        "supports_custom_fonts": true,
+        "supports_custom_season_titles": false,
+        "supported_extras": []
+    }, {
+        "name": "Star Wars (Title Only)",
+        "identifier": "Wdvh/StarWarsTitleOnly",
+        "example": null,
+        "creators": ["Wdvh", "CollinHeist"],
+        "source": "remote",
+        "supports_custom_fonts": false,
+        "supports_custom_season_titles": false,
+        "supported_extras": []
+    }, {
+        "name": "White Text Absolute",
+        "identifier": "Wdvh/WhiteTextAbsolute",
+        "example": null,
+        "creators": ["Wdvh", "CollinHeist"],
+        "source": "remote",
+        "supports_custom_fonts": false,
+        "supports_custom_season_titles": false,
+        "supported_extras": []
+    }, {
+        "name": "White Text Absolute (Logo Style)",
+        "identifier": "Wdvh/WhiteTextAbsoluteLogo",
+        "example": null,
+        "creators": ["Wdvh", "CollinHeist"],
+        "source": "remote",
+        "supports_custom_fonts": true,
+        "supports_custom_season_titles": false,
+        "supported_extras": [
+            {
+                "name": "Logo File",
+                "identifier": "logo",
+                "description": "Logo file to place on the card"
+            }, {
+                "name": "Background Color",
+                "identifier": "background",
+                "description": "Color to use for the card background"
+            }
+        ]
+    }, {
+        "name": "White Text Standard",
+        "identifier": "Wdvh/WhiteTextStandard",
+        "example": null,
+        "creators": ["Wdvh", "CollinHeist"],
+        "source": "remote",
+        "supports_custom_fonts": true,
+        "supports_custom_season_titles": false,
+        "supported_extras": [
+            {
+                "name": "Separator Character",
+                "identifier": "separator",
+                "description": "Character to separate the season and episode text"
+            }
+        ]
+    }, {
+        "name": "White Text Standard (Logo)",
+        "identifier": "Wdvh/WhiteTextStandardLogo",
+        "example": null,
+        "creators": ["Wdvh", "CollinHeist"],
+        "source": "remote",
+        "supports_custom_fonts": true,
+        "supports_custom_season_titles": true,
+        "supported_extras": [
+            {
+                "name": "Logo File",
+                "identifier": "logo",
+                "description": "Logo file to place on the card"
+            }, {
+                "name": "Background Color",
+                "identifier": "background",
+                "description": "Color to use for the card background"
+            }, {
+                "name": "Separator Character",
+                "identifier": "separator",
+                "description": "Character to separate the season and episode text"
+            }
+        ]
+    }, {
+        "name": "White Text Title Only",
+        "identifier": "Wdvh/WhiteTextTitleOnly",
+        "example": null,
+        "creators": ["Wdvh", "CollinHeist"],
+        "source": "remote",
+        "supports_custom_fonts": true,
+        "supports_custom_season_titles": false,
+        "supported_extras": []
+    }, {
+        "name": "White Text Title Only (Logo)",
+        "identifier": "Wdvh/WhiteTextTitleOnlyLogo",
+        "example": null,
+        "creators": ["Wdvh", "CollinHeist"],
+        "source": "remote",
+        "supports_custom_fonts": true,
+        "supports_custom_season_titles": false,
+        "supported_extras": [
+            {
+                "name": "Logo File",
+                "identifier": "logo",
+                "description": "Logo file to place on the card"
+            }, {
+                "name": "Background Color",
+                "identifier": "background",
+                "description": "Color to use for the card background"
+            }
+        ]
+    }, {
+        "name": "Barebones",
+        "identifier": "Yozora/BarebonesTitlecard",
+        "example": null,
+        "creators": ["Yozora", "/u/Olivier_286", "CollinHeist"],
+        "source": "remote",
+        "supports_custom_fonts": true,
+        "supports_custom_season_titles": false,
+        "supported_extras": [
+            {
+                "name": "Episode Text Color",
+                "identifier": "episode_text_color",
+                "description": "Color to use for the episode text"
+            }
+        ]
+    }, {
+        "name": "Retro",
+        "identifier": "Yozora/RetroTitleCard",
+        "example": null,
+        "creators": ["Yozora", "CollinHeist"],
+        "source": "remote",
+        "supports_custom_fonts": true,
+        "supports_custom_season_titles": false,
+        "supported_extras": [
+            {
+                "name": "Black & White Override",
+                "identifier": "override_bw",
+                "description": "Override the Black & White modification - should be 'bw' or 'color'"
+            }, {
+                "name": "Style Override",
+                "identifier": "override_style",
+                "description": "Override the play/rewind style - should be 'play' or 'rewind'"
+            }
+        ]
+    }, {
+        "name": "Slim",
+        "identifier": "Yozora/SlimTitleCard",
+        "example": null,
+        "creators": ["Yozora", "CollinHeist"],
+        "source": "remote",
+        "supports_custom_fonts": true,
+        "supports_custom_season_titles": true,
+        "supported_extras": []
+    }
+]
