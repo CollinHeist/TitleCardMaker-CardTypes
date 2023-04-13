@@ -2,9 +2,9 @@
     {
         "name": "Title Color Match",
         "identifier": "azuravian/TitleColorMatch",
+        "description": [],
         "example": null,
         "creators": ["Azuravian", "CollinHeist"],
-        "source": "remote",
         "supports_custom_fonts": true,
         "supports_custom_season_titles": true,
         "supported_extras": [
@@ -17,9 +17,9 @@
     }, {
         "name": "Gradient Logo",
         "identifier": "Beedman/GradientLogoTitleCard",
+        "description": [],
         "example": null,
         "creators": ["Beedman", "CollinHeist"],
-        "source": "remote",
         "supports_custom_fonts": true,
         "supports_custom_season_titles": true,
         "supported_extras": [
@@ -32,18 +32,18 @@
     }, {
         "name": "Blacklist",
         "identifier": "CollinHeist/BlacklistTitleCard",
+        "description": [],
         "example": null,
         "creators": ["CollinHeist"],
-        "source": "remote",
         "supports_custom_fonts": true,
         "supports_custom_season_titles": false,
         "supported_extras": []
     }, {
         "name": "Standard (All Bold)",
         "identifier": "CollinHeist/StandardAllBoldCard",
+        "description": [],
         "example": null,
         "creators": ["CollinHeist"],
-        "source": "remote",
         "supports_custom_fonts": true,
         "supports_custom_season_titles": true,
         "supported_extras": [
@@ -56,36 +56,36 @@
     }, {
         "name": "White Text Broadcast",
         "identifier": "lyonza/WhiteTextBroadcast",
+        "description": [],
         "example": null,
         "creators": ["lyonza", "Wdvh", "CollinHeist"],
-        "source": "remote",
         "supports_custom_fonts": true,
         "supports_custom_season_titles": false,
         "supported_extras": []
     }, {
         "name": "Star Wars (Title Only)",
         "identifier": "Wdvh/StarWarsTitleOnly",
+        "description": [],
         "example": null,
         "creators": ["Wdvh", "CollinHeist"],
-        "source": "remote",
         "supports_custom_fonts": false,
         "supports_custom_season_titles": false,
         "supported_extras": []
     }, {
         "name": "White Text Absolute",
         "identifier": "Wdvh/WhiteTextAbsolute",
+        "description": [],
         "example": null,
         "creators": ["Wdvh", "CollinHeist"],
-        "source": "remote",
         "supports_custom_fonts": false,
         "supports_custom_season_titles": false,
         "supported_extras": []
     }, {
         "name": "White Text Absolute (Logo Style)",
         "identifier": "Wdvh/WhiteTextAbsoluteLogo",
+        "description": [],
         "example": null,
         "creators": ["Wdvh", "CollinHeist"],
-        "source": "remote",
         "supports_custom_fonts": true,
         "supports_custom_season_titles": false,
         "supported_extras": [
@@ -102,9 +102,9 @@
     }, {
         "name": "White Text Standard",
         "identifier": "Wdvh/WhiteTextStandard",
+        "description": [],
         "example": null,
         "creators": ["Wdvh", "CollinHeist"],
-        "source": "remote",
         "supports_custom_fonts": true,
         "supports_custom_season_titles": false,
         "supported_extras": [
@@ -117,9 +117,9 @@
     }, {
         "name": "White Text Standard (Logo)",
         "identifier": "Wdvh/WhiteTextStandardLogo",
+        "description": [],
         "example": null,
         "creators": ["Wdvh", "CollinHeist"],
-        "source": "remote",
         "supports_custom_fonts": true,
         "supports_custom_season_titles": true,
         "supported_extras": [
@@ -140,18 +140,18 @@
     }, {
         "name": "White Text Title Only",
         "identifier": "Wdvh/WhiteTextTitleOnly",
+        "description": [],
         "example": null,
         "creators": ["Wdvh", "CollinHeist"],
-        "source": "remote",
         "supports_custom_fonts": true,
         "supports_custom_season_titles": false,
         "supported_extras": []
     }, {
         "name": "White Text Title Only (Logo)",
         "identifier": "Wdvh/WhiteTextTitleOnlyLogo",
+        "description": [],
         "example": null,
         "creators": ["Wdvh", "CollinHeist"],
-        "source": "remote",
         "supports_custom_fonts": true,
         "supports_custom_season_titles": false,
         "supported_extras": [
@@ -168,9 +168,9 @@
     }, {
         "name": "Barebones",
         "identifier": "Yozora/BarebonesTitlecard",
+        "description": [],
         "example": null,
         "creators": ["Yozora", "/u/Olivier_286", "CollinHeist"],
-        "source": "remote",
         "supports_custom_fonts": true,
         "supports_custom_season_titles": false,
         "supported_extras": [
@@ -183,9 +183,9 @@
     }, {
         "name": "Retro",
         "identifier": "Yozora/RetroTitleCard",
+        "description": [],
         "example": null,
         "creators": ["Yozora", "CollinHeist"],
-        "source": "remote",
         "supports_custom_fonts": true,
         "supports_custom_season_titles": false,
         "supported_extras": [
@@ -202,9 +202,9 @@
     }, {
         "name": "Slim",
         "identifier": "Yozora/SlimTitleCard",
+        "description": [],
         "example": null,
         "creators": ["Yozora", "CollinHeist"],
-        "source": "remote",
         "supports_custom_fonts": true,
         "supports_custom_season_titles": true,
         "supported_extras": []
