@@ -62,7 +62,7 @@ class TitleColorMatch(BaseCardType):
 
     def __init__(self,
             source_file: Path,
-            output_file: Path,
+            card_file: Path,
             title_text: str,
             season_text: str,
             episode_text: str,
