@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Literal
 
-from modules.BaseCardType import BaseCardType
+from modules.BaseCardType import BaseCardType, ImageMagickCommands
 from modules.Debug import log
 from modules.RemoteFile import RemoteFile
 
@@ -49,99 +49,58 @@ class RetroTitleCard(BaseCardType):
     SERIES_COUNT_TEXT_COLOR = '#FFFFFF'
 
     __slots__ = (
-        'source_file', 'output_file', 'title', 'episode_text', 'font',
-        'font_size', 'title_color', 'watched', 'vertical_shift',
-        'interline_spacing', 'kerning', 'stroke_width', 'override_bw',
-        'override_style'
+        'source_file', 'output_file', 'title_text', 'episode_text', 'font_file',
+        'font_size', 'font_color', 'font_vertical_shift',
+        'font_interline_spacing', 'font_kerning', 'font_stroke_width',
+        'override_bw', 'override_style', 'watched', 
     )
 
 
     def __init__(self, *,
-            source: Path,
-            output_file: Path,
-            title: str,
+            source_file: Path,
+            card_file: Path,
+            title_text: str,
             episode_text: str,
-            font: str,
-            font_size: float,
-            title_color: str,
-            vertical_shift: int = 0,
-            interline_spacing: int = 0,
-            kerning: float = 1.0,
+            font_color: str = TITLE_COLOR,
+            font_file: str = TITLE_FONT,
+            font_interline_spacing: int = 0,
+            font_kerning: float = 1.0,
+            font_size: float = 1.0,
+            font_stroke_width: float = 1.0,
+            font_vertical_shift: int = 0,
             watched: bool = True,
             blur: bool = False,
             grayscale: bool = False,
-            stroke_width: float = 1.0,
             override_bw: OverrideBW = '',
             override_style: OverrideStyle = '',
             **unused) -> None:
-        """
-        Initialize this CardType object.
-
-        Args:
-            source: Source image to base the card on.
-            output_file: Output file where to create the card.
-            title: Title text to add to created card.
-            season_text: Season text to add to created card.
-            episode_text: Episode text to add to created card.
-            font: Font name or path (as string) to use for episode title.
-            font_size: Scalar to apply to title font size.
-            title_color: Color to use for title text.
-            watched: Whether this episode has been watched.
-            hide_season: Whether to ignore season_text.
-            separator: Character to use to separate season and episode text.
-            blur: Whether to blur the source image.
-            grayscale: Whether to make the source image grayscale.
-            vertical_shift: Pixel count to adjust the title vertical offset by.
-            interline_spacing: Pixel count to adjust title interline spacing by.
-            kerning: Scalar to apply to kerning of the title text.
-            stroke_width: Scalar to apply to black stroke of the title text.
-            override_bw: Override B/W modification based on watch status. Should
-                be 'bw' or 'color'.
-            override_style: Override the play/rewind style based on watch
-                status. Should be 'rewind' or 'play'.
-            unused: Unused arguments.
-        """
         
         # Initialize the parent class - this sets up an ImageMagickInterface
         super().__init__(blur, grayscale)
 
-        self.source_file = source
-        self.output_file = output_file
+        self.source_file = source_file
+        self.output_file = card_file
 
         # Ensure characters that need to be escaped are
-        self.title = self.image_magick.escape_chars(title)
+        self.title_text = self.image_magick.escape_chars(title_text)
         self.episode_text = self.image_magick.escape_chars(episode_text.upper())
 
-        self.font = font
+        self.font_color = font_color
+        self.font_file = font_file
+        self.font_interline_spacing = font_interline_spacing
+        self.font_kerning = font_kerning
         self.font_size = font_size
-        self.title_color = title_color
-        self.watched = watched
-        self.vertical_shift = vertical_shift
-        self.interline_spacing = interline_spacing
-        self.kerning = kerning
-        self.stroke_width = stroke_width
+        self.font_stroke_width = font_stroke_width
+        self.font_vertical_shift = font_vertical_shift
         
         # Store extras
+        self.watched = watched
         self.override_bw = override_bw.lower()
         self.override_style = override_style.lower()
 
 
-    def __series_count_text_effects(self) -> list[str]:
-        """
-        ImageMagick commands for adding the necessary text effects to the series
-        count text.
-        
-        Returns:
-            List of ImageMagick commands.
-        """
-
-        return [
-            
-        ]
-
-
     @property
-    def add_gradient_commands(self) -> list[str]:
+    def add_gradient_commands(self) -> ImageMagickCommands:
         """
         Add the static gradient to this object's source image.
         
@@ -176,7 +135,8 @@ class RetroTitleCard(BaseCardType):
         ]
 
 
-    def title_text_commands(self) -> list[str]:
+    @property
+    def title_text_commands(self) -> ImageMagickCommands:
         """
         Adds episode title text to the provide image.
         
@@ -185,13 +145,13 @@ class RetroTitleCard(BaseCardType):
         """
 
         font_size = 150 * self.font_size
-        interline_spacing = -17 + self.interline_spacing
-        kerning = -1.25 * self.kerning
-        stroke_width = 3.0 * self.stroke_width
-        vertical_shift = 170 + self.vertical_shift
+        interline_spacing = -17 + self.font_interline_spacing
+        kerning = -1.25 * self.font_kerning
+        stroke_width = 3.0 * self.font_stroke_width
+        vertical_shift = 170 + self.font_vertical_shift
 
         return [
-            f'-font "{self.font}"',
+            f'-font "{self.font_file}"',
             f'-kerning {kerning}',
             f'-interword-spacing 50',
             f'-interline-spacing {interline_spacing}',
@@ -200,13 +160,14 @@ class RetroTitleCard(BaseCardType):
             f'-fill black',
             f'-stroke black',
             f'-strokewidth {stroke_width}',
-            f'-annotate +229+{vertical_shift} "{self.title}"',
-            f'-fill "{self.title_color}"',
-            f'-annotate +229+{vertical_shift} "{self.title}"',
+            f'-annotate +229+{vertical_shift} "{self.title_text}"',
+            f'-fill "{self.font_color}"',
+            f'-annotate +229+{vertical_shift} "{self.title_text}"',
         ]
 
 
-    def index_text_commands(self) -> list[str]:
+    @property
+    def index_text_commands(self) -> ImageMagickCommands:
         """
         Adds the series count text.
         
@@ -217,6 +178,7 @@ class RetroTitleCard(BaseCardType):
         return [
             f'-kerning 5.42',
             f'-pointsize 100',
+            f'+interword-spacing',
             f'-font "{self.EPISODE_COUNT_FONT.resolve()}"',
             f'-gravity northeast',
             f'-fill black',
@@ -243,13 +205,14 @@ class RetroTitleCard(BaseCardType):
             True if a custom font is indicated, False otherwise.
         """
 
-        return ((font.file != RetroTitleCard.TITLE_FONT)
-            or (font.size != 1.0)
-            or (font.color != RetroTitleCard.TITLE_COLOR)
-            or (font.vertical_shift != 0)
+        return ((font.color != RetroTitleCard.TITLE_COLOR)
+            or (font.file != RetroTitleCard.TITLE_FONT)
             or (font.interline_spacing != 0)
             or (font.kerning != 1.0)
-            or (font.stroke_width != 1.0))
+            or (font.size != 1.0)
+            or (font.stroke_width != 1.0)
+            or (font.vertical_shift != 0)
+        )
 
 
     @staticmethod
@@ -283,6 +246,7 @@ class RetroTitleCard(BaseCardType):
             *self.title_text_commands,
             *self.index_text_commands,
             *self.resize_output,
+            f'"{self.output_file.resolve()}"',
         ])
 
         self.image_magick.run(command)
