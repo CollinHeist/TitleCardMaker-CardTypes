@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from modules.BaseCardType import BaseCardType
+from modules.BaseCardType import BaseCardType, ImageMagickCommands
 from modules.Debug import log
 from modules.RemoteFile import RemoteFile
 
@@ -47,84 +47,68 @@ class WhiteTextBroadcast(BaseCardType):
     SERIES_COUNT_TEXT_COLOR = '#FFFFFF'
 
     __slots__ = (
-        'source_file', 'output_file', 'title', 'episode_text', 'font',
-        'font_size', 'title_color', 'hide_season', 'blur', 'vertical_shift',
-        'interline_spacing', 'kerning', 'stroke_width', 'episode_text_color',
+        'source_file', 'output_file', 'title_text', 'episode_text',
+        'hide_season_text', 'font_file', 'font_size', 'font_color',
+        'font_vertical_shift', 'font_interline_spacing', 'font_kerning',
+        'font_stroke_width', 'episode_text_color', 'omit_gradient',
     )
 
 
     def __init__(self, *,
-            source: Path,
-            output_file: Path,
-            title: str,
+            source_file: Path,
+            card_file: Path,
+            title_text: str,
             episode_text: str,
-            font: str,
+            font_color: str,
+            font_file: str,
+            font_interline_spacing: int = 0,
+            font_kerning: float = 1.0,
             font_size: float,
-            title_color: str,
+            font_stroke_width: float = 1.0,
+            font_vertical_shift: int = 0,
             blur: bool = False,
             grayscale: bool = False,
-            vertical_shift: int = 0,
-            interline_spacing: int = 0,
-            kerning: float = 1.0,
-            stroke_width: float = 1.0,
             episode_text_color: str = SERIES_COUNT_TEXT_COLOR,
+            omit_gradient: bool = False,
             **unused) -> None:
-        """
-        Initialize this CardType object.
-
-        Args:
-            source: Source image to base the card on.
-            output_file: Output file where to create the card.
-            title: Title text to add to created card.
-            episode_text: Episode text to add to created card.
-            font: Font name or path (as string) to use for episode title.
-            font_size: Scalar to apply to title font size.
-            title_color: Color to use for title text.
-            blur: Whether to blur the source image.
-            grayscale: Whether to make the source image grayscale.
-            vertical_shift: Pixel count to adjust the title vertical offset by.
-            interline_spacing: Pixel count to adjust title interline spacing by.
-            kerning: Scalar to apply to kerning of the title text.
-            stroke_width: Scalar to apply to black stroke of the title text.
-            unused: Unused arguments.
-        """
         
         # Initialize the parent class - this sets up an ImageMagickInterface
         super().__init__(blur, grayscale)
 
-        self.source_file = source
-        self.output_file = output_file
+        self.source_file = source_file
+        self.output_file = card_file
 
         # Ensure characters that need to be escaped are
-        self.title = self.image_magick.escape_chars(title)
+        self.title_text = self.image_magick.escape_chars(title_text)
         self.episode_text = self.image_magick.escape_chars(episode_text.upper())
 
-        self.font = font
+        self.font_color = font_color
+        self.font_file = font_file
+        self.font_interline_spacing = font_interline_spacing
+        self.font_kerning = font_kerning
         self.font_size = font_size
-        self.title_color = title_color
-        self.vertical_shift = vertical_shift
-        self.interline_spacing = interline_spacing
-        self.kerning = kerning
-        self.stroke_width = stroke_width
+        self.font_stroke_width = font_stroke_width
+        self.font_vertical_shift = font_vertical_shift
 
         self.episode_text_color = episode_text_color
+        self.omit_gradient = omit_gradient
 
 
     @property
-    def title_text_command(self) -> list[str]:
+    def title_text_command(self) -> ImageMagickCommands:
         """
         Add episode title text to the provide image.
         """
 
         font_size = 180 * self.font_size
-        interline_spacing = -17 + self.interline_spacing
-        kerning = -1.25 * self.kerning
-        stroke_width = 3.0 * self.stroke_width
-        vertical_shift = 50 + self.vertical_shift
+        interline_spacing = -17 + self.font_interline_spacing
+        kerning = -1.25 * self.font_kerning
+        stroke_width = 3.0 * self.font_stroke_width
+        vertical_shift = 50 + self.font_vertical_shift
 
         return [
             # Global text effects
-            f'-font "{self.font}"',
+            f'-font "{self.font_file}"',
             f'-kerning {kerning}',
             f'-interword-spacing 50',
             f'-interline-spacing {interline_spacing}',
@@ -134,21 +118,22 @@ class WhiteTextBroadcast(BaseCardType):
             f'-fill black',
             f'-stroke black',
             f'-strokewidth {stroke_width}',
-            f'-annotate +0+{vertical_shift} "{self.title}"',
+            f'-annotate +0+{vertical_shift} "{self.title_text}"',
             # Actual title text
-            f'-fill "{self.title_color}"',
-            f'-annotate +0+{vertical_shift} "{self.title}"',
+            f'-fill "{self.font_color}"',
+            f'-annotate +0+{vertical_shift} "{self.title_text}"',
         ]
 
 
     @property
-    def index_text_command(self) -> list[str]:
+    def index_text_command(self) -> ImageMagickCommands:
         """
         Adds the series count text without season title/number.
         """
 
         return [
             # Global text effects
+            f'+interword-spacing',
             f'-kerning 5.42',
             f'-pointsize 120',
             f'-font "{self.EPISODE_COUNT_FONT.resolve()}"',
@@ -179,14 +164,14 @@ class WhiteTextBroadcast(BaseCardType):
             True if a custom font is indicated, False otherwise.
         """
 
-        return ((font.file != WhiteTextBroadcast.TITLE_FONT)
-            or (font.size != 1.0)
-            or (font.color != WhiteTextBroadcast.TITLE_COLOR)
-            or (font.replacements != WhiteTextBroadcast.FONT_REPLACEMENTS)
-            or (font.vertical_shift != 0)
+        return ((font.color != WhiteTextBroadcast.TITLE_COLOR)
+            or (font.file != WhiteTextBroadcast.TITLE_FONT)
             or (font.interline_spacing != 0)
             or (font.kerning != 1.0)
-            or (font.stroke_width != 1.0))
+            or (font.size != 1.0)
+            or (font.stroke_width != 1.0)
+            or (font.vertical_shift != 0)
+        )
 
 
     @staticmethod
@@ -213,12 +198,19 @@ class WhiteTextBroadcast(BaseCardType):
         object's defined title card.
         """
 
+        if self.omit_gradient:
+            gradient_command = []
+        else:
+            gradient_command = [
+                f'"{self.__GRADIENT_IMAGE.resolve()}"',
+                f'-composite',
+            ]
+
         command = ' '.join([
             f'convert "{self.source_file.resolve()}"',
             # Overlay gradient
             *self.resize_and_style,
-            f'"{self.__GRADIENT_IMAGE.resolve()}"',
-            f'-composite',
+            *gradient_command,
             *self.title_text_command,
             *self.index_text_command,
             # Resize and write output
