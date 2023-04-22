@@ -63,10 +63,9 @@ class WhiteTextStandardLogo(BaseCardType):
             font: str,
             font_size: float,
             title_color: str,
-            hide_season: bool,
+            hide_season: bool = False,
             season_number: int = 1,
             episode_number: int = 1,
-            separator: str = '-',
             blur: bool=False,
             grayscale: bool = False,
             vertical_shift: int = 0,
@@ -74,7 +73,9 @@ class WhiteTextStandardLogo(BaseCardType):
             interline_spacing: int = 0,
             stroke_width: float = 1.0,
             logo: Optional[str] = None, 
-            background: str = '#000000', **kwargs) -> None:
+            background: str = '#000000',
+            separator: str = '-',
+            **unused) -> None:
         """
         Initialize this CardType object.
 

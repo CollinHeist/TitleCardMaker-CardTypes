@@ -57,10 +57,10 @@ class BarebonesTitleCard(BaseCardType):
             font: str,
             font_size: float,
             title_color: str,
-            episode_text_color: str = EPISODE_TEXT_COLOR,
             blur: bool = False,
             grayscale: bool = False,
             stroke_width: float = 1.0,
+            episode_text_color: str = EPISODE_TEXT_COLOR,
             **unused) -> None:
         """
         Initialize this CardType object.
@@ -73,10 +73,10 @@ class BarebonesTitleCard(BaseCardType):
             font: Font name or path (as string) to use for episode title.
             font_size: Scalar to apply to title font size.
             title_color: Color to use for title text.
-            episode_text_color: Color for the episode text.
             blur: Whether to blur the source image.
             grayscale: Whether to make the source image grayscale.
             stroke_width: Scalar to apply to black stroke of the title text.
+            episode_text_color: Color for the episode text.
             unused: Unused arguments.
         """
         

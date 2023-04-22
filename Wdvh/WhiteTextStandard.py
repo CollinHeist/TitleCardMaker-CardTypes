@@ -60,13 +60,13 @@ class WhiteTextStandard(BaseCardType):
             font_size: float,
             title_color: str,
             hide_season: bool = False,
-            separator: str = '-',
             blur: bool = False,
             grayscale: bool = False,
             vertical_shift: int = 0,
             interline_spacing: int = 0,
             kerning: float = 1.0,
             stroke_width: float = 1.0,
+            separator: str = '-',
             **unused) -> None:
         """
         Initialize this CardType object.
