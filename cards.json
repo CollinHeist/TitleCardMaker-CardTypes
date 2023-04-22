@@ -39,21 +39,6 @@
         "supports_custom_seasons": false,
         "supported_extras": []
     }, {
-        "name": "Standard (All Bold)",
-        "identifier": "CollinHeist/StandardAllBoldCard",
-        "description": ["Placeholder description"],
-        "example": "https://user-images.githubusercontent.com/17693271/178048875-46b920bd-c4b6-404a-a4eb-6a73be687a7b.jpg",
-        "creators": ["CollinHeist"],
-        "supports_custom_fonts": true,
-        "supports_custom_seasons": true,
-        "supported_extras": [
-            {
-                "name": "Separator Character",
-                "identifier": "separator",
-                "description": "Character to separate the season and episode text"
-            }
-        ]
-    }, {
         "name": "White Text Broadcast",
         "identifier": "lyonza/WhiteTextBroadcast",
         "description": ["Placeholder description"],
