@@ -48,21 +48,13 @@ class StarWarsTitleOnly(BaseCardType):
     
     def __init__(self, *,
             source: Path,
-            output_file: Path,
+            card_file: Path,
             title: str,
             blur: bool = False,
             grayscale: bool = False,
             **unused) -> None:
         """
         Initialize this CardType object.
-
-        Args:
-            source: Source image to base the card on.
-            output_file: Output file where to create the card.
-            title: Title text to add to created card.
-            blur: Whether to blur the source image.
-            grayscale: Whether to make the source image grayscale.
-            kwargs: Unused arguments.
         """
         
         # Initialize the parent class - this sets up an ImageMagickInterface
@@ -70,7 +62,7 @@ class StarWarsTitleOnly(BaseCardType):
 
         # Store source and output file
         self.source_file = source
-        self.output_file = output_file
+        self.output_file = card_file
 
         # Store episode title
         self.title = self.image_magick.escape_chars(title.upper())

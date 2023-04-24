@@ -53,7 +53,7 @@ class WhiteTextTitleOnlyLogo(BaseCardType):
 
 
     def __init__(self, *,
-            output_file: Path,
+            card_file: Path,
             title: str,
             font: str,
             font_size: float,
@@ -69,20 +69,6 @@ class WhiteTextTitleOnlyLogo(BaseCardType):
             **unused) -> None:
         """
         Initialize this CardType object.
-
-        Args:
-            output_file: Output file where to create the card.
-            title: Title text to add to created card.
-            font: Font name or path (as string) to use for episode title.
-            font_size: Scalar to apply to title font size.
-            title_color: Color to use for title text.
-            blur: Whether to blur the source image.
-            grayscale: Whether to make the source image grayscale.
-            vertical_shift: Pixel count to adjust the title vertical offset by.
-            interline_spacing: Pixel count to adjust title interline spacing by.
-            kerning: Scalar to apply to kerning of the title text.
-            stroke_width: Scalar to apply to black stroke of the title text.
-            unused: Unused arguments.
         """
         
         # Initialize the parent class - this sets up an ImageMagickInterface
@@ -94,7 +80,7 @@ class WhiteTextTitleOnlyLogo(BaseCardType):
         else:
             self.logo = None
 
-        self.output_file = output_file
+        self.output_file = card_file
 
         # Ensure characters that need to be escaped are
         self.title = self.image_magick.escape_chars(title)

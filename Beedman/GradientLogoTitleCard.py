@@ -56,11 +56,11 @@ class GradientLogoTitleCard(BaseCardType):
 
     def __init__(self, *,
             source_file: Path,
-            output_file: Path,
+            card_file: Path,
             title_text: str,
             season_text: str,
             episode_text: str,
-            hide_season_text: bool,
+            hide_season_text: bool = False,
             font_color: str = TITLE_COLOR,
             font_file: str = TITLE_FONT,
             font_interline_spacing: int = 0,
@@ -80,7 +80,7 @@ class GradientLogoTitleCard(BaseCardType):
         super().__init__(blur, grayscale)
 
         self.source_file = source_file
-        self.output_file = output_file
+        self.output_file = card_file
         self.logo = Path(logo) if logo is not None else None
 
         # Ensure characters that need to be escaped are

@@ -39,7 +39,7 @@ class BlacklistTitleCard(BaseCardType):
 
     def __init__(self,
             source_file: Path,
-            output_file: Path,
+            card_file: Path,
             title_text: str, 
             episode_text: str,
             font_file: str = TITLE_FONT,
@@ -58,7 +58,7 @@ class BlacklistTitleCard(BaseCardType):
 
         # Store source and output file
         self.source_file = source_file
-        self.output_file = output_file
+        self.output_file = card_file
 
         # Escape title, season, and episode text
         self.title_text = self.image_magick.escape_chars(title_text)

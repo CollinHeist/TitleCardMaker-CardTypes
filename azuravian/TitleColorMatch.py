@@ -67,11 +67,11 @@ class TitleColorMatch(BaseCardType):
             season_text: str,
             episode_text: str,
             hide_season_text: bool = False,
-            font_color: str,
-            font_file: str,
+            font_color: str = TITLE_COLOR,
+            font_file: str = TITLE_FONT,
             font_interline_spacing: int = 0,
             font_kerning: float = 1.0,
-            font_size: float,
+            font_size: float = 1.0,
             font_stroke_width: float = 1.0,
             font_vertical_shift: int = 0,
             season_number: int = 1,
@@ -88,7 +88,7 @@ class TitleColorMatch(BaseCardType):
         super().__init__(blur, grayscale)
 
         self.source_file = source_file
-        self.output_file = output_file
+        self.output_file = card_file
         if logo is None:
             self.logo = None
         else:
