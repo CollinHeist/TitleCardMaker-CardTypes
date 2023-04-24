@@ -187,8 +187,8 @@ class TitleColorMatch(BaseCardType):
         """
 
         # If auto color wasn't indicated use indicated color and black stroke
-        if self.title_color.lower() != 'auto':
-            return self.title_color, 'black'
+        if self.font_color.lower() != 'auto':
+            return self.font_color, 'black'
 
         # Command to get histogram of the colors in logo image
         command = ' '.join([
