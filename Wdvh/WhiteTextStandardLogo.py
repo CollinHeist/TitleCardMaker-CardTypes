@@ -412,10 +412,10 @@ class WhiteTextStandardLogo(BaseCardType):
 
         command = ' '.join([
             f'convert',
-            f'"{series_count_image.resolve()}"',
-            f'-gravity center',
-            f'-geometry +0+690.2',
             f'"{titled_image.resolve()}"',
+            f'-gravity center',
+            f'"{series_count_image.resolve()}"',
+            f'-geometry +0+690.2',
             f'-composite',
             *self.resize_output,
             f'"{self.output_file.resolve()}"',
@@ -439,14 +439,14 @@ class WhiteTextStandardLogo(BaseCardType):
             True if a custom font is indicated, False otherwise.
         """
 
-        return ((font.file != WhiteTextStandardLogo.TITLE_FONT)
-            or (font.size != 1.0)
-            or (font.color != WhiteTextStandardLogo.TITLE_COLOR)
-            or (font.replacements != WhiteTextStandardLogo.FONT_REPLACEMENTS)
-            or (font.vertical_shift != 0)
+        return ((font.color != WhiteTextStandardLogo.TITLE_COLOR)
+            or (font.file != WhiteTextStandardLogo.TITLE_FONT)
             or (font.interline_spacing != 0)
             or (font.kerning != 1.0)
-            or (font.stroke_width != 1.0))
+            or (font.size != 1.0)
+            or (font.stroke_width != 1.0)
+            or (font.vertical_shift != 0)
+        )
 
 
     @staticmethod
