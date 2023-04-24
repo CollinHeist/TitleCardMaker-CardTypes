@@ -57,7 +57,7 @@ class WhiteTextAbsolute(BaseCardType):
 
     def __init__(self, *,
             source_file: Path,
-            output_file: Path,
+            card_file: Path,
             title_text: str,
             episode_text: str,
             font_color: str = TITLE_COLOR,
@@ -78,7 +78,7 @@ class WhiteTextAbsolute(BaseCardType):
         super().__init__(blur, grayscale)
 
         self.source_file = source_file
-        self.output_file = output_file
+        self.output_file = card_file
 
         # Ensure characters that need to be escaped are
         self.title = self.image_magick.escape_chars(title_text)
