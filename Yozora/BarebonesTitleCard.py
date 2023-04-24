@@ -51,7 +51,7 @@ class BarebonesTitleCard(BaseCardType):
     
     def __init__(self, *,
             source_file: Path,
-            output_file: Path,
+            card_file: Path,
             title_text: str,
             episode_text: str,
             hide_episode_text: bool = False,
@@ -72,7 +72,7 @@ class BarebonesTitleCard(BaseCardType):
 
         # Store source and output file
         self.source_file = source_file
-        self.output_file = output_file
+        self.output_file = card_file
 
         # Store episode title and text
         self.title = self.image_magick.escape_chars(title_text.upper())
@@ -228,10 +228,11 @@ class BarebonesTitleCard(BaseCardType):
             True if a custom font is indicated, False otherwise.
         """
 
-        return ((font.file != BarebonesTitleCard.TITLE_FONT)
+        return ((font.color != BarebonesTitleCard.TITLE_COLOR)
+            or (font.file != BarebonesTitleCard.TITLE_FONT)
             or (font.size != 1.0)
-            or (font.color != BarebonesTitleCard.TITLE_COLOR)
-            or (font.stroke_width != 1.0))
+            or (font.stroke_width != 1.0)
+        )
 
 
     @staticmethod
