@@ -51,7 +51,7 @@ class WhiteTextStandard(BaseCardType):
 
 
     def __init__(self,
-            source: Path,
+            source_file: Path,
             card_file: Path,
             title_text: str,
             season_text: str,
@@ -75,7 +75,7 @@ class WhiteTextStandard(BaseCardType):
         # Initialize the parent class - this sets up an ImageMagickInterface
         super().__init__(blur, grayscale)
 
-        self.source_file = source
+        self.source_file = source_file
         self.output_file = card_file
 
         # Ensure characters that need to be escaped are

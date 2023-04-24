@@ -45,8 +45,8 @@ class WhiteTextTitleOnly(BaseCardType):
     )
 
 
-    def __init__(self,
-            source: Path,
+    def __init__(self, *,
+            source_file: Path,
             card_file: Path,
             title_text: str,
             font_color: str = TITLE_COLOR,
@@ -66,7 +66,7 @@ class WhiteTextTitleOnly(BaseCardType):
         # Initialize the parent class - this sets up an ImageMagickInterface
         super().__init__(blur, grayscale)
 
-        self.source_file = source
+        self.source_file = source_file
         self.output_file = card_file
 
         # Ensure characters that need to be escaped are

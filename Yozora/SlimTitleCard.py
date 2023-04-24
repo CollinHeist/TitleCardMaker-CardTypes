@@ -51,7 +51,7 @@ class SlimTitleCard(BaseCardType):
     )
 
 
-    def __init__(self,
+    def __init__(self, *,
             source_file: Path,
             card_file: Path,
             title_text: str,

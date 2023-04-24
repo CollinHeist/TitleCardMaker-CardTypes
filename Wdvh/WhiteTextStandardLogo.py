@@ -55,7 +55,7 @@ class WhiteTextStandardLogo(BaseCardType):
     )
 
 
-    def __init__(self,
+    def __init__(self, *,
             card_file: Path,
             title_text: str,
             season_text: str,

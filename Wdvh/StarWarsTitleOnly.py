@@ -47,7 +47,7 @@ class StarWarsTitleOnly(BaseCardType):
 
     
     def __init__(self, *,
-            source: Path,
+            source_file: Path,
             card_file: Path,
             title_text: str,
             blur: bool = False,
@@ -61,7 +61,7 @@ class StarWarsTitleOnly(BaseCardType):
         super().__init__(blur, grayscale)
 
         # Store source and output file
-        self.source_file = source
+        self.source_file = source_file
         self.output_file = card_file
 
         # Store episode title

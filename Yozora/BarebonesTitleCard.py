@@ -50,7 +50,7 @@ class BarebonesTitleCard(BaseCardType):
 
     
     def __init__(self, *,
-            source: Path,
+            source_file: Path,
             output_file: Path,
             title_text: str,
             episode_text: str,

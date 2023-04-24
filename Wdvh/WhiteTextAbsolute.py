@@ -56,7 +56,7 @@ class WhiteTextAbsolute(BaseCardType):
 
 
     def __init__(self, *,
-            source: Path,
+            source_file: Path,
             output_file: Path,
             title_text: str,
             episode_text: str,
@@ -77,7 +77,7 @@ class WhiteTextAbsolute(BaseCardType):
         # Initialize the parent class - this sets up an ImageMagickInterface
         super().__init__(blur, grayscale)
 
-        self.source_file = source
+        self.source_file = source_file
         self.output_file = output_file
 
         # Ensure characters that need to be escaped are
