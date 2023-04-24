@@ -57,21 +57,21 @@ class WhiteTextStandardLogo(BaseCardType):
 
     def __init__(self,
             card_file: Path,
-            title: str,
+            title_text: str,
             season_text: str,
             episode_text: str,
-            font: str,
-            font_size: float,
-            title_color: str,
-            hide_season: bool = False,
+            hide_season_text: bool = False,
             season_number: int = 1,
             episode_number: int = 1,
-            blur: bool=False,
+            font_color: str = TITLE_COLOR,
+            font_file: str = TITLE_FONT,
+            font_kerning: float = 1.0,
+            font_interline_spacing: int = 0,
+            font_size: float = 1.0,
+            font_stroke_width: float = 1.0,
+            font_vertical_shift: int = 0,
+            blur: bool = False,
             grayscale: bool = False,
-            vertical_shift: int = 0,
-            kerning: float = 1.0,
-            interline_spacing: int = 0,
-            stroke_width: float = 1.0,
             logo: Optional[str] = None, 
             background: str = '#000000',
             separator: str = '-',
@@ -100,18 +100,19 @@ class WhiteTextStandardLogo(BaseCardType):
         self.output_file = card_file
 
         # Ensure characters that need to be escaped are
-        self.title = self.image_magick.escape_chars(title)
+        self.title = self.image_magick.escape_chars(title_text)
         self.season_text = self.image_magick.escape_chars(season_text.upper())
         self.episode_text = self.image_magick.escape_chars(episode_text.upper())
+        self.hide_season = hide_season_text
 
-        self.font = font
+        self.font = font_file
         self.font_size = font_size
-        self.title_color = title_color
-        self.hide_season = hide_season
-        self.vertical_shift = vertical_shift
-        self.interline_spacing = interline_spacing
-        self.kerning = kerning
-        self.stroke_width = stroke_width
+        self.title_color = font_color
+        self.vertical_shift = font_vertical_shift
+        self.interline_spacing = font_interline_spacing
+        self.kerning = font_kerning
+        self.stroke_width = font_stroke_width
+
         self.background = background
         self.separator = separator
 

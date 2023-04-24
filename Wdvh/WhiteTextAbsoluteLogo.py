@@ -58,17 +58,17 @@ class WhiteTextAbsoluteLogo(BaseCardType):
 
     def __init__(self, *,
             card_file: Path,
-            title: str,
+            title_text: str,
             episode_text: str,
-            font: str,
-            font_size: float,
-            title_color: str,
+            font_color: str = TITLE_COLOR,
+            font_file: str = TITLE_FONT,
+            font_interline_spacing: int = 0,
+            font_kerning: float = 1.0,
+            font_size: float = 1.0,
+            font_stroke_width: float = 1.0,
+            font_vertical_shift: int = 0,
             blur: bool = False,
             grayscale: bool = False,
-            vertical_shift: int = 0,
-            interline_spacing: int = 0,
-            kerning: float = 1.0,
-            stroke_width: float = 1.0,
             logo: Optional[str] = None,
             background: str = '#000000',
             **unused) -> None:
@@ -88,17 +88,17 @@ class WhiteTextAbsoluteLogo(BaseCardType):
         self.output_file = card_file
 
         # Ensure characters that need to be escaped are
-        self.title = self.image_magick.escape_chars(title)
+        self.title = self.image_magick.escape_chars(title_text)
         self.episode_text = self.image_magick.escape_chars(episode_text.upper())
 
-        self.font = font
+        self.font = font_file
+        self.title_color = file_color
+        self.interline_spacing = font_interline_spacing
+        self.kerning = font_kerning
         self.font_size = font_size
-        self.title_color = title_color
-        self.blur = blur
-        self.vertical_shift = vertical_shift
-        self.interline_spacing = interline_spacing
-        self.kerning = kerning
-        self.stroke_width = stroke_width
+        self.stroke_width = font_stroke_width
+        self.vertical_shift = font_vertical_shift
+
         self.background = background
 
 

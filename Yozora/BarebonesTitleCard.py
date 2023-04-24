@@ -52,44 +52,31 @@ class BarebonesTitleCard(BaseCardType):
     def __init__(self, *,
             source: Path,
             output_file: Path,
-            title: str,
+            title_text: str,
             episode_text: str,
-            font: str,
-            font_size: float,
-            title_color: str,
+            hide_episode_text: bool = False,
+            font_color: str = TITLE_COLOR,
+            font_file: str = TITLE_FONT,
+            font_size: float = 1.0,
+            font_stroke_width: float = 1.0,
             blur: bool = False,
             grayscale: bool = False,
-            stroke_width: float = 1.0,
             episode_text_color: str = EPISODE_TEXT_COLOR,
             **unused) -> None:
         """
         Initialize this CardType object.
-
-        Args:
-            source: Source image to base the card on.
-            output_file: Output file where to create the card.
-            title: Title text to add to created card.
-            episode_text: Episode text to add to created card.
-            font: Font name or path (as string) to use for episode title.
-            font_size: Scalar to apply to title font size.
-            title_color: Color to use for title text.
-            blur: Whether to blur the source image.
-            grayscale: Whether to make the source image grayscale.
-            stroke_width: Scalar to apply to black stroke of the title text.
-            episode_text_color: Color for the episode text.
-            unused: Unused arguments.
         """
         
         # Initialize the parent class - this sets up an ImageMagickInterface
         super().__init__(blur, grayscale)
 
         # Store source and output file
-        self.source_file = source
+        self.source_file = source_file
         self.output_file = output_file
 
         # Store episode title and text
-        self.title = self.image_magick.escape_chars(title.upper())
-        self.hide_episode_text = len(episode_text) == 0
+        self.title = self.image_magick.escape_chars(title_text.upper())
+        self.hide_episode_text = hide_episode_text or len(episode_text) == 0
 
         # Attempt to convert episode text number to numeric text
         if (not self.hide_episode_text
@@ -101,11 +88,12 @@ class BarebonesTitleCard(BaseCardType):
         self.episode_text = self.image_magick.escape_chars(episode_text)
 
         # Font customizations
-        self.font = font
+        self.title_color = font_color
+        self.font = font_file
         self.font_size = font_size
-        self.title_color = title_color
+        self.stroke_width = font_stroke_width
+
         self.episode_text_color = episode_text_color
-        self.stroke_width = stroke_width
 
 
     def __resize_source(self, source: Path) -> Path:

@@ -58,39 +58,20 @@ class WhiteTextAbsolute(BaseCardType):
     def __init__(self, *,
             source: Path,
             output_file: Path,
-            title: str,
+            title_text: str,
             episode_text: str,
-            font: str,
-            font_size: float,
-            title_color: str,
+            font_color: str = TITLE_COLOR,
+            font_file: str = TITLE_FONT,
+            font_size: float = 1.0,
+            font_interline_spacing: int = 0,
+            font_kerning: float = 1.0,
+            font_stroke_width: float = 1.0,
+            font_vertical_shift: int = 0,
             blur: bool = False,
             grayscale: bool = False,
-            vertical_shift: int = 0,
-            interline_spacing: int = 0,
-            kerning: float = 1.0,
-            stroke_width: float = 1.0,
             **unused) -> None:
         """
         Initialize this CardType object.
-
-        Args:
-            source: Source image to base the card on.
-            output_file: Output file where to create the card.
-            title: Title text to add to created card.
-            season_text: Season text to add to created card.
-            episode_text: Episode text to add to created card.
-            font: Font name or path (as string) to use for episode title.
-            font_size: Scalar to apply to title font size.
-            title_color: Color to use for title text.
-            hide_season: Whether to ignore season_text.
-            separator: Character to use to separate season and episode text.
-            blur: Whether to blur the source image.
-            grayscale: Whether to make the source image grayscale.
-            vertical_shift: Pixel count to adjust the title vertical offset by.
-            interline_spacing: Pixel count to adjust title interline spacing by.
-            kerning: Scalar to apply to kerning of the title text.
-            stroke_width: Scalar to apply to black stroke of the title text.
-            kwargs: Unused arguments.
         """
         
         # Initialize the parent class - this sets up an ImageMagickInterface
@@ -100,16 +81,16 @@ class WhiteTextAbsolute(BaseCardType):
         self.output_file = output_file
 
         # Ensure characters that need to be escaped are
-        self.title = self.image_magick.escape_chars(title)
+        self.title = self.image_magick.escape_chars(title_text)
         self.episode_text = self.image_magick.escape_chars(episode_text.upper())
 
-        self.font = font
+        self.font = font_file
+        self.title_color = font_color
+        self.interline_spacing = font_interline_spacing
+        self.kerning = font_kerning
         self.font_size = font_size
-        self.title_color = title_color
-        self.vertical_shift = vertical_shift
-        self.interline_spacing = interline_spacing
-        self.kerning = kerning
-        self.stroke_width = stroke_width
+        self.stroke_width = font_stroke_width
+        self.vertical_shift = font_vertical_shift
 
 
     def __title_text_global_effects(self) -> list[str]:

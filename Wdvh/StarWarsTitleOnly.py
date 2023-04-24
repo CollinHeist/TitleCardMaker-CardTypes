@@ -49,7 +49,7 @@ class StarWarsTitleOnly(BaseCardType):
     def __init__(self, *,
             source: Path,
             card_file: Path,
-            title: str,
+            title_text: str,
             blur: bool = False,
             grayscale: bool = False,
             **unused) -> None:
@@ -65,7 +65,7 @@ class StarWarsTitleOnly(BaseCardType):
         self.output_file = card_file
 
         # Store episode title
-        self.title = self.image_magick.escape_chars(title.upper())
+        self.title = self.image_magick.escape_chars(title_text.upper())
 
 
     @staticmethod
