@@ -411,7 +411,7 @@ class WhiteTextStandardLogo(BaseCardType):
         """
 
         command = ' '.join([
-            f'convert'
+            f'convert',
             f'"{series_count_image.resolve()}"',
             f'-gravity center',
             f'-geometry +0+690.2',
