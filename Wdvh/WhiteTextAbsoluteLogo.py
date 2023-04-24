@@ -92,7 +92,7 @@ class WhiteTextAbsoluteLogo(BaseCardType):
         self.episode_text = self.image_magick.escape_chars(episode_text.upper())
 
         self.font = font_file
-        self.title_color = file_color
+        self.title_color = font_color
         self.interline_spacing = font_interline_spacing
         self.kerning = font_kerning
         self.font_size = font_size
