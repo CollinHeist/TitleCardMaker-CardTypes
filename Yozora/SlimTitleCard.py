@@ -1,5 +1,5 @@
 from pathlib import Path
-from re import findall
+from typing import Optional
 
 from modules.BaseCardType import BaseCardType, ImageMagickCommands
 from modules.RemoteFile import RemoteFile
@@ -67,10 +67,11 @@ class SlimTitleCard(BaseCardType):
             font_vertical_shift: int = 0,
             blur: bool = False,
             grayscale: bool = False,
+            preferences: Optional['Preferences'] = None,
             **unused) -> None:
         
         # Initialize the parent class - this sets up an ImageMagickInterface
-        super().__init__(blur, grayscale)
+        super().__init__(blur, grayscale, preferences=preferences)
 
         self.source_file = source_file
         self.output_file = card_file

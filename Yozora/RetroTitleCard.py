@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Literal
+from typing import Literal, Optional
 
 from modules.BaseCardType import BaseCardType, ImageMagickCommands
 from modules.Debug import log
@@ -73,10 +73,11 @@ class RetroTitleCard(BaseCardType):
             grayscale: bool = False,
             override_bw: OverrideBW = '',
             override_style: OverrideStyle = '',
+            preferences: Optional['Preferences'] = None,
             **unused) -> None:
         
         # Initialize the parent class - this sets up an ImageMagickInterface
-        super().__init__(blur, grayscale)
+        super().__init__(blur, grayscale, preferences=preferences)
 
         self.source_file = source_file
         self.output_file = card_file

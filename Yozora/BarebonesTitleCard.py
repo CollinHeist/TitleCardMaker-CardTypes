@@ -1,5 +1,6 @@
 from pathlib import Path
 from re import match
+from typing import Optional
 
 from num2words import num2words
 
@@ -61,6 +62,7 @@ class BarebonesTitleCard(BaseCardType):
             grayscale: bool = False,
             stroke_width: float = 1.0,
             episode_text_color: str = EPISODE_TEXT_COLOR,
+            preferences: Optional['Preferences'] = None,
             **unused) -> None:
         """
         Initialize this CardType object.
@@ -81,7 +83,7 @@ class BarebonesTitleCard(BaseCardType):
         """
         
         # Initialize the parent class - this sets up an ImageMagickInterface
-        super().__init__(blur, grayscale)
+        super().__init__(blur, grayscale, preferences=preferences)
 
         # Store source and output file
         self.source_file = source

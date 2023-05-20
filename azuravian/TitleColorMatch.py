@@ -67,11 +67,11 @@ class TitleColorMatch(BaseCardType):
             season_text: str,
             episode_text: str,
             hide_season_text: bool = False,
-            font_color: str,
-            font_file: str,
+            font_color: str = TITLE_COLOR,
+            font_file: str = TITLE_FONT,
             font_interline_spacing: int = 0,
             font_kerning: float = 1.0,
-            font_size: float,
+            font_size: float = 1.0,
             font_stroke_width: float = 1.0,
             font_vertical_shift: int = 0,
             season_number: int = 1,
@@ -79,16 +79,17 @@ class TitleColorMatch(BaseCardType):
             blur: bool = False,
             grayscale: bool = False,
             logo: Optional[str] = None,
+            preferences: Optional['Preferences'] = None,
             **unused) -> None:
         """
         Construct a new instance of this Card.
         """
         
         # Initialize the parent class - this sets up an ImageMagickInterface
-        super().__init__(blur, grayscale)
+        super().__init__(blur, grayscale, preferences=preferences)
 
         self.source_file = source_file
-        self.output_file = output_file
+        self.output_file = card_file
         if logo is None:
             self.logo = None
         else:
@@ -340,8 +341,8 @@ class TitleColorMatch(BaseCardType):
 
         standard_etf = TitleColorMatch.EPISODE_TEXT_FORMAT.upper()
 
-        return (custom_episode_map or
-                episode_text_format.upper() != standard_etf)
+        return (custom_episode_map
+                or episode_text_format.upper() != standard_etf)
 
 
     def create(self) -> None:

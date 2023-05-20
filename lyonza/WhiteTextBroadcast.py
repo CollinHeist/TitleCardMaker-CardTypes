@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Optional
 
 from modules.BaseCardType import BaseCardType, ImageMagickCommands
 from modules.Debug import log
@@ -70,10 +71,11 @@ class WhiteTextBroadcast(BaseCardType):
             grayscale: bool = False,
             episode_text_color: str = SERIES_COUNT_TEXT_COLOR,
             omit_gradient: bool = False,
+            preferences: Optional['Preferences'] = None,
             **unused) -> None:
         
         # Initialize the parent class - this sets up an ImageMagickInterface
-        super().__init__(blur, grayscale)
+        super().__init__(blur, grayscale, preferences=preferences)
 
         self.source_file = source_file
         self.output_file = card_file

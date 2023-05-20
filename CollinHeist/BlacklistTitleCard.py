@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Optional
 
 from modules.BaseCardType import BaseCardType, ImageMagickCommands
 from modules.Debug import log
@@ -48,13 +49,14 @@ class BlacklistTitleCard(BaseCardType):
             font_size: float = 1.0,
             blur: bool = False,
             grayscale: bool = False,
+            preferences: Optional['Preferences'] = None,
             **unused) -> None:
         """
         Construct a new instance of this Card.
         """
 
         # Initialize the parent class - this sets up an ImageMagickInterface
-        super().__init__(blur, grayscale)
+        super().__init__(blur, grayscale, preferences=preferences)
 
         # Store source and output file
         self.source_file = source_file
