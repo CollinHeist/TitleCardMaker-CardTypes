@@ -32,8 +32,11 @@
     }, {
         "name": "Blacklist",
         "identifier": "CollinHeist/BlacklistTitleCard",
-        "description": ["Placeholder description"],
-        "example": "https://user-images.githubusercontent.com/17693271/216839561-ec4a1c27-dcdc-4869-87dd-8d592a26aee2.jpg",
+        "description": [
+            "Title Card intended for the 'The Blacklist' television series",
+            "This Card features a prominent title and a customizable 'blacklist number' beneath the title.",
+            "The default Font for this card is a modified version of Helvetica."
+        ], "example": "https://user-images.githubusercontent.com/17693271/216839561-ec4a1c27-dcdc-4869-87dd-8d592a26aee2.jpg",
         "creators": ["CollinHeist"],
         "supports_custom_fonts": true,
         "supports_custom_seasons": false,

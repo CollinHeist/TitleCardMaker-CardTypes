@@ -7,7 +7,9 @@ from modules.RemoteFile import RemoteFile
 
 class BlacklistTitleCard(BaseCardType):
     """
-    
+    This class describes a type of CardType that produces title cards
+    intended for use for "The Blacklist" series. It features a title,
+    with a subtitle of the "blacklist number" parsed via an extra.
     """
 
     """Characteristics for title splitting by this class"""
@@ -34,8 +36,8 @@ class BlacklistTitleCard(BaseCardType):
 
     __slots__ = (
         'source_file', 'output_file', 'title_text', 'episode_text',
-        'line_count', 'font_color', 'font_file', 'font_size',
-        'font_interline_spacing',
+        'hide_episode_text' 'line_count', 'font_color', 'font_file',
+        'font_size', 'font_interline_spacing',
     )
 
     def __init__(self,
@@ -43,6 +45,7 @@ class BlacklistTitleCard(BaseCardType):
             output_file: Path,
             title_text: str, 
             episode_text: str,
+            hide_episode_text: bool = False,
             font_file: str = TITLE_FONT,
             font_color: str = TITLE_COLOR,
             font_interline_spacing: int = 0,
@@ -65,6 +68,7 @@ class BlacklistTitleCard(BaseCardType):
         # Escape title, season, and episode text
         self.title_text = self.image_magick.escape_chars(title_text)
         self.episode_text = self.image_magick.escape_chars(episode_text.upper())
+        self.hide_episode_text = hide_episode_text
         self.line_count = len(title_text.split('\n'))
 
         # Font customizations
@@ -124,6 +128,14 @@ class BlacklistTitleCard(BaseCardType):
         font_size = 230 * self.font_size
         interline_spacing = 30 + self.font_interline_spacing
 
+        if self.hide_episode_text:
+            episode_text_commands = []
+        else:
+            episode_text_commands = [ 
+                f'-pointsize 120',
+                f'-annotate +150+{episode_text_offset} "{self.episode_text}"',
+            ]
+
         command = ' '.join([
             f'convert "{self.source_file.resolve()}"',
             # Resize and apply styles
@@ -136,8 +148,7 @@ class BlacklistTitleCard(BaseCardType):
             f'-gravity northwest',
             f'-annotate +150+150 "{self.title_text}"',
             # Add episode text
-            f'-pointsize 120',
-            f'-annotate +150+{episode_text_offset} "{self.episode_text}"',
+            *episode_text_commands,
             f'"{self.output_file.resolve()}"',
         ])
 
