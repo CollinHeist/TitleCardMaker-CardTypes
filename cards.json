@@ -93,8 +93,10 @@
     }, {
         "name": "White Text Standard",
         "identifier": "Wdvh/WhiteTextStandard",
-        "description": ["Placeholder description"],
-        "example": "https://user-images.githubusercontent.com/17693271/169709359-ffc9e109-b327-44e9-b78a-7276f77fe917.jpg",
+        "description": [
+            "Modification of the Standard Card Type.",
+            "This Card uses a different font, smaller text size, and the episode title is positioned lower than the Standard Card Type."
+        ],"example": "https://user-images.githubusercontent.com/17693271/169709359-ffc9e109-b327-44e9-b78a-7276f77fe917.jpg",
         "creators": ["Wdvh", "CollinHeist"],
         "supports_custom_fonts": true,
         "supports_custom_seasons": false,
