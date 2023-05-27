@@ -54,8 +54,10 @@
     }, {
         "name": "Star Wars (Title Only)",
         "identifier": "Wdvh/StarWarsTitleOnly",
-        "description": ["Placeholder description"],
-        "example": "https://user-images.githubusercontent.com/17693271/178131539-c7b55ced-b9ba-4564-8153-a998454e1742.jpg",
+        "description": [
+            "A variation of the standard Star Wars Card for Shows Like Obi-Wan Kenobi that use Part/Chapter and similar as episode titles.",
+            "This card also uses a modified star gradient so that more of the left side of the image is visible."
+        ], "example": "https://user-images.githubusercontent.com/17693271/178131539-c7b55ced-b9ba-4564-8153-a998454e1742.jpg",
         "creators": ["Wdvh", "CollinHeist"],
         "supports_custom_fonts": false,
         "supports_custom_seasons": false,
