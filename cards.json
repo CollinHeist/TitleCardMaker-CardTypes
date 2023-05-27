@@ -44,8 +44,9 @@
     }, {
         "name": "White Text Broadcast",
         "identifier": "lyonza/WhiteTextBroadcast",
-        "description": ["Placeholder description"],
-        "example": "https://user-images.githubusercontent.com/1803189/171089736-f60a6ff2-0914-432a-a45d-145323d39c42.jpg",
+        "description": [
+            "Card based on Wdvh's White Text Absolute card, using the same format, but has the season number included in the episode text."
+        ], "example": "https://user-images.githubusercontent.com/1803189/171089736-f60a6ff2-0914-432a-a45d-145323d39c42.jpg",
         "creators": ["lyonza", "Wdvh", "CollinHeist"],
         "supports_custom_fonts": true,
         "supports_custom_seasons": false,
