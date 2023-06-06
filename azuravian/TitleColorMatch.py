@@ -1,6 +1,6 @@
 from pathlib import Path
-from re import findall, compile as re_compile
-from typing import Optional
+from re import compile as re_compile
+from typing import Literal, Optional, Union
 
 from pydantic import Field, FilePath
 from app.schemas.base import BetterColor
@@ -64,7 +64,7 @@ class TitleColorMatch(BaseCardType):
 
     class CardModel(BaseCardTypeCustomFontAllText):
         logo_file: FilePath
-        font_color: BetterColor = Field(default='#EBEBEB')
+        font_color: Union[BetterColor, Literal['auto']] = Field(default='#EBEBEB')
         font_file: FilePath
 
     def __init__(self,
@@ -184,7 +184,7 @@ class TitleColorMatch(BaseCardType):
         """
 
         # If auto color wasn't indicated use indicated color and black stroke
-        if self.font_color.lower() != 'auto':
+        if str(self.font_color) != 'auto':
             return self.font_color, 'black'
 
         # Command to get histogram of the colors in logo image
