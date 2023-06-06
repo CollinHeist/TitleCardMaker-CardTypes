@@ -2,8 +2,11 @@ from pathlib import Path
 from re import findall, compile as re_compile
 from typing import Optional
 
+from pydantic import Field, FilePath
+from app.schemas.base import BetterColor
+from app.schemas.card_type import BaseCardTypeCustomFontAllText
+
 from modules.BaseCardType import BaseCardType, ImageMagickCommands
-from modules.CleanPath import CleanPath
 from modules.Debug import log
 from modules.RemoteFile import RemoteFile
 
@@ -15,7 +18,7 @@ class TitleColorMatch(BaseCardType):
     matches the logo, as well as trimming the logo of any extra
     transparent space that makes its  location incorrect.
     """
-    
+
     """Directory where all reference files used by this card are stored"""
     REF_DIRECTORY = Path(__file__).parent.parent / 'ref'
 
@@ -59,10 +62,15 @@ class TitleColorMatch(BaseCardType):
         'font_stroke_width', 'font_vertical_shift', 'logo', 
     )
 
+    class CardModel(BaseCardTypeCustomFontAllText):
+        logo_file: FilePath
+        font_color: BetterColor = Field(default='#EBEBEB')
+        font_file: FilePath
 
     def __init__(self,
             source_file: Path,
             card_file: Path,
+            logo_file: Path,
             title_text: str,
             season_text: str,
             episode_text: str,
@@ -74,11 +82,8 @@ class TitleColorMatch(BaseCardType):
             font_size: float = 1.0,
             font_stroke_width: float = 1.0,
             font_vertical_shift: int = 0,
-            season_number: int = 1,
-            episode_number: int = 1,
             blur: bool = False,
             grayscale: bool = False,
-            logo: Optional[str] = None,
             preferences: Optional['Preferences'] = None,
             **unused) -> None:
         """
@@ -90,22 +95,13 @@ class TitleColorMatch(BaseCardType):
 
         self.source_file = source_file
         self.output_file = card_file
-        if logo is None:
-            self.logo = None
-        else:
-            try:
-                logo = logo.format(season_number=season_number,
-                                   episode_number=episode_number)
-                self.logo = Path(CleanPath(logo).sanitize())
-            except Exception as e:
-                self.valid = False
-                log.exception(f'Invalid logo file "{logo}"', e)
+        self.logo = logo_file
 
         # Ensure characters that need to be escaped are
         self.title_text = self.image_magick.escape_chars(title_text)
         self.season_text = self.image_magick.escape_chars(season_text.upper())
         self.episode_text = self.image_magick.escape_chars(episode_text.upper())
-        self.hide_season_text = hide_season_text or len(season_text) == 0
+        self.hide_season_text = hide_season_text
         
         self.font_color = font_color
         self.font_file = font_file
