@@ -19,6 +19,11 @@ class TitleColorMatch(BaseCardType):
     transparent space that makes its  location incorrect.
     """
 
+    class CardModel(BaseCardTypeCustomFontAllText):
+        logo_file: FilePath
+        font_color: Union[BetterColor, Literal['auto']] = Field(default='#EBEBEB')
+        font_file: FilePath
+
     """Directory where all reference files used by this card are stored"""
     REF_DIRECTORY = Path(__file__).parent.parent / 'ref'
 
@@ -61,11 +66,6 @@ class TitleColorMatch(BaseCardType):
         'font_interline_spacing', 'font_kerning', 'font_size',
         'font_stroke_width', 'font_vertical_shift', 'logo', 
     )
-
-    class CardModel(BaseCardTypeCustomFontAllText):
-        logo_file: FilePath
-        font_color: Union[BetterColor, Literal['auto']] = Field(default='#EBEBEB')
-        font_file: FilePath
 
     def __init__(self,
             source_file: Path,
@@ -346,14 +346,6 @@ class TitleColorMatch(BaseCardType):
         Make the necessary ImageMagick and system calls to create this
         object's defined title card.
         """
-        
-        # Skip card if logo doesn't exist
-        if self.logo is None:
-            log.error(f'Logo file not specified')
-            return None
-        elif not self.logo.exists():
-            log.error(f'Logo file "{self.logo.resolve()}" does not exist')
-            return None
 
         command = ' '.join([
             f'convert',
