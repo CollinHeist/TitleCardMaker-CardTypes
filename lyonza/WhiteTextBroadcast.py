@@ -1,6 +1,10 @@
 from pathlib import Path
 from typing import Optional
 
+from pydantic import Field, root_validator
+from app.schemas.base import BetterColor
+from app.schemas.card_type import BaseCardTypeCustomFontNoText
+
 from modules.BaseCardType import BaseCardType, ImageMagickCommands
 from modules.Debug import log
 from modules.RemoteFile import RemoteFile
@@ -11,6 +15,19 @@ class WhiteTextBroadcast(BaseCardType):
     "WhiteTextBroadcast" card to show SxxExx format instead of absolute
     numbering
     """
+
+    class CardModel(BaseCardTypeCustomFontNoText):
+        title_text: str
+        episode_text: str
+        hide_episode_text: bool = Field(default=False)
+        episode_text_color: BetterColor = Field(default='#FFFFFF')
+        omit_gradient: bool = Field(default=False)
+
+        @root_validator
+        def toggle_text_hiding(cls, values):
+            values['hide_episode_text'] |= (len(values['episode_text']) == 0)
+
+            return values
 
     """Directory where all reference files used by this card are stored"""
     REF_DIRECTORY = Path(__file__).parent.parent / 'ref'
@@ -49,7 +66,7 @@ class WhiteTextBroadcast(BaseCardType):
 
     __slots__ = (
         'source_file', 'output_file', 'title_text', 'episode_text',
-        'hide_season_text', 'font_file', 'font_size', 'font_color',
+        'hide_episode_text', 'font_file', 'font_size', 'font_color',
         'font_vertical_shift', 'font_interline_spacing', 'font_kerning',
         'font_stroke_width', 'episode_text_color', 'omit_gradient',
     )
@@ -60,8 +77,9 @@ class WhiteTextBroadcast(BaseCardType):
             card_file: Path,
             title_text: str,
             episode_text: str,
-            font_color: str,
-            font_file: str,
+            hide_episode_text: bool = False,
+            font_color: str = TITLE_COLOR,
+            font_file: str = TITLE_FONT,
             font_interline_spacing: int = 0,
             font_kerning: float = 1.0,
             font_size: float,
@@ -83,6 +101,7 @@ class WhiteTextBroadcast(BaseCardType):
         # Ensure characters that need to be escaped are
         self.title_text = self.image_magick.escape_chars(title_text)
         self.episode_text = self.image_magick.escape_chars(episode_text.upper())
+        self.hide_episode_text = hide_episode_text
 
         self.font_color = font_color
         self.font_file = font_file
@@ -132,6 +151,9 @@ class WhiteTextBroadcast(BaseCardType):
         """
         Adds the series count text without season title/number.
         """
+
+        if self.hide_episode_text:
+            return []
 
         return [
             # Global text effects
