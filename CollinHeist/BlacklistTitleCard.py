@@ -1,6 +1,10 @@
 from pathlib import Path
 from typing import Optional
 
+from pydantic import Field, FilePath, PositiveFloat, root_validator
+from app.schemas.base import BetterColor
+from app.schemas.card_type import BaseCardType as BaseCardModel
+
 from modules.BaseCardType import BaseCardType, ImageMagickCommands
 from modules.Debug import log
 from modules.RemoteFile import RemoteFile
@@ -11,6 +15,22 @@ class BlacklistTitleCard(BaseCardType):
     intended for use for "The Blacklist" series. It features a title,
     with a subtitle of the "blacklist number" parsed via an extra.
     """
+
+    class CardModel(BaseCardModel):
+        title_text: str
+        episode_text: str
+        hide_episode_text: bool = Field(default=False)
+        font_color: BetterColor
+        font_file: FilePath
+        font_interline_spacing: int = Field(default=0)
+        font_size: PositiveFloat = Field(default=1.0)
+        font_vertical_shift: int = Field(default=0)
+
+        @root_validator
+        def toggle_text_hiding(cls, values):
+            values['hide_episode_text'] |= (len(values['episode_text']) == 0)
+
+            return values
 
     """Characteristics for title splitting by this class"""
     TITLE_CHARACTERISTICS = {
@@ -37,19 +57,20 @@ class BlacklistTitleCard(BaseCardType):
     __slots__ = (
         'source_file', 'output_file', 'title_text', 'episode_text',
         'hide_episode_text' 'line_count', 'font_color', 'font_file',
-        'font_size', 'font_interline_spacing',
+        'font_size', 'font_interline_spacing', 'font_vertical_shift',
     )
 
     def __init__(self,
             source_file: Path,
-            output_file: Path,
+            card_file: Path,
             title_text: str, 
             episode_text: str,
             hide_episode_text: bool = False,
-            font_file: str = TITLE_FONT,
             font_color: str = TITLE_COLOR,
+            font_file: str = TITLE_FONT,
             font_interline_spacing: int = 0,
             font_size: float = 1.0,
+            font_vertical_shift: int = 0.0,
             blur: bool = False,
             grayscale: bool = False,
             preferences: Optional['Preferences'] = None,
@@ -63,7 +84,7 @@ class BlacklistTitleCard(BaseCardType):
 
         # Store source and output file
         self.source_file = source_file
-        self.output_file = output_file
+        self.output_file = card_file
 
         # Escape title, season, and episode text
         self.title_text = self.image_magick.escape_chars(title_text)
@@ -76,6 +97,7 @@ class BlacklistTitleCard(BaseCardType):
         self.font_file = font_file
         self.font_interline_spacing = font_interline_spacing
         self.font_size = font_size
+        self.font_vertical_shift = font_vertical_shift
 
 
     @staticmethod
@@ -94,7 +116,6 @@ class BlacklistTitleCard(BaseCardType):
         return ((font.color != BlacklistTitleCard.TITLE_COLOR)
             or (font.file != BlacklistTitleCard.TITLE_FONT)
             or (font.interline_spacing != 0)
-            or (font.kerning != 1.0)
             or (font.size != 1.0)
             or (font.vertical_shift != 0)
         )
@@ -127,6 +148,7 @@ class BlacklistTitleCard(BaseCardType):
         episode_text_offset = 150 + (250 * self.line_count)
         font_size = 230 * self.font_size
         interline_spacing = 30 + self.font_interline_spacing
+        vertical_shift = 150 + self.font_vertical_shift
 
         if self.hide_episode_text:
             episode_text_commands = []
@@ -146,7 +168,7 @@ class BlacklistTitleCard(BaseCardType):
             f'-interline-spacing {interline_spacing}',
             f'-pointsize {font_size}',
             f'-gravity northwest',
-            f'-annotate +150+150 "{self.title_text}"',
+            f'-annotate +150+{vertical_shift} "{self.title_text}"',
             # Add episode text
             *episode_text_commands,
             f'"{self.output_file.resolve()}"',
