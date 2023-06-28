@@ -9,13 +9,7 @@
         "creators": ["Azuravian", "CollinHeist"],
         "supports_custom_fonts": true,
         "supports_custom_seasons": true,
-        "supported_extras": [
-            {
-                "name": "Logo File",
-                "identifier": "logo",
-                "description": "Logo file to place on the card, and parse the auto-color from"
-            }
-        ]
+        "supported_extras": []
     }, {
         "name": "Gradient Logo",
         "identifier": "Beedman/GradientLogoTitleCard",
@@ -25,13 +19,7 @@
         "creators": ["Beedman", "CollinHeist"],
         "supports_custom_fonts": true,
         "supports_custom_seasons": true,
-        "supported_extras": [
-            {
-                "name": "Logo File",
-                "identifier": "logo",
-                "description": "Logo file to place on the card"
-            }
-        ]
+        "supported_extras": []
     }, {
         "name": "Blacklist",
         "identifier": "CollinHeist/BlacklistTitleCard",
@@ -86,10 +74,6 @@
         "supports_custom_seasons": false,
         "supported_extras": [
             {
-                "name": "Logo File",
-                "identifier": "logo",
-                "description": "Logo file to place on the card"
-            }, {
                 "name": "Background Color",
                 "identifier": "background",
                 "description": "Color to use for the card background"
@@ -122,10 +106,6 @@
         "supports_custom_seasons": true,
         "supported_extras": [
             {
-                "name": "Logo File",
-                "identifier": "logo",
-                "description": "Logo file to place on the card"
-            }, {
                 "name": "Background Color",
                 "identifier": "background",
                 "description": "Color to use for the card background"
@@ -154,10 +134,6 @@
         "supports_custom_seasons": false,
         "supported_extras": [
             {
-                "name": "Logo File",
-                "identifier": "logo",
-                "description": "Logo file to place on the card"
-            }, {
                 "name": "Background Color",
                 "identifier": "background",
                 "description": "Color to use for the card background"
@@ -193,6 +169,12 @@
         "creators": ["Yozora", "CollinHeist"],
         "supports_custom_fonts": true,
         "supports_custom_seasons": true,
-        "supported_extras": []
+        "supported_extras": [
+            {
+                "name": "Gradient Omission",
+                "identifier": "omit_gradient",
+                "description": "Whether to omit the gradient overlay from this Card"
+            }
+        ]
     }
 ]
