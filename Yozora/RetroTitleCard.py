@@ -1,18 +1,33 @@
 from pathlib import Path
 from typing import Literal, Optional
 
+from pydantic import Field, root_validator
+from app.schemas.card_type import BaseCardTypeCustomFontNoText
+
 from modules.BaseCardType import BaseCardType, ImageMagickCommands
 from modules.Debug import log
 from modules.RemoteFile import RemoteFile
 
-OverrideBW = Literal['', 'bw', 'color']
-OverrideStyle = Literal['', 'rewind', 'play']
 
 class RetroTitleCard(BaseCardType):
     """
     This class describes a CardType designed by Yozora. This card type
     is retro-themed, and features either a Rewind/Play overlay.
     """
+
+    class CardModel(BaseCardTypeCustomFontNoText):
+        title_text: str
+        episode_text: str
+        hide_episode_text: bool = Field(default=False)
+        watched: bool = Field(default=True)
+        override_bw: Optional[Literal['bw', 'color']] = Field(default=None)
+        override_style: Optional[Literal['rewind', 'play']] = Field(default=None)
+
+        @root_validator
+        def toggle_text_hiding(cls, values):
+            values['hide_episode_text'] |= (len(values['episode_text']) == 0)
+
+            return values
 
     """Directory where all reference files used by this card are stored"""
     REF_DIRECTORY = Path(__file__).parent.parent / 'ref' / 'retro'
@@ -61,6 +76,7 @@ class RetroTitleCard(BaseCardType):
             card_file: Path,
             title_text: str,
             episode_text: str,
+            hide_episode_text: bool = False,
             font_color: str = TITLE_COLOR,
             font_file: str = TITLE_FONT,
             font_interline_spacing: int = 0,
@@ -71,8 +87,8 @@ class RetroTitleCard(BaseCardType):
             watched: bool = True,
             blur: bool = False,
             grayscale: bool = False,
-            override_bw: OverrideBW = '',
-            override_style: OverrideStyle = '',
+            override_bw: Optional[Literal['bw', 'color']] = None,
+            override_style: Optional[Literal['rewind', 'play']] = None,
             preferences: Optional['Preferences'] = None,
             **unused) -> None:
         
@@ -85,6 +101,7 @@ class RetroTitleCard(BaseCardType):
         # Ensure characters that need to be escaped are
         self.title_text = self.image_magick.escape_chars(title_text)
         self.episode_text = self.image_magick.escape_chars(episode_text.upper())
+        self.hide_episode_text = hide_episode_text
 
         self.font_color = font_color
         self.font_file = font_file
@@ -96,8 +113,8 @@ class RetroTitleCard(BaseCardType):
         
         # Store extras
         self.watched = watched
-        self.override_bw = override_bw.lower()
-        self.override_style = override_style.lower()
+        self.override_bw = override_bw
+        self.override_style = override_style
 
 
     @property
@@ -175,6 +192,9 @@ class RetroTitleCard(BaseCardType):
         Returns:
             List of ImageMagick commands
         """
+
+        if self.hide_episode_text:
+            return []
 
         return [
             f'-kerning 5.42',
