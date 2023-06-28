@@ -1,14 +1,20 @@
 from pathlib import Path
 from typing import Optional
 
+from pydantic import Field
+from app.schemas.card_type import BaseCardTypeCustomFontAllText
+
 from modules.BaseCardType import BaseCardType, ImageMagickCommands
 from modules.RemoteFile import RemoteFile
 from modules.Debug import log
 
 class SlimTitleCard(BaseCardType):
     """
-    
+    ...
     """
+
+    class CardModel(BaseCardTypeCustomFontAllText):
+        omit_gradient: bool = Field(default=False)
 
     """Directory where all reference files used by this card are stored"""
     REF_DIRECTORY = Path(__file__).parent.parent / 'ref'
@@ -45,9 +51,9 @@ class SlimTitleCard(BaseCardType):
 
     __slots__ = (
         'source_file', 'output_file', 'title_text', 'season_text',
-        'episode_text', 'hide_season_text', 'font_color', 'font_file',
-        'font_interline_spacing', 'font_kerning', 'font_size',
-        'font_stroke_width', 'font_vertical_shift',
+        'episode_text', 'hide_season_text', 'hide_episode_text', 'font_color',
+        'font_file', 'font_interline_spacing', 'font_kerning', 'font_size',
+        'font_stroke_width', 'font_vertical_shift', 'omit_gradient',
     )
 
 
@@ -58,6 +64,7 @@ class SlimTitleCard(BaseCardType):
             season_text: str,
             episode_text: str,
             hide_season_text: bool = False,
+            hide_episode_text: bool = False,
             font_color: str = TITLE_COLOR,
             font_file: str = TITLE_FONT,
             font_interline_spacing: int = 0,
@@ -67,6 +74,7 @@ class SlimTitleCard(BaseCardType):
             font_vertical_shift: int = 0,
             blur: bool = False,
             grayscale: bool = False,
+            omit_gradient: bool = False,
             preferences: Optional['Preferences'] = None,
             **unused) -> None:
         
@@ -81,7 +89,9 @@ class SlimTitleCard(BaseCardType):
         self.season_text = self.image_magick.escape_chars(season_text.upper())
         self.episode_text = self.image_magick.escape_chars(episode_text.upper())
         self.hide_season_text = hide_season_text
+        self.hide_episode_text = hide_episode_text
 
+        # Font characteristics
         self.font_color = font_color
         self.font_file = font_file
         self.font_interline_spacing = font_interline_spacing
@@ -89,6 +99,9 @@ class SlimTitleCard(BaseCardType):
         self.font_size = font_size
         self.font_stroke_width = font_stroke_width
         self.font_vertical_shift = font_vertical_shift
+
+        # Extras
+        self.omit_gradient = omit_gradient
 
 
     def __title_text_global_effects(self) -> ImageMagickCommands:
@@ -207,6 +220,9 @@ class SlimTitleCard(BaseCardType):
             List of ImageMagick commands.
         """
 
+        if self.hide_season_text and self.hide_episode_text:
+            return []
+
         if self.hide_season_text:
             return [
                 *self.__series_count_text_global_effects(),
@@ -216,6 +232,17 @@ class SlimTitleCard(BaseCardType):
                 f'-annotate +0+697.2 "{self.episode_text}"',
                 *self.__series_count_text_effects(),
                 f'-annotate +0+697.2 "{self.episode_text}"',
+            ]
+        
+        if self.hide_episode_text:
+            return [
+                *self.__series_count_text_global_effects(),
+                f'-font "{self.SEASON_COUNT_FONT}"',
+                f'-gravity center',
+                *self.__series_count_text_black_stroke(),
+                f'-annotate +0+697.2 "{self.season_text}"',
+                *self.__series_count_text_effects(),
+                f'-annotate +0+697.2 "{self.season_text}"',
             ]
 
         return [
@@ -299,12 +326,19 @@ class SlimTitleCard(BaseCardType):
         object's defined title card.
         """
 
+        if self.omit_gradient:
+            gradient_command = []
+        else:
+            gradient_command = [
+                f'"{self.__GRADIENT_IMAGE.resolve()}"',
+                f'-composite',
+            ]
+
         command = ' '.join([
             f'convert "{self.source_file.resolve()}"',
             *self.resize_and_style,
             # Add gradient
-            f'"{self.__GRADIENT_IMAGE.resolve()}"',
-            f'-composite',
+            *gradient_command,
             # Add title and index text
             *self.title_text_command,
             *self.index_text_command,
