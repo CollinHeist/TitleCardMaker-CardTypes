@@ -34,12 +34,19 @@ class TitleColorMatch(BaseCardType):
         'top_heavy': False,     # This class uses bottom heavy titling
     }
 
-    """Default font and text color for episode title text"""
+    """Default font, text and stroke color for episode title text"""
     TITLE_FONT = str((REF_DIRECTORY / 'Sequel-Neue.otf').resolve())
     TITLE_COLOR = '#EBEBEB'
+    STROKE_COLOR = 'black'
 
-    """Threshold (%) under which logos will have their colors inverted"""
-    TITLE_MIN_LUMINANCE = 10
+    """Threshold under which logos will have their colors inverted (if enabled) and text will use TITLE_COLOR from above (0 being black and 255 being pure white)"""
+    TITLE_MIN_LUMINANCE = 50
+
+    """When enabled, any color with a significant presence may be checked for luminance. When disabled, only the most common color is checked."""
+    CHECK_MULTIPLE_LUMINANCES = True
+
+    """When enabled, logos will have their colors inverted when they are darker than the above threshold"""
+    INVERT_LOGOS = True
 
     """Default characters to replace in the generic font"""
     FONT_REPLACEMENTS = {
@@ -126,7 +133,7 @@ class TitleColorMatch(BaseCardType):
         """
 
         negate_commands = []
-        if luminance < self.TITLE_MIN_LUMINANCE:
+        if self.INVERT_LOGOS and luminance < self.TITLE_MIN_LUMINANCE:
             negate_commands = [
                 f'-channel RGB',
                 f'-negate',
@@ -195,12 +202,12 @@ class TitleColorMatch(BaseCardType):
 
         Returns:
             Tuple whose values are the title color text, the stroke
-            width color and luminance (or 100 where not applicable).
+            width color and luminance
         """
 
         # If auto color wasn't indicated use indicated color and black stroke
         if str(self.font_color) != 'auto':
-            return self.font_color, 'black', 100
+            return self.font_color, 'black', 255
 
         # Command to get histogram of the colors in logo image
         command = ' '.join([
@@ -243,19 +250,19 @@ class TitleColorMatch(BaseCardType):
 
             # First valid color, return color and stroke based on luminance
             luminance = (r * 0.299) + (g * 0.587) + (b * 0.114)
+            log.debug(f'Luminance for {self.logo} ({r}, {g}, {b}) is {luminance}')
 
-            # Determine returns
+            # If luminance is sufficient return right away, otherwise check the next most common colors
             if luminance >= self.TITLE_MIN_LUMINANCE:
                 title_color = hexcolor
-                stroke_color = 'black' if luminance > 50 else 'white'
-            else:
-                title_color = self.TITLE_COLOR
-                stroke_color = 'black'
+                stroke_color = 'black' if luminance > 100 else 'white'
+                return title_color, stroke_color, luminance
+            # Only check the first luminance when set to do so
+            else if not self.CHECK_MULTIPLE_LUMINANCES:
+                break
 
-            return title_color, stroke_color, luminance
-
-        # No valid colors identified, return defaults
-        return self.TITLE_COLOR, 'black', 100
+        # None of the most common colors had sufficient luminance, return defaults
+        return self.TITLE_COLOR, self.STROKE_COLOR, -1
 
 
     @property
