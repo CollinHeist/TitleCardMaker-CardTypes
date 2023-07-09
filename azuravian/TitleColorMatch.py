@@ -38,7 +38,7 @@ class TitleColorMatch(BaseCardType):
     TITLE_FONT = str((REF_DIRECTORY / 'Sequel-Neue.otf').resolve())
     TITLE_COLOR = '#EBEBEB'
 
-    """Threshold (%) undet which logos will have their colors inverted"""
+    """Threshold (%) under which logos will have their colors inverted"""
     TITLE_MIN_LUMINANCE = 10
 
     """Default characters to replace in the generic font"""
