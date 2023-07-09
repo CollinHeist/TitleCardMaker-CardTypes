@@ -38,7 +38,7 @@ class TitleColorMatch(BaseCardType):
     TITLE_FONT = str((REF_DIRECTORY / 'Sequel-Neue.otf').resolve())
     TITLE_COLOR = '#EBEBEB'
 
-    """Logos with luminance lower than this percentage will have their colors inverted"""
+    """Threshold (%) undet which logos will have their colors inverted"""
     TITLE_MIN_LUMINANCE = 10
 
     """Default characters to replace in the generic font"""
@@ -88,7 +88,8 @@ class TitleColorMatch(BaseCardType):
             blur: bool = False,
             grayscale: bool = False,
             preferences: Optional['Preferences'] = None,
-            **unused) -> None:
+            **unused
+        ) -> None:
         """
         Construct a new instance of this Card.
         """
@@ -115,7 +116,7 @@ class TitleColorMatch(BaseCardType):
         self.font_vertical_shift = font_vertical_shift
 
 
-    def logo_command(self, luminance) -> ImageMagickCommands:
+    def logo_command(self, luminance: int) -> ImageMagickCommands:
         """
         Get the ImageMagick commands to add the resized logo to the
         source image.
@@ -123,6 +124,13 @@ class TitleColorMatch(BaseCardType):
         Returns:
             List of ImageMagick commands.
         """
+
+        negate_commands = []
+        if luminance < self.TITLE_MIN_LUMINANCE:
+            negate_commands = [
+                f'-channel RGB',
+                f'-negate',
+            ]
 
         return [
             # Resize logo
@@ -132,10 +140,9 @@ class TitleColorMatch(BaseCardType):
             f'-resize x650',
             f'-resize 1155x650\>',
             # Recolor dark logos to be visible on the black gradient
-            f'-channel RGB' if luminance < self.TITLE_MIN_LUMINANCE else '',
-            (f'-negate' if luminance < self.TITLE_MIN_LUMINANCE else '') + ' \)',
+            *negate_commands,
             # Overlay resized logo
-            f'-gravity northwest',
+            f'\) -gravity northwest',
             f'-define colorspace:auto-grayscale=false',
             f'-type TrueColorAlpha',
             f'-geometry "+50+50"',
@@ -143,11 +150,18 @@ class TitleColorMatch(BaseCardType):
         ]
 
 
-    def title_text_command(self, title_color, stroke_color) -> ImageMagickCommands:
+    def title_text_command(self,
+            title_color: str,
+            stroke_color: str,
+        ) -> ImageMagickCommands:
         """
         ImageMagick commands to implement the title text's global
         effects. Specifically the the font, kerning, fontsize, and
         center gravity.
+
+        Args:
+            title_color: Color to utilize for the title text.
+            stroke_color: Color to utilize for the stroke.
 
         Returns:
             List of ImageMagick commands.
@@ -229,7 +243,16 @@ class TitleColorMatch(BaseCardType):
 
             # First valid color, return color and stroke based on luminance
             luminance = (r * 0.299) + (g * 0.587) + (b * 0.114)
-            return hexcolor if luminance >= self.TITLE_MIN_LUMINANCE else self.TITLE_COLOR, 'black' if luminance < self.TITLE_MIN_LUMINANCE or luminance > 50 else 'white', luminance
+
+            # Determine returns
+            if luminance >= self.TITLE_MIN_LUMINANCE:
+                title_color = hexcolor
+                stroke_color = 'black' if luminance > 50 else 'white'
+            else:
+                title_color = self.TITLE_COLOR
+                stroke_color = 'black'
+
+            return title_color, stroke_color, luminance
 
         # No valid colors identified, return defaults
         return self.TITLE_COLOR, 'black', 100
@@ -319,7 +342,9 @@ class TitleColorMatch(BaseCardType):
 
     @staticmethod
     def is_custom_season_titles(
-            custom_episode_map: bool, episode_text_format: str) -> bool:
+            custom_episode_map: bool,
+            episode_text_format: str,
+        ) -> bool:
         """
          Determines whether the given attributes constitute custom or
         generic season titles.
