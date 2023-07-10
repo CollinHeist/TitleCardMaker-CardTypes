@@ -258,7 +258,7 @@ class TitleColorMatch(BaseCardType):
                 stroke_color = 'black' if luminance > 100 else 'white'
                 return title_color, stroke_color, luminance
             # Only check the first luminance when set to do so
-            else if not self.CHECK_MULTIPLE_LUMINANCES:
+            elif not self.CHECK_MULTIPLE_LUMINANCES:
                 break
 
         # None of the most common colors had sufficient luminance, return defaults
