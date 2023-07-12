@@ -33,9 +33,7 @@ class TitleColorMatch(BaseCardType):
         default_title_color: BetterColor = Field(default='#EBEBEB')
         '''Sets the title stroke color when min luminance is not reached'''
         default_title_stroke_color: BetterColor = Field(default='black')
-        '''Whether or not to enable the gradient background being drawn'''
-        enable_gradient: bool = Field(default=True)
-        # TODO: The gradient background should be changeable by the user, setting to "none" should disable, would replace the setting above
+        omit_gradient: bool = Field(default=False)
         # TODO: The fonts for season and episode count should be changeable and so should their colors?
 
     """Directory where all reference files used by this card are stored"""
@@ -81,7 +79,7 @@ class TitleColorMatch(BaseCardType):
         'font_stroke_width', 'font_vertical_shift', 'logo',
         'title_min_luminance', 'check_multiple_luminances',
         'invert_logos', 'default_title_color',
-        'default_title_stroke_color', 'enable_gradient'
+        'default_title_stroke_color', 'omit_gradient'
     )
 
     def __init__(self,
@@ -107,12 +105,9 @@ class TitleColorMatch(BaseCardType):
             invert_logos: bool = True,
             default_title_color: str = TITLE_COLOR,
             default_title_stroke_color: str = 'black',
-            enable_gradient: bool = True,
+            omit_gradient: bool = False,
             **unused
         ) -> None:
-        """
-        Construct a new instance of this Card.
-        """
 
         # Initialize the parent class - this sets up an ImageMagickInterface
         super().__init__(blur, grayscale, preferences=preferences)
@@ -140,7 +135,7 @@ class TitleColorMatch(BaseCardType):
         self.invert_logos = invert_logos
         self.default_title_color = default_title_color
         self.default_title_stroke_color = default_title_stroke_color
-        self.enable_gradient = enable_gradient
+        self.omit_gradient = omit_gradient
 
     def logo_command(self, luminance: int) -> ImageMagickCommands:
         """
@@ -397,7 +392,12 @@ class TitleColorMatch(BaseCardType):
         """
 
         title_color, stroke_color, luminance = self._get_logo_color()
-        gradient_command = [f'"{self.__GRADIENT_IMAGE}"', '-composite'] if self.enable_gradient else []
+        gradient_command = []
+        if not self.omit_gradient:
+            gradient_command = [
+                f'"{self.__GRADIENT_IMAGE}"',
+                f'-composite',
+            ]
 
         command = ' '.join([
             f'convert',
@@ -410,7 +410,8 @@ class TitleColorMatch(BaseCardType):
             *self.logo_command(luminance),
             # Put title text
             *self.title_text_command(title_color, stroke_color),
-            # Put season/episode text TODO: The outline/text color should probably be inverted based on luminance
+            # Put season/episode text
+            # TODO: The outline/text color should probably be inverted based on luminance
             *self.index_text_command,
             # Create and resize output
             *self.resize_output,
