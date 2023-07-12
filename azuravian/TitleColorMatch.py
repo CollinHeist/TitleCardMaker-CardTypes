@@ -99,13 +99,13 @@ class TitleColorMatch(BaseCardType):
             font_vertical_shift: int = 0,
             blur: bool = False,
             grayscale: bool = False,
-            preferences: Optional['Preferences'] = None,
             title_min_luminance: int = 50,
             check_multiple_luminances: bool = True,
             invert_logos: bool = True,
             default_title_color: str = TITLE_COLOR,
             default_title_stroke_color: str = 'black',
             omit_gradient: bool = False,
+            preferences: Optional['Preferences'] = None,
             **unused
         ) -> None:
 
