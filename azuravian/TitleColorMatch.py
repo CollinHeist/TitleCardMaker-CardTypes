@@ -16,16 +16,34 @@ class TitleColorMatch(BaseCardType):
     a modification of Beedman's GradientLogoTitleCard class with a few
     changes,  specifically the ability to autoselect a font color that
     matches the logo, as well as trimming the logo of any extra
-    transparent space that makes its  location incorrect.
+    transparent space that makes its location incorrect.
     """
 
     class CardModel(BaseCardTypeCustomFontAllText):
         logo_file: FilePath
         font_color: Union[BetterColor, Literal['auto']] = Field(default='#EBEBEB')
         font_file: FilePath
+        '''Threshold under which logos will have their colors inverted (if enabled) and text will use default_title_stroke_color (0 being black and 255 being pure white)'''
+        title_min_luminance: int = Field(default=50)
+        '''When enabled, any color with a significant presence may be checked for luminance. When disabled, only the most common color is checked'''
+        check_multiple_luminances: bool = Field(default=True)
+        '''When enabled, logos will have their colors inverted when they are darker than the specified title_min_luminance'''
+        invert_logos: bool = Field(default=True)
+        '''Sets the title color when min luminance is not reached'''
+        default_title_color: BetterColor = Field(default='#EBEBEB')
+        '''Sets the title stroke color when min luminance is not reached'''
+        default_title_stroke_color: BetterColor = Field(default='black')
+        '''Whether or not to enable the gradient background being drawn'''
+        enable_gradient: bool = Field(default=True)
+        # TODO: The gradient background should be changeable by the user, setting to "none" should disable, would replace the setting above
+        # TODO: The fonts for season and episode count should be changeable and so should their colors?
 
     """Directory where all reference files used by this card are stored"""
     REF_DIRECTORY = Path(__file__).parent.parent / 'ref'
+
+    """Default font and color for episode title text"""
+    TITLE_FONT = str((REF_DIRECTORY / 'Sequel-Neue.otf').resolve())
+    TITLE_COLOR = '#EBEBEB'
 
     """Characteristics for title splitting by this class"""
     TITLE_CHARACTERISTICS = {
@@ -33,20 +51,6 @@ class TitleColorMatch(BaseCardType):
         'max_line_count': 3,    # Maximum number of lines a title can take up
         'top_heavy': False,     # This class uses bottom heavy titling
     }
-
-    """Default font, text and stroke color for episode title text"""
-    TITLE_FONT = str((REF_DIRECTORY / 'Sequel-Neue.otf').resolve())
-    TITLE_COLOR = '#EBEBEB'
-    STROKE_COLOR = 'black'
-
-    """Threshold under which logos will have their colors inverted (if enabled) and text will use TITLE_COLOR from above (0 being black and 255 being pure white)"""
-    TITLE_MIN_LUMINANCE = 50
-
-    """When enabled, any color with a significant presence may be checked for luminance. When disabled, only the most common color is checked."""
-    CHECK_MULTIPLE_LUMINANCES = True
-
-    """When enabled, logos will have their colors inverted when they are darker than the above threshold"""
-    INVERT_LOGOS = True
 
     """Default characters to replace in the generic font"""
     FONT_REPLACEMENTS = {
@@ -75,6 +79,9 @@ class TitleColorMatch(BaseCardType):
         'episode_text', 'hide_season_text', 'font_color', 'font_file',
         'font_interline_spacing', 'font_kerning', 'font_size',
         'font_stroke_width', 'font_vertical_shift', 'logo',
+        'title_min_luminance', 'check_multiple_luminances',
+        'invert_logos', 'default_title_color',
+        'default_title_stroke_color', 'enable_gradient'
     )
 
     def __init__(self,
@@ -95,6 +102,12 @@ class TitleColorMatch(BaseCardType):
             blur: bool = False,
             grayscale: bool = False,
             preferences: Optional['Preferences'] = None,
+            title_min_luminance: int = 50,
+            check_multiple_luminances: bool = True,
+            invert_logos: bool = True,
+            default_title_color: str = TITLE_COLOR,
+            default_title_stroke_color: str = 'black',
+            enable_gradient: bool = True,
             **unused
         ) -> None:
         """
@@ -122,6 +135,12 @@ class TitleColorMatch(BaseCardType):
         self.font_stroke_width = font_stroke_width
         self.font_vertical_shift = font_vertical_shift
 
+        self.title_min_luminance = title_min_luminance
+        self.check_multiple_luminances = check_multiple_luminances
+        self.invert_logos = invert_logos
+        self.default_title_color = default_title_color
+        self.default_title_stroke_color = default_title_stroke_color
+        self.enable_gradient = enable_gradient
 
     def logo_command(self, luminance: int) -> ImageMagickCommands:
         """
@@ -133,10 +152,11 @@ class TitleColorMatch(BaseCardType):
         """
 
         negate_commands = []
-        if self.INVERT_LOGOS and luminance < self.TITLE_MIN_LUMINANCE:
+        if self.invert_logos and luminance < self.title_min_luminance:
             negate_commands = [
-                f'-channel RGB',
-                f'-negate',
+                '-channel RGB',
+                '-negate',
+                '-colorspace Gray'
             ]
 
         return [
@@ -253,16 +273,16 @@ class TitleColorMatch(BaseCardType):
             log.debug(f'Luminance for {self.logo} ({r}, {g}, {b}) is {luminance}')
 
             # If luminance is sufficient return right away, otherwise check the next most common colors
-            if luminance >= self.TITLE_MIN_LUMINANCE:
+            if luminance >= self.title_min_luminance:
                 title_color = hexcolor
                 stroke_color = 'black' if luminance > 100 else 'white'
                 return title_color, stroke_color, luminance
             # Only check the first luminance when set to do so
-            elif not self.CHECK_MULTIPLE_LUMINANCES:
+            elif not self.check_multiple_luminances:
                 break
 
         # None of the most common colors had sufficient luminance, return defaults
-        return self.TITLE_COLOR, self.STROKE_COLOR, -1
+        return self.default_title_color, self.default_title_stroke_color, -1
 
 
     @property
@@ -377,19 +397,20 @@ class TitleColorMatch(BaseCardType):
         """
 
         title_color, stroke_color, luminance = self._get_logo_color()
+        gradient_command = [f'"{self.__GRADIENT_IMAGE}"', '-composite'] if self.enable_gradient else []
+
         command = ' '.join([
             f'convert',
             # Resize source image
             f'"{self.source_file.resolve()}"',
             *self.resize_and_style,
             # Overlay gradient
-            f'"{self.__GRADIENT_IMAGE}"',
-            f'-composite',
+            *gradient_command,
             # Overlay resized logo
             *self.logo_command(luminance),
             # Put title text
             *self.title_text_command(title_color, stroke_color),
-            # Put season/episode text
+            # Put season/episode text TODO: The outline/text color should probably be inverted based on luminance
             *self.index_text_command,
             # Create and resize output
             *self.resize_output,
