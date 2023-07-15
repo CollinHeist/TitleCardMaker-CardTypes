@@ -5,7 +5,6 @@ from pydantic import Field, root_validator
 from app.schemas.card_type import BaseCardTypeCustomFontNoText
 
 from modules.BaseCardType import BaseCardType, ImageMagickCommands
-from modules.Debug import log
 from modules.RemoteFile import RemoteFile
 
 
@@ -18,10 +17,10 @@ class RetroTitleCard(BaseCardType):
     class CardModel(BaseCardTypeCustomFontNoText):
         title_text: str
         episode_text: str
-        hide_episode_text: bool = Field(default=False)
-        watched: bool = Field(default=True)
-        override_bw: Optional[Literal['bw', 'color']] = Field(default=None)
-        override_style: Optional[Literal['rewind', 'play']] = Field(default=None)
+        hide_episode_text: bool = False
+        watched: bool = True
+        override_bw: Optional[Literal['bw', 'color']] = None
+        override_style: Optional[Literal['rewind', 'play']] = None
 
         @root_validator
         def toggle_text_hiding(cls, values):
@@ -64,9 +63,9 @@ class RetroTitleCard(BaseCardType):
     SERIES_COUNT_TEXT_COLOR = '#FFFFFF'
 
     __slots__ = (
-        'source_file', 'output_file', 'title_text', 'episode_text', 'font_file',
-        'font_size', 'font_color', 'font_vertical_shift',
-        'font_interline_spacing', 'font_kerning', 'font_stroke_width',
+        'source_file', 'output_file', 'title_text', 'episode_text',
+        'hide_episode_text', 'font_color', 'font_file','font_interline_spacing',
+        'font_kerning', 'font_size', 'font_stroke_width', 'font_vertical_shift',
         'override_bw', 'override_style', 'watched', 
     )
 
@@ -89,8 +88,9 @@ class RetroTitleCard(BaseCardType):
             grayscale: bool = False,
             override_bw: Optional[Literal['bw', 'color']] = None,
             override_style: Optional[Literal['rewind', 'play']] = None,
-            preferences: Optional['Preferences'] = None,
-            **unused) -> None:
+            preferences: Optional['Preferences'] = None, # type: ignore
+            **unused,
+        ) -> None:
         
         # Initialize the parent class - this sets up an ImageMagickInterface
         super().__init__(blur, grayscale, preferences=preferences)
@@ -214,7 +214,7 @@ class RetroTitleCard(BaseCardType):
 
 
     @staticmethod
-    def is_custom_font(font: 'Font') -> bool:
+    def is_custom_font(font: 'Font') -> bool: # type: ignore
         """
         Determines whether the given font characteristics constitute a
         default or custom font.
@@ -238,7 +238,9 @@ class RetroTitleCard(BaseCardType):
 
     @staticmethod
     def is_custom_season_titles(
-            custom_episode_map: bool, episode_text_format: str) -> bool:
+            custom_episode_map: bool,
+            episode_text_format: str,
+        ) -> bool:
         """
         Determines whether the given attributes constitute custom or
         generic season titles.
