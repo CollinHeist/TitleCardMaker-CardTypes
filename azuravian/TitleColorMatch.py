@@ -2,7 +2,7 @@ from pathlib import Path
 from re import compile as re_compile, findall
 from typing import Literal, Optional, Union
 
-from pydantic import Field, FilePath
+from pydantic import FilePath
 from app.schemas.base import BetterColor
 from app.schemas.card_type import BaseCardTypeCustomFontAllText
 
@@ -21,7 +21,7 @@ class TitleColorMatch(BaseCardType):
 
     class CardModel(BaseCardTypeCustomFontAllText):
         logo_file: FilePath
-        font_color: Union[BetterColor, Literal['auto']] = Field(default='#EBEBEB')
+        font_color: Union[BetterColor, Literal['auto']] = '#EBEBEB'
         font_file: FilePath
 
     """Directory where all reference files used by this card are stored"""
@@ -84,8 +84,9 @@ class TitleColorMatch(BaseCardType):
             font_vertical_shift: int = 0,
             blur: bool = False,
             grayscale: bool = False,
-            preferences: Optional['Preferences'] = None,
-            **unused) -> None:
+            preferences: Optional['Preferences'] = None, # type: ignore
+            **unused,
+        ) -> None:
         """
         Construct a new instance of this Card.
         """
