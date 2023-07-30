@@ -9,7 +9,33 @@
         "creators": ["Azuravian", "CollinHeist"],
         "supports_custom_fonts": true,
         "supports_custom_seasons": true,
-        "supported_extras": []
+        "supported_extras": [
+            {
+                "name": "Logo Inversion Toggle",
+                "identifier": "invert_logos",
+                "description": "Whether to invert logo colors when they are darker than the specified minimum luminance"
+            }, {
+                "name": "Minimum Title Luminance",
+                "identifier": "title_min_luminance",
+                "description": "Threshold under which logos will have their colors inverted - 0-255 for white-black"
+            }, {
+                "name": "Check Multiple Luminance Toggle",
+                "identifier": "check_multiple_luminances",
+                "description": "Whether to check all significant colors, or only the most common color"
+            }, {
+                "name": "Fallback Title Color",
+                "identifier": "default_title_color",
+                "description": "Title color to use when the minimum luminance is not reached"
+            }, {
+                "name": "Fallback Stroke Color",
+                "identifier": "default_title_stroke_color",
+                "description": "Stroke color to use when the minimum luminance is not reached"
+            }, {
+                "name": "Gradient Omission",
+                "identifier": "omit_gradient",
+                "description": "Whether to omit the gradient overlay"
+            }
+        ]
     }, {
         "name": "Gradient Logo",
         "identifier": "Beedman/GradientLogoTitleCard",
