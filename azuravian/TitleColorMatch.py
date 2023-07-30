@@ -21,19 +21,19 @@ class TitleColorMatch(BaseCardType):
 
     class CardModel(BaseCardTypeCustomFontAllText):
         logo_file: FilePath
-        font_color: Union[BetterColor, Literal['auto']] = Field(default='#EBEBEB')
+        font_color: Union[BetterColor, Literal['auto']] = '#EBEBEB'
         font_file: FilePath
         '''Threshold under which logos will have their colors inverted (if enabled) and text will use default_title_stroke_color (0 being black and 255 being pure white)'''
-        title_min_luminance: int = Field(default=50)
+        title_min_luminance: int = Field(min=0, default=50, max=255)
         '''When enabled, any color with a significant presence may be checked for luminance. When disabled, only the most common color is checked'''
-        check_multiple_luminances: bool = Field(default=True)
+        check_multiple_luminances: bool = True
         '''When enabled, logos will have their colors inverted when they are darker than the specified title_min_luminance'''
-        invert_logos: bool = Field(default=True)
+        invert_logos: bool = False # TODO: Evaluate whether this should default to enabled
         '''Sets the title color when min luminance is not reached'''
-        default_title_color: BetterColor = Field(default='#EBEBEB')
+        default_title_color: BetterColor = '#EBEBEB'
         '''Sets the title stroke color when min luminance is not reached'''
-        default_title_stroke_color: BetterColor = Field(default='black')
-        omit_gradient: bool = Field(default=False)
+        default_title_stroke_color: BetterColor = 'black'
+        omit_gradient: bool = False
         # TODO: The fonts for season and episode count should be changeable and so should their colors?
 
     """Directory where all reference files used by this card are stored"""
@@ -105,8 +105,8 @@ class TitleColorMatch(BaseCardType):
             default_title_color: str = TITLE_COLOR,
             default_title_stroke_color: str = 'black',
             omit_gradient: bool = False,
-            preferences: Optional['Preferences'] = None,
-            **unused
+            preferences: Optional['Preferences'] = None, # type: ignore
+            **unused,
         ) -> None:
 
         # Initialize the parent class - this sets up an ImageMagickInterface
@@ -118,8 +118,8 @@ class TitleColorMatch(BaseCardType):
 
         # Ensure characters that need to be escaped are
         self.title_text = self.image_magick.escape_chars(title_text)
-        self.season_text = self.image_magick.escape_chars(season_text.upper())
-        self.episode_text = self.image_magick.escape_chars(episode_text.upper())
+        self.season_text = self.image_magick.escape_chars(season_text)
+        self.episode_text = self.image_magick.escape_chars(episode_text)
         self.hide_season_text = hide_season_text
 
         self.font_color = font_color
@@ -136,6 +136,7 @@ class TitleColorMatch(BaseCardType):
         self.default_title_color = default_title_color
         self.default_title_stroke_color = default_title_stroke_color
         self.omit_gradient = omit_gradient
+
 
     def logo_command(self, luminance: int) -> ImageMagickCommands:
         """
@@ -340,7 +341,7 @@ class TitleColorMatch(BaseCardType):
 
 
     @staticmethod
-    def is_custom_font(font: 'Font') -> bool:
+    def is_custom_font(font: 'Font') -> bool: # type: ignore
         """
         Determines whether the given arguments represent a custom font
         for this card.
