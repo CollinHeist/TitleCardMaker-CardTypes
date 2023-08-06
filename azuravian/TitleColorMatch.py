@@ -276,7 +276,7 @@ class TitleColorMatch(BaseCardType):
                 f'-fill black',
                 f'-stroke black',
                 f'-strokewidth 6',
-                f'-gravity southwest'
+                f'-gravity southwest',
                 f'-annotate +50+50 "{self.season_text}"',
                 f'-fill "{self.SERIES_COUNT_TEXT_COLOR}"',
                 f'-stroke "{self.SERIES_COUNT_TEXT_COLOR}"',
