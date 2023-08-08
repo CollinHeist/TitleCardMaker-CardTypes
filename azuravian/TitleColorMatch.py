@@ -20,7 +20,7 @@ class TitleColorMatch(BaseCardType):
     """
 
     class CardModel(BaseCardTypeCustomFontAllText):
-        logo_file: FilePath
+        logo_file: Path
         font_color: Union[BetterColor, Literal['auto']] = '#EBEBEB'
         font_file: FilePath
         '''Threshold under which logos will have their colors inverted (if enabled) and text will use default_title_stroke_color (0 being black and 255 being pure white)'''
@@ -147,6 +147,10 @@ class TitleColorMatch(BaseCardType):
             List of ImageMagick commands.
         """
 
+        # The logo file for this series doesn't exist, don't attempt to do any work
+        if not self.logo.exists():
+            return []
+
         negate_commands = []
         if self.invert_logos and luminance < self.title_min_luminance:
             negate_commands = [
@@ -224,6 +228,10 @@ class TitleColorMatch(BaseCardType):
         # If auto color wasn't indicated use indicated color and black stroke
         if str(self.font_color) != 'auto':
             return self.font_color, 'black', 255
+        # The logo file for this series doesn't exist, return the default colors
+        if not self.logo.exists():
+            return self.default_title_color, self.default_title_stroke_color, 255
+
 
         # Command to get histogram of the colors in logo image
         command = ' '.join([
