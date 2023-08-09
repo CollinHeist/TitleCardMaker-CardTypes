@@ -6,7 +6,7 @@
             "A modification of GradientLogoTitleCard that includes the option to auto-select font color based on logo color.",
             "This card will also automatically crop off extraneous transparent space from around the logo."
         ], "example": "https://user-images.githubusercontent.com/7379812/187586521-353ba09f-30a8-424b-bbf3-ee9036c9e638.jpg",
-        "creators": ["Azuravian", "CollinHeist"],
+        "creators": ["Azuravian", "Beedman", "buthed010203", "CollinHeist"],
         "supports_custom_fonts": true,
         "supports_custom_seasons": true,
         "supported_extras": [
@@ -36,16 +36,6 @@
                 "description": "Whether to omit the gradient overlay"
             }
         ]
-    }, {
-        "name": "Gradient Logo",
-        "identifier": "Beedman/GradientLogoTitleCard",
-        "description": [
-            "A modification of the Standard card type that includes a logo, and a left-aligned gradient to go with left-aligned text and logo."
-        ], "example": "https://github.com/Beedman/TitleCardMaker-CardTypes/raw/master/Beedman/The%20Afterparty%20(2022)%20-%20S01E02%20-%20Brett.jpg?raw=true",
-        "creators": ["Beedman", "CollinHeist"],
-        "supports_custom_fonts": true,
-        "supports_custom_seasons": true,
-        "supported_extras": []
     }, {
         "name": "Blacklist",
         "identifier": "CollinHeist/BlacklistTitleCard",

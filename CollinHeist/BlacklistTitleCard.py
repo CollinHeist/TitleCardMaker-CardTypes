@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Optional
 
-from pydantic import Field, FilePath, PositiveFloat, root_validator
+from pydantic import Field, FilePath, PositiveFloat, constr, root_validator
 from app.schemas.base import BetterColor
 from app.schemas.card_type import BaseCardType as BaseCardModel
 
@@ -18,13 +18,13 @@ class BlacklistTitleCard(BaseCardType):
 
     class CardModel(BaseCardModel):
         title_text: str
-        episode_text: str
-        hide_episode_text: bool = Field(default=False)
+        episode_text: constr(to_upper=True)
+        hide_episode_text: bool = False
         font_color: BetterColor
         font_file: FilePath
-        font_interline_spacing: int = Field(default=0)
-        font_size: PositiveFloat = Field(default=1.0)
-        font_vertical_shift: int = Field(default=0)
+        font_interline_spacing: int = 0
+        font_size: PositiveFloat = 1.0
+        font_vertical_shift: int = 0
 
         @root_validator
         def toggle_text_hiding(cls, values):
@@ -56,7 +56,7 @@ class BlacklistTitleCard(BaseCardType):
 
     __slots__ = (
         'source_file', 'output_file', 'title_text', 'episode_text',
-        'hide_episode_text' 'line_count', 'font_color', 'font_file',
+        'hide_episode_text', 'line_count', 'font_color', 'font_file',
         'font_size', 'font_interline_spacing', 'font_vertical_shift',
     )
 
@@ -88,7 +88,7 @@ class BlacklistTitleCard(BaseCardType):
 
         # Escape title, season, and episode text
         self.title_text = self.image_magick.escape_chars(title_text)
-        self.episode_text = self.image_magick.escape_chars(episode_text.upper())
+        self.episode_text = self.image_magick.escape_chars(episode_text)
         self.hide_episode_text = hide_episode_text
         self.line_count = len(title_text.split('\n'))
 

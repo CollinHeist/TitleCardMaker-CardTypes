@@ -2,7 +2,7 @@ from pathlib import Path
 from re import compile as re_compile, findall
 from typing import Literal, Optional, Union
 
-from pydantic import Field, FilePath
+from pydantic import FilePath
 from app.schemas.base import BetterColor
 from app.schemas.card_type import BaseCardTypeCustomFontAllText
 
@@ -70,12 +70,13 @@ class TitleColorMatch(BaseCardType):
 
     __slots__ = (
         'source_file', 'output_file', 'title_text', 'season_text',
-        'episode_text', 'hide_season_text', 'font_color', 'font_file',
-        'font_interline_spacing', 'font_kerning', 'font_size',
-        'font_stroke_width', 'font_vertical_shift', 'logo',
-        'title_min_luminance', 'check_multiple_luminances',
-        'invert_logos', 'default_title_color',
-        'default_title_stroke_color', 'omit_gradient'
+        'episode_text', 'hide_season_text', 'hide_episode_text',
+        'font_color', 'font_file', 'font_interline_spacing',
+        'font_kerning', 'font_size', 'font_stroke_width',
+        'font_vertical_shift', 'logo', 'title_min_luminance',
+        'check_multiple_luminances', 'invert_logos',
+        'default_title_color', 'default_title_stroke_color',
+        'omit_gradient'
     )
 
     def __init__(self,
@@ -86,6 +87,7 @@ class TitleColorMatch(BaseCardType):
             season_text: str,
             episode_text: str,
             hide_season_text: bool = False,
+            hide_episode_text: bool = False,
             font_color: str = TITLE_COLOR,
             font_file: str = TITLE_FONT,
             font_interline_spacing: int = 0,
@@ -104,6 +106,9 @@ class TitleColorMatch(BaseCardType):
             preferences: Optional['Preferences'] = None, # type: ignore
             **unused,
         ) -> None:
+        """
+        Construct a new instance of this Card.
+        """
 
         # Initialize the parent class - this sets up an ImageMagickInterface
         super().__init__(blur, grayscale, preferences=preferences)
@@ -117,6 +122,7 @@ class TitleColorMatch(BaseCardType):
         self.season_text = self.image_magick.escape_chars(season_text)
         self.episode_text = self.image_magick.escape_chars(episode_text)
         self.hide_season_text = hide_season_text
+        self.hide_episode_text = hide_episode_text
 
         self.font_color = font_color
         self.font_file = font_file
@@ -299,18 +305,34 @@ class TitleColorMatch(BaseCardType):
         # Season hiding, just add episode text
         if self.hide_season_text:
             return [
+                f'-font "{self.EPISODE_COUNT_FONT.resolve()}"',
                 f'-kerning 5.42',
                 f'-pointsize 67.75',
-                f'-font "{self.EPISODE_COUNT_FONT.resolve()}"',
-                f'-gravity southwest',
                 f'-fill black',
                 f'-stroke black',
                 f'-strokewidth 6',
+                f'-gravity southwest',
                 f'-annotate +50+50 "{self.episode_text}"',
                 f'-fill "{self.SERIES_COUNT_TEXT_COLOR}"',
                 f'-stroke "{self.SERIES_COUNT_TEXT_COLOR}"',
                 f'-strokewidth 0.75',
                 f'-annotate +50+50 "{self.episode_text}"',
+            ]
+        # Episode hiding, just add season text
+        if self.hide_episode_text:
+            return [
+                f'-font "{self.SEASON_COUNT_FONT.resolve()}"',
+                f'-kerning 5.42',
+                f'-pointsize 67.75',
+                f'-fill black',
+                f'-stroke black',
+                f'-strokewidth 6',
+                f'-gravity southwest',
+                f'-annotate +50+50 "{self.season_text}"',
+                f'-fill "{self.SERIES_COUNT_TEXT_COLOR}"',
+                f'-stroke "{self.SERIES_COUNT_TEXT_COLOR}"',
+                f'-strokewidth 0.75',
+                f'-annotate +50+50 "{self.season_text}"',
             ]
 
         return [

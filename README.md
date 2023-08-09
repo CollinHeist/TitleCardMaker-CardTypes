@@ -23,14 +23,13 @@ In order to contribute your own custom Card Type to this repository, follow thes
 | Wdvh | `Wdvh/WhiteTextTitleOnly` | <img src="https://user-images.githubusercontent.com/17693271/178131552-4ca8cb30-067e-4e04-9d68-472a8f384345.jpg" height="200"/> |
 | lyonza | `lyonza/WhiteTextBroadcast` | <img src="https://user-images.githubusercontent.com/1803189/171089736-f60a6ff2-0914-432a-a45d-145323d39c42.jpg" height="200"/> |
 | Wdvh | `Wdvh/StarWarsTitleOnly` | <img src="https://user-images.githubusercontent.com/17693271/178131539-c7b55ced-b9ba-4564-8153-a998454e1742.jpg" height="200"/> |
-| Beedman | `Beedman/GradientLogoTitleCard` | <img src="https://user-images.githubusercontent.com/17693271/178131602-8d93401b-4b5a-4301-8248-42705547ec6f.jpg" height="200"/> |
 | Yozora | `Yozora/SlimTitleCard` | <img src="https://cdn.discordapp.com/attachments/975108033531219979/977614937457303602/S01E04.jpg" height="200"/> |
 | Yozora | `Yozora/BarebonesTitleCard` | <img src="https://user-images.githubusercontent.com/17693271/178131581-055fd7ca-0bda-464a-9e4d-67c88adb0a06.jpg" height="200"/> |
 | Yozora | `Yozora/RetroTitleCard` | <img src="https://user-images.githubusercontent.com/17693271/178131717-e9c387f7-625c-4654-a49d-93595687e359.jpg" height="200"/> |
 | Wdvh | `Wdvh/WhiteTextAbsoluteLogo` | <img src="https://user-images.githubusercontent.com/17693271/178131676-300601a4-bbdb-46ee-8f78-aa859d13d50c.jpg" height="200"/> |
 | Wdvh | `Wdvh/WhiteTextStandardLogo` | <img src="https://user-images.githubusercontent.com/17693271/178131565-5351dd98-201e-4f70-a8ff-2311687ed981.jpg" height="200"/> |
 | Wdvh | `Wdvh/WhiteTextTitleOnlyLogo` | <img src="https://user-images.githubusercontent.com/17693271/178131633-23a312ac-4e5f-4d1a-87cb-60b865a51fe7.jpg" height="200"/> |
-| azuravian | `azuravian/TitleColorMatch` | <img src="https://user-images.githubusercontent.com/7379812/187586521-353ba09f-30a8-424b-bbf3-ee9036c9e638.jpg" height="200"/> |
+| azuravian, Beedman | `azuravian/TitleColorMatch` | <img src="https://user-images.githubusercontent.com/7379812/187586521-353ba09f-30a8-424b-bbf3-ee9036c9e638.jpg" height="200"/> |
 | CollinHeist | `CollinHeist/StandardAllBoldCard` | <img src="https://user-images.githubusercontent.com/17693271/178048413-7d4c72a4-398a-489b-8974-df7299fad6ad.jpg" height="200"/> |
 
 # Using a Custom Card Type
@@ -44,7 +43,6 @@ To a specific series, template, or library. For example, to create Breaking Bad 
 
 ```yaml
 series:
-  Breaking Bad:
-    year: 2008
-    card_type: CollinHeist/BetterStandardTitleCard
+  Breaking Bad (2008):
+    card_type: CollinHeist/StandardAllBoldCard
 ```
