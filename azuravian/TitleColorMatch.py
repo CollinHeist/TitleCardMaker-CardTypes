@@ -2,7 +2,7 @@ from pathlib import Path
 from re import compile as re_compile, findall
 from typing import Literal, Optional, Union
 
-from pydantic import FilePath
+from pydantic import Field
 from app.schemas.base import BetterColor
 from app.schemas.card_type import BaseCardTypeCustomFontAllText
 
@@ -21,9 +21,9 @@ class TitleColorMatch(BaseCardType):
     """
 
     class CardModel(BaseCardTypeCustomFontAllText):
-        logo_file: Optional[FilePath] = None
+        logo_file: Optional[Path] = None
         font_color: Union[BetterColor, Literal['auto']] = 'auto'
-        font_file: FilePath
+        font_file: Path
         title_min_luminance: int = Field(min=0, default=50, max=255)
         check_multiple_luminances: bool = True
         invert_logos: bool = False # TODO: Evaluate whether this should default to enabled
@@ -82,7 +82,6 @@ class TitleColorMatch(BaseCardType):
     def __init__(self,
             source_file: Path,
             card_file: Path,
-            logo_file: Path,
             title_text: str,
             season_text: str,
             episode_text: str,
@@ -97,6 +96,7 @@ class TitleColorMatch(BaseCardType):
             font_vertical_shift: int = 0,
             blur: bool = False,
             grayscale: bool = False,
+            logo_file: Optional[Path] = None,
             title_min_luminance: int = 50,
             check_multiple_luminances: bool = True,
             invert_logos: bool = True,
@@ -150,7 +150,7 @@ class TitleColorMatch(BaseCardType):
         """
 
         # Logo not provided, return empty commands
-        if not self.logo:
+        if self.logo is None or not self.logo.exists():
             return []
 
         negate_commands = []
@@ -232,7 +232,7 @@ class TitleColorMatch(BaseCardType):
             return self.font_color, 'black', 255
 
         # The logo file for this series doesn't exist, return the default colors
-        if not self.logo:
+        if self.logo is None or not self.logo.exists():
             return self.default_title_color, self.default_title_stroke_color,255
 
 
