@@ -10,6 +10,7 @@ from modules.BaseCardType import BaseCardType, ImageMagickCommands
 from modules.Debug import log
 from modules.RemoteFile import RemoteFile
 
+
 class TitleColorMatch(BaseCardType):
     """
     This class describes a type of CardType created by azuravian, and is
@@ -20,18 +21,13 @@ class TitleColorMatch(BaseCardType):
     """
 
     class CardModel(BaseCardTypeCustomFontAllText):
-        logo_file: Path
-        font_color: Union[BetterColor, Literal['auto']] = '#EBEBEB'
+        logo_file: Optional[FilePath] = None
+        font_color: Union[BetterColor, Literal['auto']] = 'auto'
         font_file: FilePath
-        '''Threshold under which logos will have their colors inverted (if enabled) and text will use default_title_stroke_color (0 being black and 255 being pure white)'''
         title_min_luminance: int = Field(min=0, default=50, max=255)
-        '''When enabled, any color with a significant presence may be checked for luminance. When disabled, only the most common color is checked'''
         check_multiple_luminances: bool = True
-        '''When enabled, logos will have their colors inverted when they are darker than the specified title_min_luminance'''
         invert_logos: bool = False # TODO: Evaluate whether this should default to enabled
-        '''Sets the title color when min luminance is not reached'''
         default_title_color: BetterColor = '#EBEBEB'
-        '''Sets the title stroke color when min luminance is not reached'''
         default_title_stroke_color: BetterColor = 'black'
         omit_gradient: bool = False
         # TODO: The fonts for season and episode count should be changeable and so should their colors?
@@ -147,8 +143,8 @@ class TitleColorMatch(BaseCardType):
             List of ImageMagick commands.
         """
 
-        # The logo file for this series doesn't exist, don't attempt to do any work
-        if not self.logo.exists():
+        # Logo not provided, return empty commands
+        if not self.logo:
             return []
 
         negate_commands = []
@@ -228,9 +224,10 @@ class TitleColorMatch(BaseCardType):
         # If auto color wasn't indicated use indicated color and black stroke
         if str(self.font_color) != 'auto':
             return self.font_color, 'black', 255
+
         # The logo file for this series doesn't exist, return the default colors
-        if not self.logo.exists():
-            return self.default_title_color, self.default_title_stroke_color, 255
+        if not self.logo:
+            return self.default_title_color, self.default_title_stroke_color,255
 
 
         # Command to get histogram of the colors in logo image
