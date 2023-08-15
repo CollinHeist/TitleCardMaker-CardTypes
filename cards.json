@@ -10,7 +10,8 @@
         "supports_custom_fonts": true,
         "supports_custom_seasons": true,
         "supported_extras": []
-    }, {
+    },
+    {
         "name": "Blacklist",
         "identifier": "CollinHeist/BlacklistTitleCard",
         "description": [
@@ -22,7 +23,8 @@
         "supports_custom_fonts": true,
         "supports_custom_seasons": false,
         "supported_extras": []
-    }, {
+    },
+    {
         "name": "White Text Broadcast",
         "identifier": "lyonza/WhiteTextBroadcast",
         "description": [
@@ -32,7 +34,8 @@
         "supports_custom_fonts": true,
         "supports_custom_seasons": false,
         "supported_extras": []
-    }, {
+    },
+    {
         "name": "Star Wars (Title Only)",
         "identifier": "Wdvh/StarWarsTitleOnly",
         "description": [
@@ -43,7 +46,8 @@
         "supports_custom_fonts": false,
         "supports_custom_seasons": false,
         "supported_extras": []
-    }, {
+    },
+    {
         "name": "White Text Absolute",
         "identifier": "Wdvh/WhiteTextAbsolute",
         "description": [
@@ -54,7 +58,8 @@
         "supports_custom_fonts": false,
         "supports_custom_seasons": false,
         "supported_extras": []
-    }, {
+    },
+    {
         "name": "White Text Absolute (Logo Style)",
         "identifier": "Wdvh/WhiteTextAbsoluteLogo",
         "description": ["Placeholder description"],
@@ -69,7 +74,8 @@
                 "description": "Color to use for the card background"
             }
         ]
-    }, {
+    },
+    {
         "name": "White Text Standard",
         "identifier": "Wdvh/WhiteTextStandard",
         "description": [
@@ -86,7 +92,8 @@
                 "description": "Character to separate the season and episode text"
             }
         ]
-    }, {
+    },
+    {
         "name": "White Text Standard (Logo)",
         "identifier": "Wdvh/WhiteTextStandardLogo",
         "description": ["Placeholder description"],
@@ -105,7 +112,8 @@
                 "description": "Character to separate the season and episode text"
             }
         ]
-    }, {
+    },
+    {
         "name": "White Text Title Only",
         "identifier": "Wdvh/WhiteTextTitleOnly",
         "description": ["Placeholder description"],
@@ -114,7 +122,8 @@
         "supports_custom_fonts": true,
         "supports_custom_seasons": false,
         "supported_extras": []
-    }, {
+    },
+    {
         "name": "White Text Title Only (Logo)",
         "identifier": "Wdvh/WhiteTextTitleOnlyLogo",
         "description": ["Placeholder description"],
@@ -129,7 +138,8 @@
                 "description": "Color to use for the card background"
             }
         ]
-    }, {
+    },
+    {
         "name": "Retro",
         "identifier": "Yozora/RetroTitleCard",
         "description": [
@@ -143,14 +153,18 @@
             {
                 "name": "Black & White Override",
                 "identifier": "override_bw",
-                "description": "Override the Black & White modification - should be 'bw' or 'color'"
-            }, {
+                "description": "Override the Black & White modification",
+                "tooltip": "Either <v>bw</v>, or <v>color</v> to force the black and white or color effects."
+            },
+            {
                 "name": "Style Override",
                 "identifier": "override_style",
-                "description": "Override the play/rewind style - should be 'play' or 'rewind'"
+                "description": "Override the play/rewind style",
+                "tooltip": "Either <v>play</v> or <v>rewind</v> to force that respective style."
             }
         ]
-    }, {
+    },
+    {
         "name": "Slim",
         "identifier": "Yozora/SlimTitleCard",
         "description": [
@@ -163,7 +177,8 @@
             {
                 "name": "Gradient Omission",
                 "identifier": "omit_gradient",
-                "description": "Whether to omit the gradient overlay from this Card"
+                "description": "Whether to omit the gradient overlay from this Card",
+                "tooltip": "Either <v>True</v> or <v>False</v>. If <v>True</v>, text may appear less legible on brighter images."
             }
         ]
     }
