@@ -17,7 +17,7 @@ class WhiteTextStandard(BaseCardType):
     class CardModel(BaseCardTypeCustomFontAllText):
         font_color: BetterColor = '#FFFFFF'
         font_file: FilePath
-        separator: str = '-'
+        separator: str = '•'
 
     """Directory where all reference files used by this card are stored"""
     REF_DIRECTORY = Path(__file__).parent.parent / 'ref'
@@ -75,7 +75,7 @@ class WhiteTextStandard(BaseCardType):
             font_vertical_shift: int = 0,
             blur: bool = False,
             grayscale: bool = False,
-            separator: str = '-',
+            separator: str = '•',
             preferences: Optional['Preferences'] = None, # type: ignore
             **unused,
         ) -> None:
@@ -165,6 +165,7 @@ class WhiteTextStandard(BaseCardType):
             )
 
         return [
+            f'+interword-spacing',
             f'-kerning 5.42',
             f'-pointsize 85',
             f'-font "{self.EPISODE_COUNT_FONT.resolve()}"',
