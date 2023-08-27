@@ -165,7 +165,7 @@ class WhiteTextStandard(BaseCardType):
             )
 
         return [
-            f'+interword-spacing',
+            f'-interword-spacing 10',
             f'-kerning 5.42',
             f'-pointsize 85',
             f'-font "{self.EPISODE_COUNT_FONT.resolve()}"',
