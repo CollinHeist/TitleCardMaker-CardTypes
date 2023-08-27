@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Optional
 
 from pydantic import FilePath
 from app.schemas.base import BetterColor
@@ -49,9 +50,6 @@ class WhiteTextStandard(BaseCardType):
     EPISODE_COUNT_FONT = REF_DIRECTORY / 'Sequel-Neue.otf'
     SERIES_COUNT_TEXT_COLOR = '#FFFFFF'
 
-    """Paths to intermediate files that are deleted after the card is created"""
-    __GRADIENT_WITH_TITLE = BaseCardType.TEMP_DIR / 'gradient_title.png'
-
     __slots__ = (
         'source_file', 'output_file', 'title', 'season_text', 'episode_text',
         'font', 'font_size', 'title_color', 'hide_season', 'separator',
@@ -78,12 +76,13 @@ class WhiteTextStandard(BaseCardType):
             blur: bool = False,
             grayscale: bool = False,
             separator: str = '-',
+            preferences: Optional['Preferences'] = None, # type: ignore
             **unused,
         ) -> None:
         """Initialize this CardType object."""
         
         # Initialize the parent class - this sets up an ImageMagickInterface
-        super().__init__(blur, grayscale)
+        super().__init__(blur, grayscale, preferences=preferences)
 
         self.source_file = source_file
         self.output_file = card_file
