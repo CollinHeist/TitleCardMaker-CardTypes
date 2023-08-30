@@ -23,6 +23,12 @@
         "supports_custom_seasons": true,
         "supported_extras": [
             {
+                "name": "Trailing Underscore",
+                "identifier": "add_trailing_underscore",
+                "description": "Whether to add a trailing underscore (_) to the title text",
+                "tooltip": "Either <v>True</v> or <v>False</v>. Default is <v>True</v>."
+            },
+            {
                 "name": "Overlay Bottom Color",
                 "identifier": "overlay_bottom_color",
                 "description": "The color of the overlay's bottom layer",
@@ -183,7 +189,8 @@
                 "name": "Background Color",
                 "identifier": "background",
                 "description": "Color to use for the card background"
-            }, {
+            },
+            {
                 "name": "Separator Character",
                 "identifier": "separator",
                 "description": "Character to separate the season and episode text"

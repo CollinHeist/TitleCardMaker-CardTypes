@@ -22,6 +22,7 @@ class SciFiTitleCard(BaseCardType):
         hide_episode_text: bool = False
         font_color: BetterColor = 'white'
         font_file: FilePath
+        add_trailing_underscore: bool = True
         overlay_bottom_color: BetterColor = 'rgb(58, 255, 255)'
         overlay_middle_color: BetterColor = 'rgb(255, 255, 255)'
         overlay_top_color: BetterColor = 'rgb(255, 49, 255)'
@@ -84,10 +85,10 @@ class SciFiTitleCard(BaseCardType):
         'hide_episode_text', 'font_color', 'stroke_color', 'font_file',
         'font_interline_spacing', 'font_interword_spacing', 'font_kerning',
         'font_size', 'font_stroke_width', 'font_vertical_shift',
-        'overlay_bottom_color', 'overlay_middle_color', 'overlay_top_color',
-        'overlay_rectangles_color', 'overlay_base_alpha',
-        'overlay_middle_alpha', 'overlay_bottom_alpha', 'overlay_top_alpha',
-        'overlay_rectangles_alpha', 'episode_text_color',
+        'add_trailing_underscore' 'overlay_bottom_color',
+        'overlay_middle_color', 'overlay_top_color', 'overlay_rectangles_color',
+        'overlay_base_alpha', 'overlay_middle_alpha', 'overlay_bottom_alpha',
+        'overlay_top_alpha', 'overlay_rectangles_alpha', 'episode_text_color',
     )
 
     def __init__(self,
@@ -106,6 +107,7 @@ class SciFiTitleCard(BaseCardType):
             font_vertical_shift: int = 0,
             blur: bool = False,
             grayscale: bool = False,
+            add_trailing_underscore: bool = True,
             overlay_bottom_color: str = 'rgb(58, 255, 255)',
             overlay_middle_color: str = 'rgb(255, 255, 255)',
             overlay_top_color: str = 'rgb(255, 49, 255)',
@@ -147,6 +149,7 @@ class SciFiTitleCard(BaseCardType):
         self.font_vertical_shift = font_vertical_shift
 
         # Optional extras
+        self.add_trailing_underscore = add_trailing_underscore
         self.episode_text_color = episode_text_color
         self.overlay_bottom_color = overlay_bottom_color
         self.overlay_top_color = overlay_top_color
@@ -171,6 +174,10 @@ class SciFiTitleCard(BaseCardType):
             List of ImageMagick commands.
         """
 
+        title_text = (
+            self.title_text + ('_' if self.add_trailing_underscore else '')
+        )
+
         font_size = 157.41 * self.font_size
         interline_spacing = -22 + self.font_interline_spacing
         interword_spacing = 50 + self.font_interword_spacing
@@ -188,7 +195,7 @@ class SciFiTitleCard(BaseCardType):
             f'-strokewidth {stroke_width}',
             f'-stroke {self.stroke_color}',
             f'-fill {self.TITLE_COLOR}',
-            f'-annotate +200+{vertical_shift} "{self.title_text}_"'
+            f'-annotate +200+{vertical_shift} "{title_text}"'
         ]
 
 
