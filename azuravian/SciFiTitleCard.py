@@ -81,7 +81,7 @@ class SciFiTitleCard(BaseCardType):
         'hide_episode_text', 'font_color', 'stroke_color', 'font_file',
         'font_interline_spacing', 'font_interword_spacing', 'font_kerning',
         'font_size', 'font_stroke_width', 'font_vertical_shift',
-        'add_trailing_underscore' 'overlay_bottom_color',
+        'add_trailing_underscore', 'overlay_bottom_color',
         'overlay_middle_color', 'overlay_top_color', 'overlay_rectangles_color',
         'overlay_base_alpha', 'overlay_middle_alpha', 'overlay_bottom_alpha',
         'overlay_top_alpha', 'overlay_rectangles_alpha', 'episode_text_color',
