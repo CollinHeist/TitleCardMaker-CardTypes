@@ -210,7 +210,7 @@ class SciFiTitleCard(BaseCardType):
             return []
    
         return [
-            f'-font "{self.EPISODE_TEXT_FONT.resolve()}"',
+            f'-font "{self.EPISODE_TEXT_FONT}"',
             f'-fill "{self.episode_text_color}"',
             f'-kerning 5.42',
             f'-pointsize 67.75',
