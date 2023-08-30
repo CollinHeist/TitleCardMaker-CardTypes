@@ -52,7 +52,7 @@ class SciFiTitleCard(BaseCardType):
     }
 
     """Characteristics of the default title font"""
-    TITLE_FONT = str((REF_DIRECTORY / 'PcapTerminal-BO9B.ttf').resolve())
+    TITLE_FONT = str(RemoteFile('azuravian', 'ref/SciFi/PcapTerminal-BO9B.ttf'))
     TITLE_COLOR = 'white'
     STROKE_COLOR = 'black'
 
@@ -61,11 +61,7 @@ class SciFiTitleCard(BaseCardType):
 
     """Characteristics of the episode text"""
     EPISODE_TEXT_FORMAT = 'S{season_number:02}E{episode_number:02}'
-    EPISODE_TEXT_FONT = REF_DIRECTORY / 'PcapTerminal-BO9B.ttf'
-    EPISODE_NUMBER_FONT = REF_DIRECTORY / 'PcapTerminal-BO9B.ttf'
-
-    """Default fonts and color for series count text"""
-    SEASON_COUNT_FONT = REF_DIRECTORY / 'PcapTerminal-BO9B.ttf'
+    EPISODE_TEXT_FONT = str(RemoteFile('azuravian', 'ref/SciFi/PcapTerminal-BO9B.ttf'))
 
     """Whether this class uses season titles for the purpose of archives"""
     USES_SEASON_TITLE = False
