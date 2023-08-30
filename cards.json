@@ -12,6 +12,63 @@
         "supported_extras": []
     },
     {
+        "name": "SciFi",
+        "identifier": "azuravian/SciFiTitleCard",
+        "description": [
+            "A multi-overlay card designed to look like a heads up display.  Intended for use in Science Fiction series."
+        ], "example": "https://raw.githubusercontent.com/azuravian/myimages/main/SciFiTitleCard/Example1.jpg",
+        "creators": ["Azuravian"],
+        "supports_custom_fonts": true,
+        "supports_custom_seasons": true,
+        "supported_extras": [
+            {
+                "name": "Overlay Bottom Color",
+                "identifier": "overlay_bottom_color",
+                "description": "The color you want to use for the bottom layer"
+            },
+            {
+                "name": "Overlay Top Color",
+                "identifier": "overlay_top_color",
+                "description": "The color you want to use for the top layer"
+            },
+            {
+                "name": "Overlay Middle Color",
+                "identifier": "overlay_middle_color",
+                "description": "The color you want to use for the middle layer"
+            },
+            {
+                "name": "Overlay Rectangles Color",
+                "identifier": "overlay_rectangles_color",
+                "description": "The color you want to use for the rectangles"
+            },
+            {
+                "name": "Overlay Base Alpha",
+                "identifier": "overlay_base_alpha",
+                "description": "The transparency (between 0 and 1) you want to use for the black surrounding layer"
+            },
+            {
+                "name": "Overlay Bottom Alpha",
+                "identifier": "overlay_bottom_alpha",
+                "description": "The transparency (between 0 and 1) you want to use for the bottom layer"
+            },
+            {
+                "name": "Overlay Top Alpha",
+                "identifier": "overlay_top_alpha",
+                "description": "The transparency (between 0 and 1) you want to use for the top layer"
+            },
+            {
+                "name": "Overlay Middle Alpha",
+                "identifier": "overlay_middle_alpha",
+                "description": "The transparency (between 0 and 1) you want to use for the middle layer"
+            },
+            {
+                "name": "Overlay Rectangles Alpha",
+                "identifier": "overlay_rectangles_alpha",
+                "description": "The transparency (between 0 and 1) you want to use for the rectangles"
+            }
+        ]
+    },
+    {
         "name": "Blacklist",
         "identifier": "CollinHeist/BlacklistTitleCard",
         "description": [
