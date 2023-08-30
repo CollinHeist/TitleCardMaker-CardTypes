@@ -1,6 +1,10 @@
 from pathlib import Path
 from typing import Optional
 
+from pydantic import FilePath, PositiveFloat, constr, root_validator
+from app.schemas.base import BetterColor
+from app.schemas.card_type import BaseCardTypeCustomFontNoText
+
 from modules.BaseCardType import BaseCardType, ImageMagickCommands
 from modules.Debug import log
 from modules.RemoteFile import RemoteFile
@@ -8,9 +12,31 @@ from modules.RemoteFile import RemoteFile
 
 class SciFiTitleCard(BaseCardType):
     """
-    This class describes a type of BaseCardType that produces title cards
-    in a SciFi style as if viewed through a HUD.
+    This class describes a type of BaseCardType that produces title
+    cards in a SciFi style as if viewed through a HUD.
     """
+
+    class CardModel(BaseCardTypeCustomFontNoText):
+        title_text: str
+        episode_text: constr(to_upper=True)
+        hide_episode_text: bool = False
+        font_color: BetterColor = 'white'
+        font_file: FilePath
+        overlay_bottom_color: BetterColor = 'rgb(58, 255, 255)'
+        overlay_middle_color: BetterColor = 'rgb(255, 255, 255)'
+        overlay_top_color: BetterColor = 'rgb(255, 49, 255)'
+        overlay_rectangles_color: BetterColor = 'rgb(102, 211, 122)'
+        overlay_base_alpha: PositiveFloat = 1.0
+        overlay_bottom_alpha: PositiveFloat = 0.6
+        overlay_middle_alpha: PositiveFloat = 0.6
+        overlay_top_alpha: PositiveFloat = 0.6
+        overlay_rectangles_alpha: PositiveFloat = 0.6
+
+        @root_validator(skip_on_failure=True, allow_reuse=True)
+        def toggle_text_hiding(cls, values):
+            values['hide_episode_text'] |= (len(values['episode_text']) == 0)
+
+            return values
 
     """Directory where all reference files used by this card are stored"""
     REF_DIRECTORY = Path(__file__).parent.parent / 'azuravian' / 'ref' / 'SciFi'
@@ -28,22 +54,18 @@ class SciFiTitleCard(BaseCardType):
     STROKE_COLOR = 'black'
 
     """Default characters to replace in the generic font"""
-    FONT_REPLACEMENTS = {
-        '[': '(', ']': ')', '(': '[', ')': ']', '―': '-', '…': '...'
-    }
+    FONT_REPLACEMENTS = {}
 
     """Characteristics of the episode text"""
-    EPISODE_TEXT_FORMAT = "S{season_number:02}E{episode_number:02}"
+    EPISODE_TEXT_FORMAT = 'S{season_number:02}E{episode_number:02}'
     EPISODE_TEXT_FONT = REF_DIRECTORY / 'PcapTerminal-BO9B.ttf'
     EPISODE_NUMBER_FONT = REF_DIRECTORY / 'PcapTerminal-BO9B.ttf'
 
     """Default fonts and color for series count text"""
     SEASON_COUNT_FONT = REF_DIRECTORY / 'PcapTerminal-BO9B.ttf'
-    EPISODE_COUNT_FONT = REF_DIRECTORY / 'PcapTerminal-BO9B.ttf'
-    SERIES_COUNT_TEXT_COLOR = 'white'
 
     """Whether this class uses season titles for the purpose of archives"""
-    USES_SEASON_TITLE = True
+    USES_SEASON_TITLE = False
 
     """How to name archive directories for this type of card"""
     ARCHIVE_NAME = 'Sci-Fi Style'
@@ -54,35 +76,32 @@ class SciFiTitleCard(BaseCardType):
     __OVERLAY_MIDDLE = str(RemoteFile('azuravian', 'ref/SciFi/Middle.png'))
     __OVERLAY_TOP = str(RemoteFile('azuravian', 'ref/SciFi/Top.png'))
     __OVERLAY_RECTANGLES = str(RemoteFile('azuravian', 'ref/SciFi/Rectangles.png'))
-    
+
     __slots__ = (
-        'source_file', 'output_file', 'title_text', 'season_text',
-        'episode_text', 'hide_season_text', 'hide_episode_text', 'font_color',
-        'stroke_color', 'font_file', 'font_interline_spacing', 'font_kerning', 'font_size',
-        'font_stroke_width', 'font_vertical_shift', 'episode_prefix',
+        'source_file', 'output_file', 'title_text', 'episode_text',
+        'hide_episode_text', 'font_color', 'stroke_color', 'font_file',
+        'font_interline_spacing', 'font_interword_spacing', 'font_kerning',
+        'font_size', 'font_stroke_width', 'font_vertical_shift',
         'overlay_bottom_color', 'overlay_middle_color', 'overlay_top_color',
-        'overlay_rectangles_color', 'overlay_base_alpha','overlay_middle_alpha',
-        'overlay_bottom_alpha', 'overlay_top_alpha', 'overlay_rectangles_alpha',
+        'overlay_rectangles_color', 'overlay_base_alpha',
+        'overlay_middle_alpha', 'overlay_bottom_alpha', 'overlay_top_alpha',
+        'overlay_rectangles_alpha', 'episode_text_color',
     )
 
     def __init__(self,
             source_file: Path,
             card_file: Path,
             title_text: str,
-            season_text: str,
             episode_text: str,
-            hide_season_text: bool = False,
             hide_episode_text: bool = False,
             font_color: str = TITLE_COLOR,
             font_file: str = TITLE_FONT,
-            stroke_color: str = STROKE_COLOR,
             font_interline_spacing: int = 0,
+            font_interword_spacing: int = 0,
             font_kerning: float = 1.0,
             font_size: float = 1.0,
             font_stroke_width: float = 1.0,
             font_vertical_shift: int = 0,
-            season_number: int = 1,
-            episode_number: int = 1,
             overlay_bottom_color: str = 'rgb(58, 255, 255)',
             overlay_middle_color: str = 'rgb(255, 255, 255)',
             overlay_top_color: str = 'rgb(255, 49, 255)',
@@ -92,6 +111,8 @@ class SciFiTitleCard(BaseCardType):
             overlay_middle_alpha: float = 0.6,
             overlay_top_alpha: float = 0.6,
             overlay_rectangles_alpha: float = 0.6,
+            episode_text_color: str = TITLE_COLOR,
+            stroke_color: str = STROKE_COLOR,
             blur: bool = False,
             grayscale: bool = False,
             preferences: Optional['Preferences'] = None, # type: ignore
@@ -110,35 +131,21 @@ class SciFiTitleCard(BaseCardType):
 
         # Ensure characters that need to be escaped are
         self.title_text = self.image_magick.escape_chars(title_text)
-        self.season_text = self.image_magick.escape_chars(season_text.upper())
-        self.episode_text = self.image_magick.escape_chars(episode_text.upper())
-        self.hide_season_text = hide_season_text
+        self.episode_text = self.image_magick.escape_chars(episode_text)
         self.hide_episode_text = hide_episode_text
 
         # Font customizations
         self.font_color = font_color
-        self.stroke_color = stroke_color
         self.font_file = font_file
         self.font_interline_spacing = font_interline_spacing
+        self.font_interword_spacing = font_interword_spacing
         self.font_kerning = font_kerning
         self.font_size = font_size
         self.font_stroke_width = font_stroke_width
         self.font_vertical_shift = font_vertical_shift
 
-        # Attempt to detect prefix text
-        if self.hide_episode_text:
-            self.episode_prefix, self.episode_text = None, None
-        else:
-            if ' ' in episode_text:
-                prefix, text = episode_text.upper().split(' ', 1)
-                self.episode_prefix, self.episode_text = map(
-                    self.image_magick.escape_chars,
-                    (prefix, text)
-                )
-            else:
-                self.episode_text = episode_text
-
         # Optional extras
+        self.episode_text_color = episode_text_color
         self.overlay_bottom_color = overlay_bottom_color
         self.overlay_top_color = overlay_top_color
         self.overlay_middle_color = overlay_middle_color
@@ -148,6 +155,7 @@ class SciFiTitleCard(BaseCardType):
         self.overlay_top_alpha = 1 / overlay_top_alpha
         self.overlay_middle_alpha = 1 / overlay_middle_alpha
         self.overlay_rectangles_alpha = 1 / overlay_rectangles_alpha
+        self.stroke_color = stroke_color
 
 
     @property
@@ -163,22 +171,22 @@ class SciFiTitleCard(BaseCardType):
 
         font_size = 157.41 * self.font_size
         interline_spacing = -22 + self.font_interline_spacing
+        interword_spacing = 50 + self.font_interword_spacing
         kerning = -1.25 * self.font_kerning
         stroke_width = 3.0 * self.font_stroke_width
-        vertical_shift = 250 + self.font_vertical_shift
-        title_text = f'{self.title_text}_'
+        vertical_shift = 215 + self.font_vertical_shift
 
         return [
             f'-font "{self.font_file}"',
             f'-kerning {kerning}',
-            f'-interword-spacing 50',
+            f'-interword-spacing {interword_spacing}',
             f'-interline-spacing {interline_spacing}',
             f'-pointsize {font_size}',
             f'-gravity southeast',
             f'-strokewidth {stroke_width}',
             f'-stroke {self.stroke_color}',
             f'-fill {self.TITLE_COLOR}',
-            f'-annotate +200+{vertical_shift} "{title_text}"'
+            f'-annotate +200+{vertical_shift} "{self.title_text}_"'
         ]
 
 
@@ -191,38 +199,21 @@ class SciFiTitleCard(BaseCardType):
         Returns:
             List of ImageMagick commands.
         """
-        stroke_width = 3.0 * self.font_stroke_width
 
-        # Season hiding, just add episode text
-        if self.hide_season_text:
-            return [
-                f'-kerning 5.42',
-                f'-pointsize 67.75',
-                f'-font "{self.EPISODE_COUNT_FONT.resolve()}"',
-                f'-gravity northwest',
-                f'-fill "{self.SERIES_COUNT_TEXT_COLOR}"',
-                f'-strokewidth {stroke_width}',
-                f'-stroke {self.stroke_color}',
-                f'-annotate +160+100 "{self.episode_text}"'
-            ]
-
+        # All text is hidden, return 
+        if self.hide_episode_text:
+            return []
+   
         return [
-            f'-background transparent',
-            f'+interword-spacing',
+            f'-font "{self.EPISODE_TEXT_FONT.resolve()}"',
+            f'-fill "{self.episode_text_color}"',
             f'-kerning 5.42',
             f'-pointsize 67.75',
-            f'-fill "{self.SERIES_COUNT_TEXT_COLOR}"',
-            f'-strokewidth {stroke_width}',
-            f'-stroke {self.stroke_color}',
-            f'\( -gravity center',
-            f'-font "{self.SEASON_COUNT_FONT.resolve()}"',
-            f'label:"{self.season_text}"',
-            f'-font "{self.EPISODE_COUNT_FONT.resolve()}"',
-            f'label:"{self.episode_text}"',
-            f'+smush 5.42 \)',
             f'-gravity northwest',
-            f'-geometry +160+100',
-            f'-composite'
+            f'-strokewidth 3',
+            f'-stroke black',
+            f'+interword-spacing',
+            f'-annotate +150+100 "{self.episode_text}"'
         ]
 
 
@@ -264,7 +255,10 @@ class SciFiTitleCard(BaseCardType):
             or (font.file != SciFiTitleCard.TITLE_FONT)
             or (font.interline_spacing != 0)
             or (font.interword_spacing != 0)
+            or (font.kerning != 1.0)
             or (font.size != 1.0)
+            or (font.stroke_width != 1.0)
+            or (font.vertical_shift != 0)
         )
 
 
@@ -291,11 +285,21 @@ class SciFiTitleCard(BaseCardType):
                 episode_text_format.upper() != standard_etf)
 
 
-    def overlay_hud(self, overlay, color, alpha) -> Path:
+    def overlay_hud(self,
+            overlay: str,
+            color: str,
+            alpha: float,
+        ) -> ImageMagickCommands:
         """
         Edit the rectangles hud layer to selected color and transparency.
         
-        :returns:   Path to the created image.
+        Args:
+            overlay: Filepath (as a string) to the overlay file.
+            color: Color to colorize the overlay with.
+            alpha: Transparency of this overlay.
+
+        Returns:
+            List of ImageMagick commands.
         """
 
         return [
@@ -316,8 +320,8 @@ class SciFiTitleCard(BaseCardType):
             f'convert "{self.source_file.resolve()}"',
             # Resize and apply styles
             *self.resize_and_style,
-            # Overlay hud
-            *self.overlay_hud(self.__OVERLAY_BASE, "black", self.overlay_base_alpha),
+            # Overlay huds
+            *self.overlay_hud(self.__OVERLAY_BASE, 'black', self.overlay_base_alpha),
             *self.overlay_hud(self.__OVERLAY_BOTTOM, self.overlay_bottom_color, self.overlay_bottom_alpha),
             *self.overlay_hud(self.__OVERLAY_MIDDLE, self.overlay_middle_color, self.overlay_middle_alpha),
             *self.overlay_hud(self.__OVERLAY_TOP, self.overlay_top_color, self.overlay_top_alpha),
