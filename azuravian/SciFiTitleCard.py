@@ -31,6 +31,8 @@ class SciFiTitleCard(BaseCardType):
         overlay_middle_alpha: PositiveFloat = 0.6
         overlay_top_alpha: PositiveFloat = 0.6
         overlay_rectangles_alpha: PositiveFloat = 0.6
+        episode_text_color: BetterColor = 'white'
+        stroke_color: BetterColor = 'black'
 
         @root_validator(skip_on_failure=True, allow_reuse=True)
         def toggle_text_hiding(cls, values):
@@ -102,6 +104,8 @@ class SciFiTitleCard(BaseCardType):
             font_size: float = 1.0,
             font_stroke_width: float = 1.0,
             font_vertical_shift: int = 0,
+            blur: bool = False,
+            grayscale: bool = False,
             overlay_bottom_color: str = 'rgb(58, 255, 255)',
             overlay_middle_color: str = 'rgb(255, 255, 255)',
             overlay_top_color: str = 'rgb(255, 49, 255)',
@@ -113,8 +117,6 @@ class SciFiTitleCard(BaseCardType):
             overlay_rectangles_alpha: float = 0.6,
             episode_text_color: str = TITLE_COLOR,
             stroke_color: str = STROKE_COLOR,
-            blur: bool = False,
-            grayscale: bool = False,
             preferences: Optional['Preferences'] = None, # type: ignore
             **unused,
         ) -> None:

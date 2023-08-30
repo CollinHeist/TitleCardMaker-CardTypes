@@ -75,6 +75,16 @@
                 "identifier": "overlay_rectangles_alpha",
                 "description": "The transparency of the overlay rectangles",
                 "tooltip": "Value between <v>0.0</v> and <v>1.0</v>. Defaults to <v>0.6</v>."
+            },
+            {
+                "name": "Episode Text Color",
+                "identifier": "episode_text_color",
+                "description": "The color of the episode text"
+            },
+            {
+                "name": "Text Stroke Color",
+                "identifier": "stroke_color",
+                "description": "The color of the text stroke"
             }
         ]
     },
