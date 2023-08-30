@@ -20,7 +20,7 @@
         ], "example": "https://raw.githubusercontent.com/azuravian/myimages/main/SciFiTitleCard/Example1.jpg",
         "creators": ["Azuravian"],
         "supports_custom_fonts": true,
-        "supports_custom_seasons": true,
+        "supports_custom_seasons": false,
         "supported_extras": [
             {
                 "name": "Trailing Underscore",
