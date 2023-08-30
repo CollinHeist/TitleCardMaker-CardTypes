@@ -15,7 +15,8 @@
         "name": "SciFi",
         "identifier": "azuravian/SciFiTitleCard",
         "description": [
-            "A multi-overlay card designed to look like a heads up display.  Intended for use in Science Fiction series."
+            "A multi-overlay card designed to look like a heads up display.",
+            "Intended for use in Science Fiction series."
         ], "example": "https://raw.githubusercontent.com/azuravian/myimages/main/SciFiTitleCard/Example1.jpg",
         "creators": ["Azuravian"],
         "supports_custom_fonts": true,
@@ -24,47 +25,56 @@
             {
                 "name": "Overlay Bottom Color",
                 "identifier": "overlay_bottom_color",
-                "description": "The color you want to use for the bottom layer"
+                "description": "The color of the overlay's bottom layer",
+                "tooltip": "Defaults to <v>rgb(58, 255, 255)</v> (neon blue)."
             },
             {
                 "name": "Overlay Top Color",
                 "identifier": "overlay_top_color",
-                "description": "The color you want to use for the top layer"
+                "description": "The color of overlay's top layer",
+                "tooltip":"Defaults to <v>rgb(255, 49, 255)</v> (hot pink)."
             },
             {
                 "name": "Overlay Middle Color",
                 "identifier": "overlay_middle_color",
-                "description": "The color you want to use for the middle layer"
+                "description": "The color of the overlay's middle layer",
+                "tooltip": "Defaults to <v>rgb(255, 255, 255)</v> (white)."
             },
             {
-                "name": "Overlay Rectangles Color",
+                "name": "Overlay Rectangle Color",
                 "identifier": "overlay_rectangles_color",
-                "description": "The color you want to use for the rectangles"
+                "description": "The color of the overlay rectangles",
+                "tooltip": "Defaults to <v>rgb(102, 211, 122)</v> (neon green)."
             },
             {
                 "name": "Overlay Base Alpha",
                 "identifier": "overlay_base_alpha",
-                "description": "The transparency (between 0 and 1) you want to use for the black surrounding layer"
+                "description": "The transparency of the black surrounding layer",
+                "tooltip": "Value between <v>0.0</v> and <v>1.0</v>. Defaults to <v>1.0</v>."
             },
             {
                 "name": "Overlay Bottom Alpha",
                 "identifier": "overlay_bottom_alpha",
-                "description": "The transparency (between 0 and 1) you want to use for the bottom layer"
+                "description": "The transparency of the bottom layer",
+                "tooltip": "Value between <v>0.0</v> and <v>1.0</v>. Defaults to <v>0.6</v>."
             },
             {
                 "name": "Overlay Top Alpha",
                 "identifier": "overlay_top_alpha",
-                "description": "The transparency (between 0 and 1) you want to use for the top layer"
+                "description": "The transparency of the top layer",
+                "tooltip": "Value between <v>0.0</v> and <v>1.0</v>. Defaults to <v>0.6</v>."
             },
             {
                 "name": "Overlay Middle Alpha",
                 "identifier": "overlay_middle_alpha",
-                "description": "The transparency (between 0 and 1) you want to use for the middle layer"
+                "description": "The transparency of the middle layer",
+                "tooltip": "Value between <v>0.0</v> and <v>1.0</v>. Defaults to <v>0.6</v>."
             },
             {
                 "name": "Overlay Rectangles Alpha",
                 "identifier": "overlay_rectangles_alpha",
-                "description": "The transparency (between 0 and 1) you want to use for the rectangles"
+                "description": "The transparency of the overlay rectangles",
+                "tooltip": "Value between <v>0.0</v> and <v>1.0</v>. Defaults to <v>0.6</v>."
             }
         ]
     },
