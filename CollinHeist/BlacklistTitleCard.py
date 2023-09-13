@@ -1,11 +1,13 @@
 from pathlib import Path
 from typing import Optional
 
-from pydantic import Field, FilePath, PositiveFloat, constr, root_validator
+from pydantic import FilePath, PositiveFloat, constr, root_validator
 from app.schemas.base import BetterColor
 from app.schemas.card_type import BaseCardType as BaseCardModel
 
-from modules.BaseCardType import BaseCardType, ImageMagickCommands
+from modules.BaseCardType import (
+    BaseCardType, ImageMagickCommands, Extra, CardDescription
+)
 from modules.Debug import log
 from modules.RemoteFile import RemoteFile
 
@@ -15,6 +17,23 @@ class BlacklistTitleCard(BaseCardType):
     intended for use for "The Blacklist" series. It features a title,
     with a subtitle of the "blacklist number" parsed via an extra.
     """
+
+    API_DETAILS =  CardDescription(
+        name='Blacklist',
+        identifier='CollinHeist/BlacklistTitleCard',
+        example='https://user-images.githubusercontent.com/17693271/216839561-ec4a1c27-dcdc-4869-87dd-8d592a26aee2.jpg',
+        creators=['CollinHeist'],
+        source='remote',
+        supports_custom_fonts=True,
+        supports_custom_seasons=False,
+        supported_extras=[],
+        description=[
+            "Title Card intended for the 'The Blacklist' television series",
+            "This Card features a prominent title and a customizable "
+            "'blacklist number' beneath the title.", 'The default Font for '
+            'this card is a modified version of Helvetica.',
+        ]
+    )
 
     class CardModel(BaseCardModel):
         title_text: str

@@ -5,7 +5,9 @@ from pydantic import FilePath, PositiveFloat, constr, root_validator
 from app.schemas.base import BetterColor
 from app.schemas.card_type import BaseCardTypeCustomFontNoText
 
-from modules.BaseCardType import BaseCardType, ImageMagickCommands
+from modules.BaseCardType import (
+    BaseCardType, ImageMagickCommands, Extra, CardDescription
+)
 from modules.Debug import log
 from modules.RemoteFile import RemoteFile
 
@@ -15,6 +17,21 @@ class SciFiTitleCard(BaseCardType):
     This class describes a type of BaseCardType that produces title
     cards in a SciFi style as if viewed through a HUD.
     """
+
+    API_DETAILS = CardDescription(
+        name='SciFi',
+        identifier='azuravian/SciFiTitleCard',
+        example='https://raw.githubusercontent.com/azuravian/myimages/main/SciFiTitleCard/Example1.jpg',
+        creators=['Azuravian'],
+        source='remote',
+        supports_custom_fonts=True,
+        supports_custom_seasons=False,
+        supported_extras=[],
+        description=[
+            'A multi-overlay card designed to look like a heads up display.',
+            'Intended for use in Science Fiction series.',
+        ]
+    )
 
     class CardModel(BaseCardTypeCustomFontNoText):
         title_text: str

@@ -5,7 +5,9 @@ from pydantic import FilePath
 from app.schemas.base import BetterColor
 from app.schemas.card_type import BaseCardTypeCustomFontAllText
 
-from modules.BaseCardType import BaseCardType, ImageMagickCommands
+from modules.BaseCardType import (
+    BaseCardType, ImageMagickCommands, Extra, CardDescription
+)
 from modules.RemoteFile import RemoteFile
 
 
@@ -13,6 +15,22 @@ class WhiteTextStandard(BaseCardType):
     """
     WDVH's WhiteTextStandard card type.
     """
+
+    API_DETAILS =  CardDescription(
+        name='White Text Standard',
+        identifier='Wdvh/WhiteTextStandard',
+        example='https://user-images.githubusercontent.com/17693271/169709359-ffc9e109-b327-44e9-b78a-7276f77fe917.jpg',
+        creators=['Wdvh', 'CollinHeist'],
+        source='remote',
+        supports_custom_fonts=True,
+        supports_custom_seasons=False,
+        supported_extras=[],
+        description=[
+            'Modification of the Standard Card Type.', 'This Card uses a '
+            'different font, smaller text size, and the episode title is '
+            'positioned lower than the Standard Card Type.',
+        ]
+    )
 
     class CardModel(BaseCardTypeCustomFontAllText):
         font_color: BetterColor = '#FFFFFF'

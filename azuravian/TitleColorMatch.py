@@ -6,7 +6,9 @@ from pydantic import FilePath
 from app.schemas.base import BetterColor
 from app.schemas.card_type import BaseCardTypeCustomFontAllText
 
-from modules.BaseCardType import BaseCardType, ImageMagickCommands
+from modules.BaseCardType import (
+    BaseCardType, ImageMagickCommands, Extra, CardDescription
+)
 from modules.Debug import log
 from modules.RemoteFile import RemoteFile
 
@@ -18,6 +20,23 @@ class TitleColorMatch(BaseCardType):
     matches the logo, as well as trimming the logo of any extra
     transparent space that makes its  location incorrect.
     """
+
+    API_DETAILS =  CardDescription(
+        name='Title Color Match',
+        identifier='azuravian/TitleColorMatch',
+        example='https://user-images.githubusercontent.com/7379812/187586521-353ba09f-30a8-424b-bbf3-ee9036c9e638.jpg',
+        creators=['Azuravian', 'Beedman', 'CollinHeist'],
+        source='remote',
+        supports_custom_fonts=True,
+        supports_custom_seasons=True,
+        supported_extras=[],
+        description=[
+            'A modification of GradientLogoTitleCard that includes the option '
+            'to auto-select font color based on logo color.', 'This card will '
+            'also automatically crop off extraneous transparent space from '
+            'around the logo.',
+        ]
+    )
 
     class CardModel(BaseCardTypeCustomFontAllText):
         logo_file: FilePath
