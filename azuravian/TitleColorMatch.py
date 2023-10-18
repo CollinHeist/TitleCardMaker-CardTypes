@@ -3,11 +3,11 @@ from re import compile as re_compile, findall
 from typing import Literal, Optional, Union
 
 from pydantic import FilePath
+
 from app.schemas.base import BetterColor
 from app.schemas.card_type import BaseCardTypeCustomFontAllText
-
 from modules.BaseCardType import (
-    BaseCardType, ImageMagickCommands, Extra, CardDescription
+    BaseCardType, ImageMagickCommands, CardDescription
 )
 from modules.Debug import log
 from modules.RemoteFile import RemoteFile
