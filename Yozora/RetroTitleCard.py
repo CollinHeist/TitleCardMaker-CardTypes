@@ -2,10 +2,10 @@ from pathlib import Path
 from typing import Literal, Optional
 
 from pydantic import root_validator
-from app.schemas.card_type import BaseCardTypeCustomFontNoText
 
+from app.schemas.card_type import BaseCardTypeCustomFontNoText
 from modules.BaseCardType import (
-    BaseCardType, ImageMagickCommands, Extra, CardDescription
+    BaseCardType, ImageMagickCommands, CardDescription
 )
 from modules.RemoteFile import RemoteFile
 

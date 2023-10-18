@@ -1,16 +1,41 @@
 from pathlib import Path
+from typing import Literal
 
+from pydantic import constr
 
-from modules.BaseCardType import BaseCardType
+from app.schemas.base import BetterColor
+from app.schemas.card_type import BaseCardTypeCustomFontNoText
+from modules.BaseCardType import BaseCardType, CardDescription
 from modules.Debug import log
 from modules.RemoteFile import RemoteFile
 
+
 class StarWarsTitleOnly(BaseCardType):
     """
-    This class describes a type of ImageMaker that produces title cards in the
-    theme of Star Wars cards as designed by reddit user /u/Olivier_286. These
-    cards are not as customizable as the standard template.
+    This class describes a type of Card that produces a modified version
+    of the Star Wars card.
     """
+
+    API_DETAILS = CardDescription(
+        name='Star Wars (Title Only)',
+        identifier='Wdvh/StarWarsTitleOnly',
+        example='https://user-images.githubusercontent.com/17693271/178131539-c7b55ced-b9ba-4564-8153-a998454e1742.jpg',
+        creators=['Wdvh', 'CollinHeist'],
+        source='remote',
+        supports_custom_fonts=False,
+        supports_custom_seasons=False,
+        supported_extras=[],
+        description=[
+            'A variation of the standard Star Wars Card for Shows like '
+            'Obi-Wan Kenobi that use Part/Chapter and similar as episode '
+            'titles.', 'This card also uses a modified star gradient so that '
+            'more of the left side of the image is visible.',
+        ]
+    )
+
+    class CardModel(BaseCardTypeCustomFontNoText):
+        title_text: constr(to_upper=True)
+        font_color: BetterColor = '#DAC960'
 
     """Directory where all reference files used by this card are stored"""
     REF_DIRECTORY = Path(__file__).parent.parent / 'ref' / 'star_wars'
@@ -47,37 +72,30 @@ class StarWarsTitleOnly(BaseCardType):
 
     
     def __init__(self, *,
-            source: Path,
-            output_file: Path,
-            title: str,
+            source_file: Path,
+            card_file: Path,
+            title_text: str,
             blur: bool = False,
             grayscale: bool = False,
-            **unused) -> None:
+            **unused,
+        ) -> None:
         """
         Initialize this CardType object.
-
-        Args:
-            source: Source image to base the card on.
-            output_file: Output file where to create the card.
-            title: Title text to add to created card.
-            blur: Whether to blur the source image.
-            grayscale: Whether to make the source image grayscale.
-            kwargs: Unused arguments.
         """
         
         # Initialize the parent class - this sets up an ImageMagickInterface
         super().__init__(blur, grayscale)
 
         # Store source and output file
-        self.source_file = source
-        self.output_file = output_file
+        self.source_file = source_file
+        self.output_file = card_file
 
         # Store episode title
-        self.title = self.image_magick.escape_chars(title.upper())
+        self.title = self.image_magick.escape_chars(title_text)
 
 
     @staticmethod
-    def is_custom_font(font: 'Font') -> bool:
+    def is_custom_font(font: 'Font') -> Literal[False]: # type: ignore
         """
         Determines whether the given font characteristics constitute a
         default or custom font.
@@ -94,7 +112,9 @@ class StarWarsTitleOnly(BaseCardType):
 
     @staticmethod
     def is_custom_season_titles(
-            custom_episode_map: bool, episode_text_format: str) -> bool:
+            custom_episode_map: bool,
+            episode_text_format: str,
+        ) -> Literal[False]:
         """
         Determines whether the given attributes constitute custom or
         generic season titles.
