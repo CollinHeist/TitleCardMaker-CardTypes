@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Literal
+from typing import Literal, Optional
 
 from pydantic import constr
 
@@ -77,6 +77,7 @@ class StarWarsTitleOnly(BaseCardType):
             title_text: str,
             blur: bool = False,
             grayscale: bool = False,
+            preferences: Optional['Preferences'] = None, # type: ignore
             **unused,
         ) -> None:
         """
@@ -84,7 +85,7 @@ class StarWarsTitleOnly(BaseCardType):
         """
         
         # Initialize the parent class - this sets up an ImageMagickInterface
-        super().__init__(blur, grayscale)
+        super().__init__(blur, grayscale, preferences=preferences)
 
         # Store source and output file
         self.source_file = source_file
