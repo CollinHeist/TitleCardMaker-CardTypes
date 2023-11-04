@@ -3,13 +3,12 @@ from typing import Optional
 
 from pydantic import FilePath, PositiveFloat, constr, root_validator
 from app.schemas.base import BetterColor
-from app.schemas.card_type import BaseCardType as BaseCardModel
+from app.schemas.card_type import BaseCardModel
 
-from modules.BaseCardType import (
-    BaseCardType, ImageMagickCommands, Extra, CardDescription
-)
+from modules.BaseCardType import BaseCardType, CardDescription
 from modules.Debug import log
 from modules.RemoteFile import RemoteFile
+
 
 class BlacklistTitleCard(BaseCardType):
     """
@@ -53,9 +52,9 @@ class BlacklistTitleCard(BaseCardType):
 
     """Characteristics for title splitting by this class"""
     TITLE_CHARACTERISTICS = {
-        'max_line_width': 15,   # Character count to begin splitting titles
-        'max_line_count': 4,    # Maximum number of lines a title can take up
-        'top_heavy': True,      # This class uses bottom heavy titling
+        'max_line_width': 15,
+        'max_line_count': 4,
+        'top_heavy': True,
     }
 
     """How to name archive directories for this type of card"""
@@ -92,8 +91,9 @@ class BlacklistTitleCard(BaseCardType):
             font_vertical_shift: int = 0.0,
             blur: bool = False,
             grayscale: bool = False,
-            preferences: Optional['Preferences'] = None,
-            **unused) -> None:
+            preferences: Optional['Preferences'] = None, # type: ignore
+            **unused,
+        ) -> None:
         """
         Construct a new instance of this Card.
         """
@@ -142,7 +142,9 @@ class BlacklistTitleCard(BaseCardType):
 
     @staticmethod
     def is_custom_season_titles(
-            custom_episode_map: bool, episode_text_format: str) -> bool:
+            custom_episode_map: bool,
+            episode_text_format: str,
+        ) -> bool:
         """
         Determines whether the given attributes constitute custom or
         generic season titles.
