@@ -87,7 +87,7 @@ class TintedFramePlusTitleCard(BaseCardType):
             episode_text_vertical_shift: int = 0,
             frame_color: str = None,
             frame_width: int = BOX_WIDTH,
-            top_element: Element = 'title',
+            top_element: Element = 'logo',
             middle_element: MiddleElement = 'omit',
             bottom_element: Element = 'index',
             logo: SeriesExtra[str] = None,
