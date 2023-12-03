@@ -4,3 +4,17 @@ A combination of the [TintedFrameTitleCard](https://github.com/CollinHeist/Title
 
 ## Example
 ![Fringe (2008) - S01E02](https://github.com/khthe8th/TitleCardMaker-CardTypes/assets/5308389/1b20569a-77f1-48eb-8dbb-e5dcba95cbdf)
+
+## Specification
+Image shown above has template:
+
+```yaml
+templates:
+  crime:
+    library: <<library>>
+    card_type: KHthe8th/TintedFramePlusTitleCard
+    extras:
+      top_element: logo
+      logo: ./source/<<clean_title>> (<<year>>)/logo.png
+      episode_text_font_size: 1.3
+```
