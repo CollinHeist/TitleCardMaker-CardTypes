@@ -422,12 +422,6 @@ class TintedFramePlusTitleCard(BaseCardType):
             element_width /= (logo_height / 150)
             element_width *= self.logo_size
             margin = 25
-        # Element is title
-        elif self.bottom_element == 'title':
-            element_width, _ = self.get_text_dimensions(
-                self.title_text_commands, width='max', height='max',
-            )
-            margin = 10
 
         # Determine bounds based on element width
         left_box_x = (self.WIDTH / 2) - (element_width / 2) - margin
