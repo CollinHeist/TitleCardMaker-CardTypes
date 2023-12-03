@@ -159,8 +159,8 @@ class TintedFramePlusTitleCard(BaseCardType):
                 log.warning(f'Invalid element - must be "omit" or "logo')
                 self.valid = False
             elif (not middle
-                and element not in ('omit', 'title', 'index', 'logo')):
-                log.warning(f'Invalid element - must be "omit", "title", '
+                and element not in ('omit', 'index', 'logo')):
+                log.warning(f'Invalid element - must be "omit", '
                             f'"index", or "logo"')
                 self.valid = False
             return element
