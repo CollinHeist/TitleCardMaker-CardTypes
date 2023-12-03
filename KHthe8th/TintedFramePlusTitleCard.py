@@ -693,8 +693,6 @@ class TintedFramePlusTitleCard(BaseCardType):
             f'-pointsize {font_size}',
 			# Black stroke behind title text
             *self.black_title_commands,
-            # Add remaining sub-components
-          #  *self.title_text_commands,
 			# Title text
             f'-fill "{self.font_color}"',
             f'-annotate +0+{vertical_shift} "{self.title_text}"',
