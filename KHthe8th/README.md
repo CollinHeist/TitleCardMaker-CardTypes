@@ -1,6 +1,6 @@
 # `KHthe8th/TintedFramePlusTitleCard`
 ## Description
-A combination of the [TintedFrameTitleCard](https://github.com/CollinHeist/TitleCardMaker/wiki/TintedFrameTitleCard) and the [StandardTitleCard](https://github.com/CollinHeist/TitleCardMaker/wiki/StandardTitleCard) for the best of both worlds (in my opinion). 
+A combination of the [TintedFrameTitleCard](https://github.com/CollinHeist/TitleCardMaker/wiki/TintedFrameTitleCard) and the [StandardTitleCard](https://github.com/CollinHeist/TitleCardMaker/wiki/StandardTitleCard) for the best of both worlds. It has the same extras you can pass to tinted frame, and you can still modify the top/middle/bottom frame elements with extras but now it adds the episode title text above the bottom frame element (this is not modifiable).
 
 ## Example
-![Fringe (2008) - S01E01](https://github.com/khthe8th/TitleCardMaker-CardTypes/assets/5308389/5c5c0897-62ff-46c3-aad9-111d1e4a5939)
+![Fringe (2008) - S01E02](https://github.com/khthe8th/TitleCardMaker-CardTypes/assets/5308389/1b20569a-77f1-48eb-8dbb-e5dcba95cbdf)
