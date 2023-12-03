@@ -6,7 +6,7 @@ from modules.BaseCardType import (
 )
 
 SeriesExtra = Optional
-Element = Literal['index', 'logo', 'omit', 'title']
+Element = Literal['index', 'logo', 'omit']
 MiddleElement = Literal['logo', 'omit']
 
 
