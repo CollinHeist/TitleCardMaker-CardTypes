@@ -18,4 +18,4 @@ templates:
       logo: ./source/<<clean_title>> (<<year>>)/logo.png
       episode_text_font_size: 1.3
 ```
-It also has all optional valid extras listed on [TintedFrameTitleCard](https://github.com/CollinHeist/TitleCardMaker/wiki/TintedFrameTitleCard), as well as stroke_color listed on [StandardTitleCard](https://github.com/CollinHeist/TitleCardMaker/wiki/StandardTitleCard](https://github.com/CollinHeist/TitleCardMaker/wiki/StandardTitleCard#custom-stroke-color)
+It also has all optional valid extras listed on [TintedFrameTitleCard](https://github.com/CollinHeist/TitleCardMaker/wiki/TintedFrameTitleCard), as well as stroke_color listed on [StandardTitleCard](https://github.com/CollinHeist/TitleCardMaker/wiki/StandardTitleCard#custom-stroke-color)
