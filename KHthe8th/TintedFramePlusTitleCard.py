@@ -220,43 +220,6 @@ class TintedFramePlusTitleCard(BaseCardType):
 
 
     @property
-    def title_text_commands(self) -> ImageMagickCommands:
-        """Subcommand for adding title text to the source image."""
-
-        # No title text, or not being shown
-        if (len(self.title_text) == 0
-            or (self.top_element != 'title' and self.bottom_element !='title')):
-            return []
-
-        # Determine vertical position based on which element the title is
-        if self.top_element == 'title':
-            vertical_shift = -700 + self.font_vertical_shift
-        else:
-            vertical_shift = 722 + self.font_vertical_shift
-
-        return [
-            f'-background transparent',
-            f'\( -font "{self.font_file}"',
-            f'-pointsize {100 * self.font_size}',
-            f'-kerning {1 * self.font_kerning}',
-            f'-interline-spacing {self.font_interline_spacing}',
-            f'-interword-spacing {self.font_interword_spacing}',
-            f'-fill "{self.font_color}"',
-            f'label:"{self.title_text}"',
-            # Create drop shadow
-            f'\( +clone',
-            f'-shadow 80x3+10+10 \)',
-            # Position shadow below text
-            f'+swap',
-            f'-layers merge',
-            f'+repage \)',
-            # Overlay text and shadow onto source image
-            f'-geometry +0{vertical_shift:+}',
-            f'-composite',
-        ]
-
-
-    @property
     def index_text_commands(self) -> ImageMagickCommands:
         """Subcommand for adding index text to the source image."""
 
