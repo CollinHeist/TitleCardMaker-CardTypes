@@ -621,7 +621,7 @@ class TintedFramePlusTitleCard(BaseCardType):
         Make the necessary ImageMagick and system calls to create this
         object's defined title card.
         """
-		        # Font customizations
+        # Font customizations
         font_size = 157.41 * self.font_size
         interline_spacing = -22 + self.font_interline_spacing
         interword_spacing = 50 + self.font_interword_spacing
