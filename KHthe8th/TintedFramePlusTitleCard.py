@@ -481,6 +481,7 @@ class TintedFramePlusTitleCard(BaseCardType):
             f'\( -size {self.TITLE_CARD_SIZE}',
             f'xc:transparent',
             # Draw all sets of rectangles
+            f'+stroke',
             f'-fill "{self.frame_color}"',
             *top, *left, *right, *bottom,
             f'\( +clone',
