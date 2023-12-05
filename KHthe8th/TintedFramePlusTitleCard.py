@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Literal, Optional
 
-from modues.Debug import log
+from modules.Debug import log
 from modules.BaseCardType import (
     BaseCardType, Coordinate, ImageMagickCommands, Rectangle,
 )
