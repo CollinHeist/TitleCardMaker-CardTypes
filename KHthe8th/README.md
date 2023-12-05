@@ -10,7 +10,7 @@ Image shown above has template:
 
 ```yaml
 templates:
-  procedural:
+  myTemplate:
     library: <<library>>
     card_type: KHthe8th/TintedFramePlusTitleCard
     extras:
