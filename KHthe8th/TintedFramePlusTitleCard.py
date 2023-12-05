@@ -393,8 +393,7 @@ class TintedFramePlusTitleCard(BaseCardType):
             or (self.bottom_element == 'index'
                 and self.hide_season_text and self.hide_episode_text)
             or (self.bottom_element == 'logo'
-                and (self.logo is None or not self.logo.exists()))
-            or (self.bottom_element == 'title' and len(self.title_text) == 0)):
+                and (self.logo is None or not self.logo.exists()))):
 
             return [
                 Rectangle(
