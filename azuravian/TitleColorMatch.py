@@ -2,7 +2,7 @@ from pathlib import Path
 from re import compile as re_compile, findall
 from typing import Literal, Optional, Union
 
-from pydantic import FilePath
+from pydantic import Field
 
 from app.schemas.base import BetterColor
 from app.schemas.card_type import BaseCardTypeCustomFontAllText
@@ -12,13 +12,14 @@ from modules.BaseCardType import (
 from modules.Debug import log
 from modules.RemoteFile import RemoteFile
 
+
 class TitleColorMatch(BaseCardType):
     """
-    This class describes a type of CardType created by azuravian, and is 
+    This class describes a type of CardType created by azuravian, and is
     a modification of Beedman's GradientLogoTitleCard class with a few
     changes,  specifically the ability to autoselect a font color that
     matches the logo, as well as trimming the logo of any extra
-    transparent space that makes its  location incorrect.
+    transparent space that makes its location incorrect.
     """
 
     API_DETAILS =  CardDescription(
@@ -39,12 +40,23 @@ class TitleColorMatch(BaseCardType):
     )
 
     class CardModel(BaseCardTypeCustomFontAllText):
-        logo_file: FilePath
-        font_color: Union[BetterColor, Literal['auto']] = '#EBEBEB'
-        font_file: FilePath
+        logo_file: Optional[Path] = None
+        font_color: Union[BetterColor, Literal['auto']] = 'auto'
+        font_file: Path
+        title_min_luminance: int = Field(min=0, default=50, max=255)
+        check_multiple_luminances: bool = True
+        invert_logos: bool = False # TODO: Evaluate whether this should default to enabled
+        default_title_color: BetterColor = '#EBEBEB'
+        default_title_stroke_color: BetterColor = 'black'
+        omit_gradient: bool = False
+        # TODO: The fonts for season and episode count should be changeable and so should their colors?
 
     """Directory where all reference files used by this card are stored"""
     REF_DIRECTORY = Path(__file__).parent.parent / 'ref'
+
+    """Default font and color for episode title text"""
+    TITLE_FONT = str((REF_DIRECTORY / 'Sequel-Neue.otf').resolve())
+    TITLE_COLOR = '#EBEBEB'
 
     """Characteristics for title splitting by this class"""
     TITLE_CHARACTERISTICS = {
@@ -52,10 +64,6 @@ class TitleColorMatch(BaseCardType):
         'max_line_count': 3,    # Maximum number of lines a title can take up
         'top_heavy': False,     # This class uses bottom heavy titling
     }
-
-    """Default font and text color for episode title text"""
-    TITLE_FONT = str((REF_DIRECTORY / 'Sequel-Neue.otf').resolve())
-    TITLE_COLOR = '#EBEBEB'
 
     """Default characters to replace in the generic font"""
     FONT_REPLACEMENTS = {
@@ -81,15 +89,18 @@ class TitleColorMatch(BaseCardType):
 
     __slots__ = (
         'source_file', 'output_file', 'title_text', 'season_text',
-        'episode_text', 'hide_season_text', 'hide_episode_text', 'font_color',
-        'font_file', 'font_interline_spacing', 'font_kerning', 'font_size',
-        'font_stroke_width', 'font_vertical_shift', 'logo', 
+        'episode_text', 'hide_season_text', 'hide_episode_text',
+        'font_color', 'font_file', 'font_interline_spacing',
+        'font_kerning', 'font_size', 'font_stroke_width',
+        'font_vertical_shift', 'logo', 'title_min_luminance',
+        'check_multiple_luminances', 'invert_logos',
+        'default_title_color', 'default_title_stroke_color',
+        'omit_gradient'
     )
 
     def __init__(self,
             source_file: Path,
             card_file: Path,
-            logo_file: Path,
             title_text: str,
             season_text: str,
             episode_text: str,
@@ -104,13 +115,20 @@ class TitleColorMatch(BaseCardType):
             font_vertical_shift: int = 0,
             blur: bool = False,
             grayscale: bool = False,
+            logo_file: Optional[Path] = None,
+            title_min_luminance: int = 50,
+            check_multiple_luminances: bool = True,
+            invert_logos: bool = True,
+            default_title_color: str = TITLE_COLOR,
+            default_title_stroke_color: str = 'black',
+            omit_gradient: bool = False,
             preferences: Optional['Preferences'] = None, # type: ignore
             **unused,
         ) -> None:
         """
         Construct a new instance of this Card.
         """
-        
+
         # Initialize the parent class - this sets up an ImageMagickInterface
         super().__init__(blur, grayscale, preferences=preferences)
 
@@ -124,7 +142,7 @@ class TitleColorMatch(BaseCardType):
         self.episode_text = self.image_magick.escape_chars(episode_text)
         self.hide_season_text = hide_season_text
         self.hide_episode_text = hide_episode_text
-        
+
         self.font_color = font_color
         self.font_file = font_file
         self.font_interline_spacing = font_interline_spacing
@@ -133,9 +151,15 @@ class TitleColorMatch(BaseCardType):
         self.font_stroke_width = font_stroke_width
         self.font_vertical_shift = font_vertical_shift
 
+        self.title_min_luminance = title_min_luminance
+        self.check_multiple_luminances = check_multiple_luminances
+        self.invert_logos = invert_logos
+        self.default_title_color = default_title_color
+        self.default_title_stroke_color = default_title_stroke_color
+        self.omit_gradient = omit_gradient
 
-    @property
-    def logo_command(self) -> ImageMagickCommands:
+
+    def logo_command(self, luminance: int) -> ImageMagickCommands:
         """
         Get the ImageMagick commands to add the resized logo to the
         source image.
@@ -144,35 +168,52 @@ class TitleColorMatch(BaseCardType):
             List of ImageMagick commands.
         """
 
+        # Logo not provided, return empty commands
+        if self.logo is None or not self.logo.exists():
+            return []
+
+        negate_commands = []
+        if self.invert_logos and luminance < self.title_min_luminance:
+            negate_commands = [
+                '-channel RGB',
+                '-negate',
+                '-colorspace Gray'
+            ]
+
         return [
             # Resize logo
             f'\( "{self.logo.resolve()}"',
             f'-trim',
             f'+repage',
             f'-resize x650',
-            f'-resize 1155x650\> \)',
+            f'-resize 1155x650\>',
+            # Recolor dark logos to be visible on the black gradient
+            *negate_commands,
             # Overlay resized logo
-            f'-gravity northwest',
+            f'\) -gravity northwest',
             f'-define colorspace:auto-grayscale=false',
-            f'-type TrueColorAlpha',  
+            f'-type TrueColorAlpha',
             f'-geometry "+50+50"',
             f'-composite',
         ]
 
 
-    @property
-    def title_text_command(self) -> ImageMagickCommands:
+    def title_text_command(self,
+            title_color: str,
+            stroke_color: str,
+        ) -> ImageMagickCommands:
         """
         ImageMagick commands to implement the title text's global
         effects. Specifically the the font, kerning, fontsize, and
         center gravity.
 
+        Args:
+            title_color: Color to utilize for the title text.
+            stroke_color: Color to utilize for the stroke.
+
         Returns:
             List of ImageMagick commands.
         """
-
-        # Get the title color and stroke for this logo
-        title_color, stroke_color = self._get_logo_color()
 
         font_size = 157.41 * self.font_size
         interline_spacing = -22 + self.font_interline_spacing
@@ -196,18 +237,23 @@ class TitleColorMatch(BaseCardType):
         ]
 
 
-    def _get_logo_color(self) -> tuple[str, str]:
+    def _get_logo_color(self) -> tuple[str, str, int]:
         """
         Get the logo color for this card's logo.
 
         Returns:
-            Tuple whose values are the title color text and the stroke
-            width color.
+            Tuple whose values are the title color text, the stroke
+            width color and luminance
         """
 
         # If auto color wasn't indicated use indicated color and black stroke
         if str(self.font_color) != 'auto':
-            return self.font_color, 'black'
+            return self.font_color, 'black', 255
+
+        # The logo file for this series doesn't exist, return the default colors
+        if self.logo is None or not self.logo.exists():
+            return self.default_title_color, self.default_title_stroke_color,255
+
 
         # Command to get histogram of the colors in logo image
         command = ' '.join([
@@ -247,19 +293,24 @@ class TitleColorMatch(BaseCardType):
             color_ = hexcolor.lstrip('#')
             lv = len(color_)
             r, g, b = (int(color_[i:i+lv//3], 16) for i in range(0, lv, lv//3))
-            
-            # Skip values that are too dark/light
-            if min(r, g, b) > 240 or max(r, g, b) < 15:
-                continue
 
             # First valid color, return color and stroke based on luminance
             luminance = (r * 0.299) + (g * 0.587) + (b * 0.114)
-            return hexcolor, 'black' if luminance > 50 else 'white'
+            log.debug(f'Luminance for {self.logo} ({r}, {g}, {b}) is {luminance}')
 
-        # No valid colors identified, return defaults
-        return self.TITLE_COLOR, 'black'
+            # If luminance is sufficient return right away, otherwise check the next most common colors
+            if luminance >= self.title_min_luminance:
+                title_color = hexcolor
+                stroke_color = 'black' if luminance > 100 else 'white'
+                return title_color, stroke_color, luminance
+            # Only check the first luminance when set to do so
+            elif not self.check_multiple_luminances:
+                break
 
-    
+        # None of the most common colors had sufficient luminance, return defaults
+        return self.default_title_color, self.default_title_stroke_color, -1
+
+
     @property
     def index_text_command(self) -> ImageMagickCommands:
         """
@@ -340,7 +391,7 @@ class TitleColorMatch(BaseCardType):
         """
         Determines whether the given arguments represent a custom font
         for this card.
-        
+
         Args:
             font: The Font being evaluated.
 
@@ -387,19 +438,27 @@ class TitleColorMatch(BaseCardType):
         object's defined title card.
         """
 
+        title_color, stroke_color, luminance = self._get_logo_color()
+        gradient_command = []
+        if not self.omit_gradient:
+            gradient_command = [
+                f'"{self.__GRADIENT_IMAGE}"',
+                f'-composite',
+            ]
+
         command = ' '.join([
             f'convert',
             # Resize source image
             f'"{self.source_file.resolve()}"',
             *self.resize_and_style,
             # Overlay gradient
-            f'"{self.__GRADIENT_IMAGE}"',
-            f'-composite',
+            *gradient_command,
             # Overlay resized logo
-            *self.logo_command,
+            *self.logo_command(luminance),
             # Put title text
-            *self.title_text_command,
+            *self.title_text_command(title_color, stroke_color),
             # Put season/episode text
+            # TODO: The outline/text color should probably be inverted based on luminance
             *self.index_text_command,
             # Create and resize output
             *self.resize_output,
