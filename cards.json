@@ -14,29 +14,118 @@
                 "name": "Logo Inversion Toggle",
                 "identifier": "invert_logos",
                 "description": "Whether to invert logo colors when they are darker than the specified minimum luminance"
-            }, {
+            },
+            {
                 "name": "Minimum Title Luminance",
                 "identifier": "title_min_luminance",
                 "description": "Threshold under which logos will have their colors inverted - 0-255 for white-black"
-            }, {
+            },
+            {
                 "name": "Check Multiple Luminance Toggle",
                 "identifier": "check_multiple_luminances",
                 "description": "Whether to check all significant colors, or only the most common color"
-            }, {
+            },
+            {
                 "name": "Fallback Title Color",
                 "identifier": "default_title_color",
                 "description": "Title color to use when the minimum luminance is not reached"
-            }, {
+            },
+            {
                 "name": "Fallback Stroke Color",
                 "identifier": "default_title_stroke_color",
                 "description": "Stroke color to use when the minimum luminance is not reached"
-            }, {
+            },
+            {
                 "name": "Gradient Omission",
                 "identifier": "omit_gradient",
                 "description": "Whether to omit the gradient overlay"
             }
         ]
-    }, {
+    },
+    {
+        "name": "SciFi",
+        "identifier": "azuravian/SciFiTitleCard",
+        "description": [
+            "A multi-overlay card designed to look like a heads up display.",
+            "Intended for use in Science Fiction series."
+        ], "example": "https://raw.githubusercontent.com/azuravian/myimages/main/SciFiTitleCard/Example1.jpg",
+        "creators": ["Azuravian"],
+        "supports_custom_fonts": true,
+        "supports_custom_seasons": false,
+        "supported_extras": [
+            {
+                "name": "Trailing Underscore",
+                "identifier": "add_trailing_underscore",
+                "description": "Whether to add a trailing underscore (_) to the title text",
+                "tooltip": "Either <v>True</v> or <v>False</v>. Default is <v>True</v>."
+            },
+            {
+                "name": "Overlay Bottom Color",
+                "identifier": "overlay_bottom_color",
+                "description": "The color of the overlay's bottom layer",
+                "tooltip": "Defaults to <v>rgb(58, 255, 255)</v> (neon blue)."
+            },
+            {
+                "name": "Overlay Top Color",
+                "identifier": "overlay_top_color",
+                "description": "The color of overlay's top layer",
+                "tooltip":"Defaults to <v>rgb(255, 49, 255)</v> (hot pink)."
+            },
+            {
+                "name": "Overlay Middle Color",
+                "identifier": "overlay_middle_color",
+                "description": "The color of the overlay's middle layer",
+                "tooltip": "Defaults to <v>rgb(255, 255, 255)</v> (white)."
+            },
+            {
+                "name": "Overlay Rectangle Color",
+                "identifier": "overlay_rectangles_color",
+                "description": "The color of the overlay rectangles",
+                "tooltip": "Defaults to <v>rgb(102, 211, 122)</v> (neon green)."
+            },
+            {
+                "name": "Overlay Base Alpha",
+                "identifier": "overlay_base_alpha",
+                "description": "The transparency of the black surrounding layer",
+                "tooltip": "Value between <v>0.0</v> and <v>1.0</v>. Defaults to <v>1.0</v>."
+            },
+            {
+                "name": "Overlay Bottom Alpha",
+                "identifier": "overlay_bottom_alpha",
+                "description": "The transparency of the bottom layer",
+                "tooltip": "Value between <v>0.0</v> and <v>1.0</v>. Defaults to <v>0.6</v>."
+            },
+            {
+                "name": "Overlay Top Alpha",
+                "identifier": "overlay_top_alpha",
+                "description": "The transparency of the top layer",
+                "tooltip": "Value between <v>0.0</v> and <v>1.0</v>. Defaults to <v>0.6</v>."
+            },
+            {
+                "name": "Overlay Middle Alpha",
+                "identifier": "overlay_middle_alpha",
+                "description": "The transparency of the middle layer",
+                "tooltip": "Value between <v>0.0</v> and <v>1.0</v>. Defaults to <v>0.6</v>."
+            },
+            {
+                "name": "Overlay Rectangles Alpha",
+                "identifier": "overlay_rectangles_alpha",
+                "description": "The transparency of the overlay rectangles",
+                "tooltip": "Value between <v>0.0</v> and <v>1.0</v>. Defaults to <v>0.6</v>."
+            },
+            {
+                "name": "Episode Text Color",
+                "identifier": "episode_text_color",
+                "description": "The color of the episode text"
+            },
+            {
+                "name": "Text Stroke Color",
+                "identifier": "stroke_color",
+                "description": "The color of the text stroke"
+            }
+        ]
+    },
+    {
         "name": "Blacklist",
         "identifier": "CollinHeist/BlacklistTitleCard",
         "description": [
@@ -48,7 +137,8 @@
         "supports_custom_fonts": true,
         "supports_custom_seasons": false,
         "supported_extras": []
-    }, {
+    },
+    {
         "name": "White Text Broadcast",
         "identifier": "lyonza/WhiteTextBroadcast",
         "description": [
@@ -58,18 +148,20 @@
         "supports_custom_fonts": true,
         "supports_custom_seasons": false,
         "supported_extras": []
-    }, {
+    },
+    {
         "name": "Star Wars (Title Only)",
         "identifier": "Wdvh/StarWarsTitleOnly",
         "description": [
-            "A variation of the standard Star Wars Card for Shows Like Obi-Wan Kenobi that use Part/Chapter and similar as episode titles.",
+            "A variation of the standard Star Wars Card for Shows like Obi-Wan Kenobi that use Part/Chapter and similar as episode titles.",
             "This card also uses a modified star gradient so that more of the left side of the image is visible."
         ], "example": "https://user-images.githubusercontent.com/17693271/178131539-c7b55ced-b9ba-4564-8153-a998454e1742.jpg",
         "creators": ["Wdvh", "CollinHeist"],
         "supports_custom_fonts": false,
         "supports_custom_seasons": false,
         "supported_extras": []
-    }, {
+    },
+    {
         "name": "White Text Absolute",
         "identifier": "Wdvh/WhiteTextAbsolute",
         "description": [
@@ -80,7 +172,8 @@
         "supports_custom_fonts": false,
         "supports_custom_seasons": false,
         "supported_extras": []
-    }, {
+    },
+    {
         "name": "White Text Absolute (Logo Style)",
         "identifier": "Wdvh/WhiteTextAbsoluteLogo",
         "description": ["Placeholder description"],
@@ -95,7 +188,8 @@
                 "description": "Color to use for the card background"
             }
         ]
-    }, {
+    },
+    {
         "name": "White Text Standard",
         "identifier": "Wdvh/WhiteTextStandard",
         "description": [
@@ -112,7 +206,8 @@
                 "description": "Character to separate the season and episode text"
             }
         ]
-    }, {
+    },
+    {
         "name": "White Text Standard (Logo)",
         "identifier": "Wdvh/WhiteTextStandardLogo",
         "description": ["Placeholder description"],
@@ -125,13 +220,15 @@
                 "name": "Background Color",
                 "identifier": "background",
                 "description": "Color to use for the card background"
-            }, {
+            },
+            {
                 "name": "Separator Character",
                 "identifier": "separator",
                 "description": "Character to separate the season and episode text"
             }
         ]
-    }, {
+    },
+    {
         "name": "White Text Title Only",
         "identifier": "Wdvh/WhiteTextTitleOnly",
         "description": ["Placeholder description"],
@@ -140,7 +237,8 @@
         "supports_custom_fonts": true,
         "supports_custom_seasons": false,
         "supported_extras": []
-    }, {
+    },
+    {
         "name": "White Text Title Only (Logo)",
         "identifier": "Wdvh/WhiteTextTitleOnlyLogo",
         "description": ["Placeholder description"],
@@ -155,7 +253,8 @@
                 "description": "Color to use for the card background"
             }
         ]
-    }, {
+    },
+    {
         "name": "Retro",
         "identifier": "Yozora/RetroTitleCard",
         "description": [
@@ -169,14 +268,18 @@
             {
                 "name": "Black & White Override",
                 "identifier": "override_bw",
-                "description": "Override the Black & White modification - should be 'bw' or 'color'"
-            }, {
+                "description": "Override the Black & White modification",
+                "tooltip": "Either <v>bw</v>, or <v>color</v> to force the black and white or color effects."
+            },
+            {
                 "name": "Style Override",
                 "identifier": "override_style",
-                "description": "Override the play/rewind style - should be 'play' or 'rewind'"
+                "description": "Override the play/rewind style",
+                "tooltip": "Either <v>play</v> or <v>rewind</v> to force that respective style."
             }
         ]
-    }, {
+    },
+    {
         "name": "Slim",
         "identifier": "Yozora/SlimTitleCard",
         "description": [
@@ -189,7 +292,8 @@
             {
                 "name": "Gradient Omission",
                 "identifier": "omit_gradient",
-                "description": "Whether to omit the gradient overlay from this Card"
+                "description": "Whether to omit the gradient overlay from this Card",
+                "tooltip": "Either <v>True</v> or <v>False</v>. If <v>True</v>, text may appear less legible on brighter images."
             }
         ]
     }

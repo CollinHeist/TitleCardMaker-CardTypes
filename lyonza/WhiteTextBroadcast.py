@@ -5,7 +5,9 @@ from pydantic import Field, root_validator
 from app.schemas.base import BetterColor
 from app.schemas.card_type import BaseCardTypeCustomFontNoText
 
-from modules.BaseCardType import BaseCardType, ImageMagickCommands
+from modules.BaseCardType import (
+    BaseCardType, ImageMagickCommands, Extra, CardDescription
+)
 from modules.Debug import log
 from modules.RemoteFile import RemoteFile
 
@@ -15,6 +17,21 @@ class WhiteTextBroadcast(BaseCardType):
     "WhiteTextBroadcast" card to show SxxExx format instead of absolute
     numbering
     """
+
+    API_DETAILS =  CardDescription(
+        name='White Text Broadcast',
+        identifier='lyonza/WhiteTextBroadcast',
+        example='https://user-images.githubusercontent.com/1803189/171089736-f60a6ff2-0914-432a-a45d-145323d39c42.jpg',
+        creators=['lyonza', 'Wdvh', 'CollinHeist'],
+        source='remote',
+        supports_custom_fonts=True,
+        supports_custom_seasons=False,
+        supported_extras=[],
+        description=[
+            "Card based on Wdvh's White Text Absolute card, using the same "
+            'format, but has the season number included in the episode text.',
+        ]
+    )
 
     class CardModel(BaseCardTypeCustomFontNoText):
         title_text: str

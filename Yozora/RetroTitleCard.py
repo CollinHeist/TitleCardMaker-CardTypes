@@ -1,10 +1,12 @@
 from pathlib import Path
 from typing import Literal, Optional
 
-from pydantic import Field, root_validator
-from app.schemas.card_type import BaseCardTypeCustomFontNoText
+from pydantic import root_validator
 
-from modules.BaseCardType import BaseCardType, ImageMagickCommands
+from app.schemas.card_type import BaseCardTypeCustomFontNoText
+from modules.BaseCardType import (
+    BaseCardType, ImageMagickCommands, CardDescription
+)
 from modules.RemoteFile import RemoteFile
 
 
@@ -13,6 +15,22 @@ class RetroTitleCard(BaseCardType):
     This class describes a CardType designed by Yozora. This card type
     is retro-themed, and features either a Rewind/Play overlay.
     """
+
+    API_DETAILS = CardDescription(
+        name='Retro',
+        identifier='Yozora/RetroTitleCard',
+        example='https://camo.githubusercontent.com/bb6308801194ee20a369080a2d1830c19a63685fab304aa814f0faa1dded2caf/68747470733a2f2f692e6962622e636f2f30746e4a4a36502f537472616e6765722d5468696e67732d323031362d5330332d4530322e6a7067',
+        creators=['Yozora', 'CollinHeist'],
+        source='remote',
+        supports_custom_fonts=True,
+        supports_custom_seasons=False,
+        supported_extras=[],
+        description=[
+            'Card type featuring a VHS/Camcorder inspired overlay.',
+            "The 'Play' button can be set to 'Rewind' and the image "
+            'greyscaled when the item has been played.',
+        ]
+    )
 
     class CardModel(BaseCardTypeCustomFontNoText):
         title_text: str

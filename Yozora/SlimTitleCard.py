@@ -1,20 +1,37 @@
 from pathlib import Path
 from typing import Optional
 
-from pydantic import Field
 from app.schemas.card_type import BaseCardTypeCustomFontAllText
 
-from modules.BaseCardType import BaseCardType, ImageMagickCommands
+from modules.BaseCardType import (
+    BaseCardType, ImageMagickCommands, Extra, CardDescription
+)
 from modules.RemoteFile import RemoteFile
 from modules.Debug import log
 
 class SlimTitleCard(BaseCardType):
     """
-    ...
+    Card type closely following the Standard Title Card but with slimmed down
+    margins to save space.
     """
 
+    API_DETAILS = CardDescription(
+        name='Slim',
+        identifier='Yozora/SlimTitleCard',
+        example='https://camo.githubusercontent.com/8eb09f530888a23bc9279f26fff0d6ee0ea82f998137560f24f042bb9a0e4639/68747470733a2f2f63646e2e646973636f72646170702e636f6d2f6174746163686d656e74732f3937353130383033333533313231393937392f3937373631343933373435373330333630322f5330314530342e6a7067',
+        creators=['Yozora', 'CollinHeist'],
+        source='remote',
+        supports_custom_fonts=True,
+        supports_custom_seasons=True,
+        supported_extras=[],
+        description=[
+            'Card type closely following the Standard Title Card but with '
+            'slimmed down margins to save space.',
+        ]
+    )
+
     class CardModel(BaseCardTypeCustomFontAllText):
-        omit_gradient: bool = Field(default=False)
+        omit_gradient: bool = False
 
     """Directory where all reference files used by this card are stored"""
     REF_DIRECTORY = Path(__file__).parent.parent / 'ref'
