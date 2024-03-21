@@ -6,8 +6,14 @@ from app.schemas.card_type import BaseCardTypeCustomFontAllText
 from modules.BaseCardType import (
     BaseCardType, ImageMagickCommands, Extra, CardDescription
 )
-from modules.RemoteFile import RemoteFile
 from modules.Debug import log
+from modules.RemoteFile import RemoteFile
+from modules.Title import SplitCharacteristics
+
+if TYPE_CHECKING:
+    from app.models.preferences import Preferences
+    from modules.Font import Font
+
 
 class SlimTitleCard(BaseCardType):
     """
@@ -18,7 +24,13 @@ class SlimTitleCard(BaseCardType):
     API_DETAILS = CardDescription(
         name='Slim',
         identifier='Yozora/SlimTitleCard',
-        example='https://camo.githubusercontent.com/8eb09f530888a23bc9279f26fff0d6ee0ea82f998137560f24f042bb9a0e4639/68747470733a2f2f63646e2e646973636f72646170702e636f6d2f6174746163686d656e74732f3937353130383033333533313231393937392f3937373631343933373435373330333630322f5330314530342e6a7067',
+        example=(
+            'https://camo.githubusercontent.com/8eb09f530888a23bc9279f26fff0d'
+            '6ee0ea82f998137560f24f042bb9a0e4639/68747470733a2f2f63646e2e6469'
+            '73636f72646170702e636f6d2f6174746163686d656e74732f39373531303830'
+            '33333533313231393937392f3937373631343933373435373330333630322f53'
+            '30314530342e6a7067'
+        ),
         creators=['Yozora', 'CollinHeist'],
         source='remote',
         supports_custom_fonts=True,
@@ -37,10 +49,10 @@ class SlimTitleCard(BaseCardType):
     REF_DIRECTORY = Path(__file__).parent.parent / 'ref'
 
     """Characteristics for title splitting by this class"""
-    TITLE_CHARACTERISTICS = {
-        'max_line_width': 45,   # Character count to begin splitting titles
-        'max_line_count': 3,    # Maximum number of lines a title can take up
-        'top_heavy': False,     # This class uses bottom heavy titling
+    TITLE_CHARACTERISTICS: SplitCharacteristics = {
+        'max_line_width': 45,
+        'max_line_count': 3,
+        'style': 'bottom',
     }
 
     """Default font and text color for episode title text"""
@@ -93,7 +105,8 @@ class SlimTitleCard(BaseCardType):
             grayscale: bool = False,
             omit_gradient: bool = False,
             preferences: Optional['Preferences'] = None,
-            **unused) -> None:
+            **unused,
+        ) -> None:
         
         # Initialize the parent class - this sets up an ImageMagickInterface
         super().__init__(blur, grayscale, preferences=preferences)
@@ -121,13 +134,11 @@ class SlimTitleCard(BaseCardType):
         self.omit_gradient = omit_gradient
 
 
+    @property
     def __title_text_global_effects(self) -> ImageMagickCommands:
         """
         ImageMagick commands to implement the title text's global effects.
         Specifically the the font, kerning, fontsize, and center gravity.
-        
-        Returns:
-            List of ImageMagick commands.
         """
 
         font_size = 157.41 * self.font_size
@@ -144,12 +155,10 @@ class SlimTitleCard(BaseCardType):
         ]   
 
 
+    @property
     def __title_text_black_stroke(self) -> ImageMagickCommands:
         """
         ImageMagick commands to implement the title text's black stroke.
-        
-        Returns:
-            List of ImageMagick commands.
         """
 
         stroke_width = 1.0 * self.font_stroke_width
@@ -161,13 +170,11 @@ class SlimTitleCard(BaseCardType):
         ]
 
 
+    @property
     def __series_count_text_global_effects(self) -> ImageMagickCommands:
         """
         ImageMagick commands for global text effects applied to all series count
         text (season/episode count and dot).
-        
-        Returns:
-            List of ImageMagick commands.
         """
 
         return [
@@ -176,13 +183,11 @@ class SlimTitleCard(BaseCardType):
         ]
 
 
+    @property
     def __series_count_text_black_stroke(self) -> ImageMagickCommands:
         """
         ImageMagick commands for adding the necessary black stroke effects to
         series count text.
-        
-        Returns:
-            List of ImageMagick commands.
         """
 
         return [
@@ -220,8 +225,8 @@ class SlimTitleCard(BaseCardType):
         vertical_shift = 100 + self.font_vertical_shift
 
         return [
-            *self.__title_text_global_effects(),
-            *self.__title_text_black_stroke(),
+            *self.__title_text_global_effects,
+            *self.__title_text_black_stroke,
             f'-annotate +0+{vertical_shift} "{self.title_text}"',
             f'-fill "{self.font_color}"',
             f'-annotate +0+{vertical_shift} "{self.title_text}"',
@@ -242,10 +247,10 @@ class SlimTitleCard(BaseCardType):
 
         if self.hide_season_text:
             return [
-                *self.__series_count_text_global_effects(),
+                *self.__series_count_text_global_effects,
                 f'-font "{self.EPISODE_COUNT_FONT}"',
                 f'-gravity center',
-                *self.__series_count_text_black_stroke(),
+                *self.__series_count_text_black_stroke,
                 f'-annotate +0+697.2 "{self.episode_text}"',
                 *self.__series_count_text_effects(),
                 f'-annotate +0+697.2 "{self.episode_text}"',
@@ -253,10 +258,10 @@ class SlimTitleCard(BaseCardType):
         
         if self.hide_episode_text:
             return [
-                *self.__series_count_text_global_effects(),
+                *self.__series_count_text_global_effects,
                 f'-font "{self.SEASON_COUNT_FONT}"',
                 f'-gravity center',
-                *self.__series_count_text_black_stroke(),
+                *self.__series_count_text_black_stroke,
                 f'-annotate +0+697.2 "{self.season_text}"',
                 *self.__series_count_text_effects(),
                 f'-annotate +0+697.2 "{self.season_text}"',
@@ -267,8 +272,8 @@ class SlimTitleCard(BaseCardType):
             f'+interword-spacing',
             f'-gravity south',
             f'\(',
-            *self.__series_count_text_global_effects(),
-            *self.__series_count_text_black_stroke(),
+            *self.__series_count_text_global_effects,
+            *self.__series_count_text_black_stroke,
             f'-font "{self.SEASON_COUNT_FONT}"',
             f'label:"{self.season_text}"',
             f'label:"• "',
@@ -279,7 +284,7 @@ class SlimTitleCard(BaseCardType):
             f'-composite',
 
             f'\(',
-            *self.__series_count_text_global_effects(),
+            *self.__series_count_text_global_effects,
             *self.__series_count_text_effects(),
             f'-font "{self.SEASON_COUNT_FONT}"',
             f'label:"{self.season_text}"',
@@ -317,7 +322,9 @@ class SlimTitleCard(BaseCardType):
 
     @staticmethod
     def is_custom_season_titles(
-            custom_episode_map: bool, episode_text_format: str) -> bool:
+            custom_episode_map: bool,
+            episode_text_format: str,
+        ) -> bool:
         """
         Determines whether the given attributes constitute custom or
         generic season titles.
