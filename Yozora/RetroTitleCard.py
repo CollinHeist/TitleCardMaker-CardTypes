@@ -8,7 +8,14 @@ from modules.BaseCardType import (
     BaseCardType, ImageMagickCommands, CardDescription
 )
 from modules.RemoteFile import RemoteFile
+from modules.Title import SplitCharacteristics
 
+if TYPE_CHECKING:
+    from app.models.preferences import Preferences
+    from modules.Font import Font
+
+OverrideBw = Literal['bw', 'color']
+OverrideStyle = Literal['rewind', 'play']
 
 class RetroTitleCard(BaseCardType):
     """
@@ -19,7 +26,12 @@ class RetroTitleCard(BaseCardType):
     API_DETAILS = CardDescription(
         name='Retro',
         identifier='Yozora/RetroTitleCard',
-        example='https://camo.githubusercontent.com/bb6308801194ee20a369080a2d1830c19a63685fab304aa814f0faa1dded2caf/68747470733a2f2f692e6962622e636f2f30746e4a4a36502f537472616e6765722d5468696e67732d323031362d5330332d4530322e6a7067',
+        example=(
+            'https://camo.githubusercontent.com/bb6308801194ee20a369080'
+            'a2d1830c19a63685fab304aa814f0faa1dded2caf/68747470733a2f2f'
+            '692e6962622e636f2f30746e4a4a36502f537472616e6765722d546869'
+            '6e67732d323031362d5330332d4530322e6a7067'
+        ),
         creators=['Yozora', 'CollinHeist'],
         source='remote',
         supports_custom_fonts=True,
@@ -37,8 +49,8 @@ class RetroTitleCard(BaseCardType):
         episode_text: str
         hide_episode_text: bool = False
         watched: bool = True
-        override_bw: Optional[Literal['bw', 'color']] = None
-        override_style: Optional[Literal['rewind', 'play']] = None
+        override_bw: Optional[OverrideBw] = None
+        override_style: Optional[OverrideStyle] = None
 
         @root_validator
         def toggle_text_hiding(cls, values):
@@ -50,10 +62,10 @@ class RetroTitleCard(BaseCardType):
     REF_DIRECTORY = Path(__file__).parent.parent / 'ref' / 'retro'
 
     """Characteristics for title splitting by this class"""
-    TITLE_CHARACTERISTICS = {
-        'max_line_width': 32,   # Character count to begin splitting titles
-        'max_line_count': 3,    # Maximum number of lines a title can take up
-        'top_heavy': False,     # This class uses bottom heavy titling
+    TITLE_CHARACTERISTICS: SplitCharacteristics = {
+        'max_line_width': 32,
+        'max_line_count': 3,
+        'style': 'bottom',
     }
 
     """Default font characteristics for the title text"""
@@ -104,9 +116,9 @@ class RetroTitleCard(BaseCardType):
             watched: bool = True,
             blur: bool = False,
             grayscale: bool = False,
-            override_bw: Optional[Literal['bw', 'color']] = None,
-            override_style: Optional[Literal['rewind', 'play']] = None,
-            preferences: Optional['Preferences'] = None, # type: ignore
+            override_bw: Optional[OverrideBw] = None,
+            override_style: Optional[OverrideStyle] = None,
+            preferences: Optional['Preferences'] = None,
             **unused,
         ) -> None:
         
@@ -137,12 +149,7 @@ class RetroTitleCard(BaseCardType):
 
     @property
     def add_gradient_commands(self) -> ImageMagickCommands:
-        """
-        Add the static gradient to this object's source image.
-        
-        Returns:
-            Path to the created image.
-        """
+        """Add the static gradient to this object's source image."""
         
         # Select gradient overlay based on override/watch status
         if self.override_style == 'rewind':
@@ -173,12 +180,7 @@ class RetroTitleCard(BaseCardType):
 
     @property
     def title_text_commands(self) -> ImageMagickCommands:
-        """
-        Adds episode title text to the provide image.
-        
-        Returns:
-            List of ImageMagick commands.
-        """
+        """Adds episode title text to the provide image."""
 
         font_size = 150 * self.font_size
         interline_spacing = -17 + self.font_interline_spacing
@@ -204,12 +206,7 @@ class RetroTitleCard(BaseCardType):
 
     @property
     def index_text_commands(self) -> ImageMagickCommands:
-        """
-        Adds the series count text.
-        
-        Returns:
-            List of ImageMagick commands
-        """
+        """Adds the series count text."""
 
         if self.hide_episode_text:
             return []
@@ -232,7 +229,7 @@ class RetroTitleCard(BaseCardType):
 
 
     @staticmethod
-    def is_custom_font(font: 'Font') -> bool: # type: ignore
+    def is_custom_font(font: 'Font') -> bool:
         """
         Determines whether the given font characteristics constitute a
         default or custom font.
