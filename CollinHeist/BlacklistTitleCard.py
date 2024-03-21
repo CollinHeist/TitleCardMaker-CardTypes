@@ -8,6 +8,11 @@ from app.schemas.card_type import BaseCardModel
 from modules.BaseCardType import BaseCardType, CardDescription
 from modules.Debug import log
 from modules.RemoteFile import RemoteFile
+from modules.Title import SplitCharacteristics
+
+if TYPE_CHECKING:
+    from app.models.preferences import Preferences
+    from modules.Font import Font
 
 
 class BlacklistTitleCard(BaseCardType):
@@ -51,10 +56,10 @@ class BlacklistTitleCard(BaseCardType):
             return values
 
     """Characteristics for title splitting by this class"""
-    TITLE_CHARACTERISTICS = {
+    TITLE_CHARACTERISTICS: SplitCharacteristics = {
         'max_line_width': 15,
         'max_line_count': 4,
-        'top_heavy': True,
+        'style': 'top',
     }
 
     """How to name archive directories for this type of card"""
@@ -91,7 +96,7 @@ class BlacklistTitleCard(BaseCardType):
             font_vertical_shift: int = 0.0,
             blur: bool = False,
             grayscale: bool = False,
-            preferences: Optional['Preferences'] = None, # type: ignore
+            preferences: Optional['Preferences'] = None,
             **unused,
         ) -> None:
         """
