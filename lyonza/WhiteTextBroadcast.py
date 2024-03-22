@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 
 from pydantic import Field, root_validator
 from app.schemas.base import BetterColor
@@ -120,7 +120,6 @@ class WhiteTextBroadcast(BaseCardType):
         ) -> None:
         """Initialize this card"""
         
-        # Initialize the parent class - this sets up an ImageMagickInterface
         super().__init__(blur, grayscale, preferences=preferences)
 
         self.source_file = source_file

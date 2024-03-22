@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Literal, Optional
+from typing import Literal, Optional, TYPE_CHECKING
 
 from pydantic import root_validator
 
@@ -14,8 +14,10 @@ if TYPE_CHECKING:
     from app.models.preferences import Preferences
     from modules.Font import Font
 
+
 OverrideBw = Literal['bw', 'color']
 OverrideStyle = Literal['rewind', 'play']
+
 
 class RetroTitleCard(BaseCardType):
     """

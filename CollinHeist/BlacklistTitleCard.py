@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 
 from pydantic import FilePath, PositiveFloat, constr, root_validator
 from app.schemas.base import BetterColor
@@ -25,7 +25,10 @@ class BlacklistTitleCard(BaseCardType):
     API_DETAILS =  CardDescription(
         name='Blacklist',
         identifier='CollinHeist/BlacklistTitleCard',
-        example='https://user-images.githubusercontent.com/17693271/216839561-ec4a1c27-dcdc-4869-87dd-8d592a26aee2.jpg',
+        example=(
+            'https://user-images.githubusercontent.com/17693271/'
+            '216839561-ec4a1c27-dcdc-4869-87dd-8d592a26aee2.jpg'
+        ),
         creators=['CollinHeist'],
         source='remote',
         supports_custom_fonts=True,
@@ -103,7 +106,6 @@ class BlacklistTitleCard(BaseCardType):
         Construct a new instance of this Card.
         """
 
-        # Initialize the parent class - this sets up an ImageMagickInterface
         super().__init__(blur, grayscale, preferences=preferences)
 
         # Store source and output file

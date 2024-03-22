@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 
 from pydantic import FilePath
 from app.schemas.base import BetterColor
@@ -10,16 +10,21 @@ from modules.BaseCardType import (
 )
 from modules.RemoteFile import RemoteFile
 
+if TYPE_CHECKING:
+    from app.models.preferences import Preferences
+    from modules.Font import Font
+
 
 class WhiteTextStandard(BaseCardType):
-    """
-    WDVH's WhiteTextStandard card type.
-    """
+    """WDVH's WhiteTextStandard card type."""
 
     API_DETAILS =  CardDescription(
         name='White Text Standard',
         identifier='Wdvh/WhiteTextStandard',
-        example='https://user-images.githubusercontent.com/17693271/169709359-ffc9e109-b327-44e9-b78a-7276f77fe917.jpg',
+        example=(
+            'https://user-images.githubusercontent.com/17693271/'
+            '169709359-ffc9e109-b327-44e9-b78a-7276f77fe917.jpg'
+        ),
         creators=['Wdvh', 'CollinHeist'],
         source='remote',
         supports_custom_fonts=True,
@@ -94,12 +99,11 @@ class WhiteTextStandard(BaseCardType):
             blur: bool = False,
             grayscale: bool = False,
             separator: str = '•',
-            preferences: Optional['Preferences'] = None, # type: ignore
+            preferences: Optional['Preferences'] = None,
             **unused,
         ) -> None:
         """Initialize this CardType object."""
-        
-        # Initialize the parent class - this sets up an ImageMagickInterface
+
         super().__init__(blur, grayscale, preferences=preferences)
 
         self.source_file = source_file
@@ -120,18 +124,12 @@ class WhiteTextStandard(BaseCardType):
         self.title_color = font_color
         self.vertical_shift = font_vertical_shift
 
-        # Extras
         self.separator = separator
 
 
     @property
-    def title_text_commands(self) -> list[ImageMagickCommands]:
-        """
-        ImageMagick commands to add title text.
-
-        Returns:
-            List of ImageMagick commands.
-        """
+    def title_text_commands(self) -> ImageMagickCommands:
+        """ImageMagick commands to add title text."""
 
         font_size = 180 * self.font_size
         interline_spacing = -70 + self.interline_spacing
@@ -159,13 +157,10 @@ class WhiteTextStandard(BaseCardType):
 
 
     @property
-    def index_text_commands(self) -> list[ImageMagickCommands]:
+    def index_text_commands(self) -> ImageMagickCommands:
         """
         Get the ImageMagick commands required to add the index (season
         and episode) text to the image.
-
-        Returns:
-            List of ImageMagick commands.
         """
 
         # All text is hidden, return empty commands
@@ -200,7 +195,7 @@ class WhiteTextStandard(BaseCardType):
 
 
     @staticmethod
-    def is_custom_font(font: 'Font') -> bool: # type: ignore
+    def is_custom_font(font: 'Font') -> bool:
         """
         Determines whether the given font characteristics constitute a
         default or custom font.
@@ -247,8 +242,8 @@ class WhiteTextStandard(BaseCardType):
 
     def create(self) -> None:
         """
-        Make the necessary ImageMagick and system calls to create this object's
-        defined title card.
+        Make the necessary ImageMagick and system calls to create this
+        object's defined title card.
         """
 
         command = ' '.join([

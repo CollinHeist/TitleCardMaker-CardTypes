@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Literal, Optional
+from typing import Literal, Optional, TYPE_CHECKING
 
 from pydantic import constr
 
@@ -8,6 +8,10 @@ from app.schemas.card_type import BaseCardTypeCustomFontNoText
 from modules.BaseCardType import BaseCardType, CardDescription
 from modules.Debug import log
 from modules.RemoteFile import RemoteFile
+
+if TYPE_CHECKING:
+    from app.models.preferences import Preferences
+    from modules.Font import Font
 
 
 class StarWarsTitleOnly(BaseCardType):
@@ -19,7 +23,10 @@ class StarWarsTitleOnly(BaseCardType):
     API_DETAILS = CardDescription(
         name='Star Wars (Title Only)',
         identifier='Wdvh/StarWarsTitleOnly',
-        example='https://user-images.githubusercontent.com/17693271/178131539-c7b55ced-b9ba-4564-8153-a998454e1742.jpg',
+        example=(
+            'https://user-images.githubusercontent.com/17693271/'
+            '178131539-c7b55ced-b9ba-4564-8153-a998454e1742.jpg'
+        ),
         creators=['Wdvh', 'CollinHeist'],
         source='remote',
         supports_custom_fonts=False,
@@ -77,26 +84,21 @@ class StarWarsTitleOnly(BaseCardType):
             title_text: str,
             blur: bool = False,
             grayscale: bool = False,
-            preferences: Optional['Preferences'] = None, # type: ignore
+            preferences: Optional['Preferences'] = None,
             **unused,
         ) -> None:
-        """
-        Initialize this CardType object.
-        """
+        """Initialize this CardType object."""
         
-        # Initialize the parent class - this sets up an ImageMagickInterface
         super().__init__(blur, grayscale, preferences=preferences)
 
-        # Store source and output file
         self.source_file = source_file
         self.output_file = card_file
 
-        # Store episode title
         self.title = self.image_magick.escape_chars(title_text)
 
 
     @staticmethod
-    def is_custom_font(font: 'Font') -> Literal[False]: # type: ignore
+    def is_custom_font(font: 'Font') -> Literal[False]:
         """
         Determines whether the given font characteristics constitute a
         default or custom font.

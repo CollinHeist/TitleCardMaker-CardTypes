@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 
 from pydantic import FilePath, PositiveFloat, constr, root_validator
 from app.schemas.base import BetterColor
@@ -26,7 +26,10 @@ class SciFiTitleCard(BaseCardType):
     API_DETAILS = CardDescription(
         name='SciFi',
         identifier='azuravian/SciFiTitleCard',
-        example='https://raw.githubusercontent.com/azuravian/myimages/main/SciFiTitleCard/Example1.jpg',
+        example=(
+            'https://raw.githubusercontent.com/azuravian/myimages/main/'
+            'SciFiTitleCard/Example1.jpg'
+        ),
         creators=['Azuravian'],
         source='remote',
         supports_custom_fonts=True,

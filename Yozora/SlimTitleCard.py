@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 
 from app.schemas.card_type import BaseCardTypeCustomFontAllText
 

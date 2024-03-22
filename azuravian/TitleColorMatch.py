@@ -1,6 +1,6 @@
 from pathlib import Path
 from re import compile as re_compile, findall
-from typing import Literal, Optional, Union
+from typing import Literal, Optional, TYPE_CHECKING, Union
 
 from pydantic import FilePath
 
@@ -11,6 +11,11 @@ from modules.BaseCardType import (
 )
 from modules.Debug import log
 from modules.RemoteFile import RemoteFile
+
+if TYPE_CHECKING:
+    from app.models.preferences import Preferences
+    from modules.Font import Font
+
 
 class TitleColorMatch(BaseCardType):
     """
@@ -24,7 +29,10 @@ class TitleColorMatch(BaseCardType):
     API_DETAILS =  CardDescription(
         name='Title Color Match',
         identifier='azuravian/TitleColorMatch',
-        example='https://user-images.githubusercontent.com/7379812/187586521-353ba09f-30a8-424b-bbf3-ee9036c9e638.jpg',
+        example=(
+            'https://user-images.githubusercontent.com/7379812/'
+            '187586521-353ba09f-30a8-424b-bbf3-ee9036c9e638.jpg'
+        ),
         creators=['Azuravian', 'Beedman', 'CollinHeist'],
         source='remote',
         supports_custom_fonts=True,
@@ -104,7 +112,7 @@ class TitleColorMatch(BaseCardType):
             font_vertical_shift: int = 0,
             blur: bool = False,
             grayscale: bool = False,
-            preferences: Optional['Preferences'] = None, # type: ignore
+            preferences: Optional['Preferences'] = None,
             **unused,
         ) -> None:
         """
@@ -136,13 +144,7 @@ class TitleColorMatch(BaseCardType):
 
     @property
     def logo_command(self) -> ImageMagickCommands:
-        """
-        Get the ImageMagick commands to add the resized logo to the
-        source image.
-
-        Returns:
-            List of ImageMagick commands.
-        """
+        """ImageMagick commands to add the resized logo to the image."""
 
         return [
             # Resize logo
@@ -166,9 +168,6 @@ class TitleColorMatch(BaseCardType):
         ImageMagick commands to implement the title text's global
         effects. Specifically the the font, kerning, fontsize, and
         center gravity.
-
-        Returns:
-            List of ImageMagick commands.
         """
 
         # Get the title color and stroke for this logo
@@ -206,7 +205,7 @@ class TitleColorMatch(BaseCardType):
         """
 
         # If auto color wasn't indicated use indicated color and black stroke
-        if str(self.font_color) != 'auto':
+        if self.font_color != 'auto':
             return self.font_color, 'black'
 
         # Command to get histogram of the colors in logo image
@@ -263,11 +262,8 @@ class TitleColorMatch(BaseCardType):
     @property
     def index_text_command(self) -> ImageMagickCommands:
         """
-        Get the ImageMagick commands required to add the index (season
-        and episode) text to the image.
-
-        Returns:
-            List of ImageMagick commands.
+        ImageMagick commands required to add the index (season and
+        episode) text to the image.
         """
 
         # Season hiding, just add episode text
@@ -286,6 +282,7 @@ class TitleColorMatch(BaseCardType):
                 f'-strokewidth 0.75',
                 f'-annotate +50+50 "{self.episode_text}"',
             ]
+
         # Episode hiding, just add season text
         if self.hide_episode_text:
             return [
@@ -336,7 +333,7 @@ class TitleColorMatch(BaseCardType):
 
 
     @staticmethod
-    def is_custom_font(font: 'Font') -> bool: # type: ignore
+    def is_custom_font(font: 'Font') -> bool:
         """
         Determines whether the given arguments represent a custom font
         for this card.
@@ -364,7 +361,7 @@ class TitleColorMatch(BaseCardType):
             episode_text_format: str,
         ) -> bool:
         """
-         Determines whether the given attributes constitute custom or
+        Determines whether the given attributes constitute custom or
         generic season titles.
 
         Args:
