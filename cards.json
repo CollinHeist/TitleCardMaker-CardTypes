@@ -9,7 +9,8 @@
         "creators": ["Azuravian", "Beedman", "CollinHeist"],
         "supports_custom_fonts": true,
         "supports_custom_seasons": true,
-        "supported_extras": []
+        "supported_extras": [],
+        "hash": "fa0d18e9e33745314936aa506d7b623b"
     },
     {
         "name": "SciFi",
@@ -92,7 +93,8 @@
                 "identifier": "stroke_color",
                 "description": "The color of the text stroke"
             }
-        ]
+        ],
+        "hash": "a4b09099c9920d2a953478cd1fd79936"
     },
     {
         "name": "Blacklist",
@@ -105,7 +107,8 @@
         "creators": ["CollinHeist"],
         "supports_custom_fonts": true,
         "supports_custom_seasons": false,
-        "supported_extras": []
+        "supported_extras": [],
+        "hash": "96429429956e263f33cf38318384e28e"
     },
     {
         "name": "White Text Broadcast",
@@ -116,7 +119,8 @@
         "creators": ["lyonza", "Wdvh", "CollinHeist"],
         "supports_custom_fonts": true,
         "supports_custom_seasons": false,
-        "supported_extras": []
+        "supported_extras": [],
+        "hash": "58bd4af4909d6601450abaf289934c48"
     },
     {
         "name": "Star Wars (Title Only)",
@@ -128,7 +132,8 @@
         "creators": ["Wdvh", "CollinHeist"],
         "supports_custom_fonts": false,
         "supports_custom_seasons": false,
-        "supported_extras": []
+        "supported_extras": [],
+        "hash": "26f3689ace10c315511972211885c90c"
     },
     {
         "name": "White Text Absolute",
@@ -140,7 +145,8 @@
         "creators": ["Wdvh", "CollinHeist"],
         "supports_custom_fonts": false,
         "supports_custom_seasons": false,
-        "supported_extras": []
+        "supported_extras": [],
+        "hash": "255c4d01139dd8aed9c347afcdfef45f"
     },
     {
         "name": "White Text Absolute (Logo Style)",
@@ -156,7 +162,8 @@
                 "identifier": "background",
                 "description": "Color to use for the card background"
             }
-        ]
+        ],
+        "hash": "3c2e7ca9b39554a4a9a1db295ffac875"
     },
     {
         "name": "White Text Standard",
@@ -174,7 +181,8 @@
                 "identifier": "separator",
                 "description": "Character to separate the season and episode text"
             }
-        ]
+        ],
+        "hash": "3159f81706f639f96ad32e8da719b174"
     },
     {
         "name": "White Text Standard (Logo)",
@@ -195,7 +203,8 @@
                 "identifier": "separator",
                 "description": "Character to separate the season and episode text"
             }
-        ]
+        ],
+        "hash": "d69c578bf0b736d46b596cc9ba71c8f9"
     },
     {
         "name": "White Text Title Only",
@@ -205,7 +214,8 @@
         "creators": ["Wdvh", "CollinHeist"],
         "supports_custom_fonts": true,
         "supports_custom_seasons": false,
-        "supported_extras": []
+        "supported_extras": [],
+        "hash": "456e360155572436f7f9d43271457eea"
     },
     {
         "name": "White Text Title Only (Logo)",
@@ -221,7 +231,8 @@
                 "identifier": "background",
                 "description": "Color to use for the card background"
             }
-        ]
+        ],
+        "hash": "1897d497617b22d07aae0f9e47a5ddcf"
     },
     {
         "name": "Retro",
@@ -229,7 +240,8 @@
         "description": [
             "Card type featuring a VHS/Camcorder inspired overlay.",
             "The 'Play' button can be set to 'Rewind' and the image greyscaled when the item has been played."
-        ], "example": "https://camo.githubusercontent.com/bb6308801194ee20a369080a2d1830c19a63685fab304aa814f0faa1dded2caf/68747470733a2f2f692e6962622e636f2f30746e4a4a36502f537472616e6765722d5468696e67732d323031362d5330332d4530322e6a7067",
+        ],
+        "example": "https://camo.githubusercontent.com/bb6308801194ee20a369080a2d1830c19a63685fab304aa814f0faa1dded2caf/68747470733a2f2f692e6962622e636f2f30746e4a4a36502f537472616e6765722d5468696e67732d323031362d5330332d4530322e6a7067",
         "creators": ["Yozora", "CollinHeist"],
         "supports_custom_fonts": true,
         "supports_custom_seasons": false,
@@ -246,14 +258,16 @@
                 "description": "Override the play/rewind style",
                 "tooltip": "Either <v>play</v> or <v>rewind</v> to force that respective style."
             }
-        ]
+        ],
+        "hash": "d00ba92d5d77db575ede6c3b26343c67"
     },
     {
         "name": "Slim",
         "identifier": "Yozora/SlimTitleCard",
         "description": [
             "Card type closely following the Standard Title Card but with slimmed down margins to save space."
-        ], "example": "https://camo.githubusercontent.com/8eb09f530888a23bc9279f26fff0d6ee0ea82f998137560f24f042bb9a0e4639/68747470733a2f2f63646e2e646973636f72646170702e636f6d2f6174746163686d656e74732f3937353130383033333533313231393937392f3937373631343933373435373330333630322f5330314530342e6a7067",
+        ],
+        "example": "https://camo.githubusercontent.com/8eb09f530888a23bc9279f26fff0d6ee0ea82f998137560f24f042bb9a0e4639/68747470733a2f2f63646e2e646973636f72646170702e636f6d2f6174746163686d656e74732f3937353130383033333533313231393937392f3937373631343933373435373330333630322f5330314530342e6a7067",
         "creators": ["Yozora", "CollinHeist"],
         "supports_custom_fonts": true,
         "supports_custom_seasons": true,
@@ -264,6 +278,7 @@
                 "description": "Whether to omit the gradient overlay from this Card",
                 "tooltip": "Either <v>True</v> or <v>False</v>. If <v>True</v>, text may appear less legible on brighter images."
             }
-        ]
+        ],
+        "hash": "dc82c2facf02987a2becc6961a23fe9c"
     }
 ]
