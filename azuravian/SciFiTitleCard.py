@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 
 from pydantic import FilePath, PositiveFloat, constr, root_validator
 from app.schemas.base import BetterColor
@@ -10,6 +10,11 @@ from modules.BaseCardType import (
 )
 from modules.Debug import log
 from modules.RemoteFile import RemoteFile
+from modules.Title import SplitCharacteristics
+
+if TYPE_CHECKING:
+    from app.models.preferences import Preferences
+    from modules.Font import Font
 
 
 class SciFiTitleCard(BaseCardType):
@@ -21,7 +26,10 @@ class SciFiTitleCard(BaseCardType):
     API_DETAILS = CardDescription(
         name='SciFi',
         identifier='azuravian/SciFiTitleCard',
-        example='https://raw.githubusercontent.com/azuravian/myimages/main/SciFiTitleCard/Example1.jpg',
+        example=(
+            'https://raw.githubusercontent.com/azuravian/myimages/main/'
+            'SciFiTitleCard/Example1.jpg'
+        ),
         creators=['Azuravian'],
         source='remote',
         supports_custom_fonts=True,
@@ -62,10 +70,10 @@ class SciFiTitleCard(BaseCardType):
     REF_DIRECTORY = Path(__file__).parent.parent / 'azuravian' / 'ref' / 'SciFi'
 
     """Characteristics for title splitting by this class"""
-    TITLE_CHARACTERISTICS = {
-        'max_line_width': 20,   # Character count to begin splitting titles
-        'max_line_count': 3,    # Maximum number of lines a title can take up
-        'top_heavy': False,      # This class uses bottom heavy titling
+    TITLE_CHARACTERISTICS: SplitCharacteristics = {
+        'max_line_width': 20,
+        'max_line_count': 3,
+        'style': 'bottom',
     }
 
     """Characteristics of the default title font"""
@@ -132,12 +140,10 @@ class SciFiTitleCard(BaseCardType):
             overlay_rectangles_alpha: float = 0.6,
             episode_text_color: str = TITLE_COLOR,
             stroke_color: str = STROKE_COLOR,
-            preferences: Optional['Preferences'] = None, # type: ignore
+            preferences: Optional['Preferences'] = None,
             **unused,
         ) -> None:
-        """
-        Initialize the CardType object.
-        """
+        """Initialize the CardType object."""
 
         # Initialize the parent class - this sets up an ImageMagickInterface
         super().__init__(blur, grayscale, preferences=preferences)
@@ -182,9 +188,6 @@ class SciFiTitleCard(BaseCardType):
         ImageMagick commands to implement the title text's global
         effects. Specifically the the font, kerning, fontsize, and
         center gravity.
-
-        Returns:
-            List of ImageMagick commands.
         """
 
         title_text = (
@@ -217,9 +220,6 @@ class SciFiTitleCard(BaseCardType):
         """
         Get the ImageMagick commands required to add the index (season
         and episode) text to the image.
-
-        Returns:
-            List of ImageMagick commands.
         """
 
         # All text is hidden, return 
@@ -240,28 +240,7 @@ class SciFiTitleCard(BaseCardType):
 
 
     @staticmethod
-    def modify_extras(
-            extras: dict,
-            custom_font: bool,
-            custom_season_titles: bool,
-        ) -> None:
-        """
-        Modify the given extras based on whether font or season titles
-        are custom.
-
-        Args:
-            extras: Dictionary to modify.
-            custom_font: Whether the font are custom.
-            custom_season_titles: Whether the season titles are custom.
-        """
-
-        # Generic font, reset episode text and box colors
-        # TODO
-        ...
-
-
-    @staticmethod
-    def is_custom_font(font: 'Font') -> bool: # type: ignore
+    def is_custom_font(font: 'Font') -> bool:
         """
         Determines whether the given arguments represent a custom font
         for this card.

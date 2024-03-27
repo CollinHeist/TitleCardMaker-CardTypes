@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 
 from pydantic import Field, root_validator
 from app.schemas.base import BetterColor
@@ -10,6 +10,12 @@ from modules.BaseCardType import (
 )
 from modules.Debug import log
 from modules.RemoteFile import RemoteFile
+from modules.Title import SplitCharacteristics
+
+if TYPE_CHECKING:
+    from app.models.preferences import Preferences
+    from modules.Font import Font
+
 
 class WhiteTextBroadcast(BaseCardType):
     """
@@ -21,7 +27,10 @@ class WhiteTextBroadcast(BaseCardType):
     API_DETAILS =  CardDescription(
         name='White Text Broadcast',
         identifier='lyonza/WhiteTextBroadcast',
-        example='https://user-images.githubusercontent.com/1803189/171089736-f60a6ff2-0914-432a-a45d-145323d39c42.jpg',
+        example=(
+            'https://user-images.githubusercontent.com/1803189/171089736-'
+            'f60a6ff2-0914-432a-a45d-145323d39c42.jpg'
+        ),
         creators=['lyonza', 'Wdvh', 'CollinHeist'],
         source='remote',
         supports_custom_fonts=True,
@@ -50,10 +59,10 @@ class WhiteTextBroadcast(BaseCardType):
     REF_DIRECTORY = Path(__file__).parent.parent / 'ref'
 
     """Characteristics for title splitting by this class"""
-    TITLE_CHARACTERISTICS = {
-        'max_line_width': 32,   # Character count to begin splitting titles
-        'max_line_count': 3,    # Maximum number of lines a title can take up
-        'top_heavy': False,     # This class uses bottom heavy titling
+    TITLE_CHARACTERISTICS: SplitCharacteristics = {
+        'max_line_width': 32,
+        'max_line_count': 3,
+        'style': 'bottom',
     }
 
     """Default font and text color for episode title text"""
@@ -107,9 +116,10 @@ class WhiteTextBroadcast(BaseCardType):
             episode_text_color: str = SERIES_COUNT_TEXT_COLOR,
             omit_gradient: bool = False,
             preferences: Optional['Preferences'] = None,
-            **unused) -> None:
+            **unused,
+        ) -> None:
+        """Initialize this card"""
         
-        # Initialize the parent class - this sets up an ImageMagickInterface
         super().__init__(blur, grayscale, preferences=preferences)
 
         self.source_file = source_file
@@ -134,9 +144,7 @@ class WhiteTextBroadcast(BaseCardType):
 
     @property
     def title_text_command(self) -> ImageMagickCommands:
-        """
-        Add episode title text to the provide image.
-        """
+        """Add episode title text to the provide image."""
 
         font_size = 180 * self.font_size
         interline_spacing = -17 + self.font_interline_spacing
@@ -165,9 +173,7 @@ class WhiteTextBroadcast(BaseCardType):
 
     @property
     def index_text_command(self) -> ImageMagickCommands:
-        """
-        Adds the series count text without season title/number.
-        """
+        """Adds the series count text without season title/number."""
 
         if self.hide_episode_text:
             return []
@@ -217,7 +223,9 @@ class WhiteTextBroadcast(BaseCardType):
 
     @staticmethod
     def is_custom_season_titles(
-            custom_episode_map: bool, episode_text_format: str) -> bool:
+            custom_episode_map: bool,
+            episode_text_format: str,
+        ) -> bool:
         """
         Determines whether the given attributes constitute custom or
         generic season titles.
