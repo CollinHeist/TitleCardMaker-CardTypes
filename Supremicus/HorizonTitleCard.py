@@ -50,47 +50,47 @@ class HorizonTitleCard(BaseCardType):
             Extra(
                 name='Stroke Text Color',
                 identifier='stroke_color',
-                description='Color to use for the episode & title text stroke.',
+                description='Color to use for the episode & title text stroke',
                 tooltip='Default is <c>black</c>.'
             ),
             Extra(
                 name='Separator Character',
                 identifier='separator',
-                description='Character to separate season and episode text.',
+                description='Character to separate season and episode text',
                 tooltip='Default is <v>•</v>.'
             ),
             Extra(
                 name='Horizontal Alignment',
                 identifier='h_align',
-                description='Horizontal alignment of text and symbol.',
+                description='Horizontal alignment of the text and symbol',
                 tooltip='Either <v>left</v> or <v>right</v>. Default is <v>left</v>.'
             ),
             Extra(
                 name='Symbol',
                 identifier='symbol',
-                description='Add a custom symbol.',
+                description='Add a custom symbol behind the text',
                 tooltip=(
-                    '<b>Built-in symbols</b>: <v>acolyte</v>, <v>ahsoka</v>, <v>andor</v>,'
-                    ' <v>bobafett</v>, <v>mandalorian</v>, <v>obiwan</v>, <v>witcher</v>.<br>'
-                    '<b>Custom</b>: <v>logo</v>. Files > Logo > Upload. '
+                    'Either <v>acolyte</v>, <v>ahsoka</v>, <v>andor</v>, <v>bobafett<v>, '
+                    '<v>mandalorian</v>, <v>obiwan</v>, or <v>witcher</v> to use a built-in '
+                    'symbol, or <v>logo</v> to use the Series logo.'
                 ),
             ),
             Extra(
                 name='CRT TV Overlay',
                 identifier='crt_overlay',
-                description='Enable CRT TV overlay.',
+                description='CRT TV Overlay Toggle',
                 tooltip=(
-                    'Enable CRT TV overlay: <v>nobezel</v> or <v>bezel</v>.<br>'
-                    'Default is <v>None</v>.'
+                    'Either <v>nobezel</v> or <v>bezel</v>. Default is <v>None</v>.'
                 ),
             ),
             Extra(
                 name='CRT TV Watched/Unwatched Overlay',
                 identifier='crt_state_overlay',
-                description='Enable CRT TV Watched/Unwatched overlay.',
+                description='CRT TV Overlay Watched-Status Toggle',
                 tooltip=(
-                    'Enable CRT TV Watched/Unwatched overlay: <v>True</v> / <v>False</v>. Default is <v>False</v>.<br>'
-                    'Will only work if CRT TV Overlay is enabled.'
+                    'Whether to change the CRT overlay with the watched status of the Episode. '
+                    'Either <v>True</v> or <v>False</v>. Default is <v>False</v>. '
+                    'Will only work if the CRT TV Overlay Toggle is enabled.'
                 ),
             ),
             Extra(
@@ -105,11 +105,11 @@ class HorizonTitleCard(BaseCardType):
             Extra(
                 name='Alignment Overlay',
                 identifier='alignment_overlay',
-                description='Enable Alignment Overlay.',
+                description='Alignment Overlay Toggle',
                 tooltip=(
-                    'Enables alignment overlay to help assist adjusting offsets for'
-                    ' misaligned custom fonts. Guides per 10 pixles. <v>True</v> / <v>False</v>.' 
-                    ' Default is <v>False</v>.'
+                    'Enable an alignment overlay to help assist adjusting offsets for '
+                    'misaligned custom fonts. The overlay has guiding lines every 10 pixels '.
+                    'Either <v>True</v> or <v>False</v>. Default is <v>False</v>.'
                 ),
             ),
         ],
@@ -125,7 +125,7 @@ class HorizonTitleCard(BaseCardType):
         stroke_color: str = 'black'
         separator: str = '•'
         h_align: Literal['left', 'right'] = 'left'
-        symbol: str = None
+        symbol: Optional[str] = None
         logo_file: FilePath
         alignment_overlay: bool = False
         crt_overlay: str = None
@@ -148,34 +148,34 @@ class HorizonTitleCard(BaseCardType):
     USES_SEASON_TITLE = True
 
     """Standard class has standard archive name"""
-    ARCHIVE_NAME = 'horizon'
+    ARCHIVE_NAME = 'Horizon'
 
     """Characteristics of episode text"""
     EPISODE_TEXT_FORMAT = 'EPISODE {to_cardinal(episode_number)}'
-    EPISODE_TEXT_FONT = str(RemoteFile('Supremicus', 'ref/fonts/ExoSoft-Medium.ttf'))
+    EPISODE_TEXT_FONT = RemoteFile('Supremicus', 'ref/fonts/ExoSoft-Medium.ttf')
 
     """Source path for symbol images to be overlayed behind text"""
-    __SYMBOL_IMAGE_ACOLYTE = str(RemoteFile('Supremicus', 'ref/symbols/acolyte.png'))
-    __SYMBOL_IMAGE_AHSOKA = str(RemoteFile('Supremicus', 'ref/symbols/ahsoka.png'))
-    __SYMBOL_IMAGE_ANDOR = str(RemoteFile('Supremicus', 'ref/symbols/andor.png'))
-    __SYMBOL_IMAGE_BOBAFETT = str(RemoteFile('Supremicus', 'ref/symbols/bobafett.png'))
-    __SYMBOL_IMAGE_MANDALORIAN = str(RemoteFile('Supremicus', 'ref/symbols/mandalorian.png'))
-    __SYMBOL_IMAGE_OBIWAN = str(RemoteFile('Supremicus', 'ref/symbols/obiwan.png'))
-    __SYMBOL_IMAGE_WITCHER = str(RemoteFile('Supremicus', 'ref/symbols/witcher.png'))
+    __SYMBOL_IMAGE_ACOLYTE = RemoteFile('Supremicus', 'ref/symbols/acolyte.png')
+    __SYMBOL_IMAGE_AHSOKA = RemoteFile('Supremicus', 'ref/symbols/ahsoka.png')
+    __SYMBOL_IMAGE_ANDOR = RemoteFile('Supremicus', 'ref/symbols/andor.png')
+    __SYMBOL_IMAGE_BOBAFETT = RemoteFile('Supremicus', 'ref/symbols/bobafett.png')
+    __SYMBOL_IMAGE_MANDALORIAN = RemoteFile('Supremicus', 'ref/symbols/mandalorian.png')
+    __SYMBOL_IMAGE_OBIWAN = RemoteFile('Supremicus', 'ref/symbols/obiwan.png')
+    __SYMBOL_IMAGE_WITCHER = RemoteFile('Supremicus', 'ref/symbols/witcher.png')
 
     """Alignment overlay image"""
-    __ALIGNMENT_OVERLAY_IMAGE = str(RemoteFile('Supremicus', 'ref/overlays/overlay_alignment.png'))
+    __ALIGNMENT_OVERLAY_IMAGE = RemoteFile('Supremicus', 'ref/overlays/overlay_alignment.png')
 
     """Source path for CRT overlays to be overlayed if enabled"""
-    __OVERLAY_PLAIN = str(RemoteFile('Supremicus', 'ref/overlays/overlay_plain.png'))
-    __OVERLAY_PLAIN_BEZEL = str(RemoteFile('Supremicus', 'ref/overlays/overlay_plain_bezel.png'))
-    __OVERLAY_PLAY = str(RemoteFile('Supremicus', 'ref/overlays/overlay_play.png'))
-    __OVERLAY_PLAY_BEZEL = str(RemoteFile('Supremicus', 'ref/overlays/overlay_play_bezel.png'))
-    __OVERLAY_REWIND = str(RemoteFile('Supremicus', 'ref/overlays/overlay_rewind.png'))
-    __OVERLAY_REWIND_BEZEL = str(RemoteFile('Supremicus', 'ref/overlays/overlay_rewind_bezel.png'))
+    __OVERLAY_PLAIN = RemoteFile('Supremicus', 'ref/overlays/overlay_plain.png')
+    __OVERLAY_PLAIN_BEZEL = RemoteFile('Supremicus', 'ref/overlays/overlay_plain_bezel.png')
+    __OVERLAY_PLAY = RemoteFile('Supremicus', 'ref/overlays/overlay_play.png')
+    __OVERLAY_PLAY_BEZEL = RemoteFile('Supremicus', 'ref/overlays/overlay_play_bezel.png')
+    __OVERLAY_REWIND = RemoteFile('Supremicus', 'ref/overlays/overlay_rewind.png')
+    __OVERLAY_REWIND_BEZEL = RemoteFile('Supremicus', 'ref/overlays/overlay_rewind_bezel.png')
 
     """Source path for the gradient image"""
-    __GRADIENT_IMAGE = str(RemoteFile('Supremicus', 'ref/overlays/radial_gradient.png'))
+    __GRADIENT_IMAGE = RemoteFile('Supremicus', 'ref/overlays/radial_gradient.png')
 
     __slots__ = (
         'source_file', 'output_file', 'title_text', 'season_text',
@@ -356,7 +356,6 @@ class HorizonTitleCard(BaseCardType):
         interline_spacing = -26 + self.font_interline_spacing
         interword_spacing = 50 + self.font_interword_spacing
         kerning = -1.25 * self.font_kerning
-        vertical_shift = 40 + self.font_vertical_shift
 
         return [
             f'-font "{self.font_file.resolve()}"',
@@ -452,14 +451,14 @@ class HorizonTitleCard(BaseCardType):
             return []
         # Select CRT overlay based on watch status
         if self.crt_overlay == 'nobezel':
-            if self.crt_state_overlay:
+            if self.crt_state_overlay and not self.watched:
                 crt_overlay_image = self.__OVERLAY_PLAY
             elif self.crt_state_overlay and self.watched:
                 crt_overlay_image = self.__OVERLAY_REWIND
             else:
                 crt_overlay_image = self.__OVERLAY_PLAIN
         elif self.crt_overlay == 'bezel':
-            if self.crt_state_overlay:
+            if self.crt_state_overlay and not self.watched:
                 crt_overlay_image = self.__OVERLAY_PLAY_BEZEL
             elif self.crt_state_overlay and self.watched:
                 crt_overlay_image = self.__OVERLAY_REWIND_BEZEL
@@ -501,13 +500,12 @@ class HorizonTitleCard(BaseCardType):
         """
         Add alignment overlay image.
         """
-        alignment_image = self.__ALIGNMENT_OVERLAY_IMAGE
 
-        if self.alignment_overlay is False:
+        if not self.alignment_overlay:
             return []
 
         return [
-            f'"{alignment_image.resolve()}"',
+            f'"{self.__ALIGNMENT_OVERLAY_IMAGE.resolve()}"',
             f'-composite',
         ]
 

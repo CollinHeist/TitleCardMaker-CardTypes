@@ -37,7 +37,7 @@ class DawnTitleCard(BaseCardType):
             Extra(
                 name='Episode Text Vertical Shift',
                 identifier='episode_text_vertical_shift',
-                description='Vertical Shift for Episode Text.',
+                description='Vertical Shift for Episode Text',
                 tooltip=(
                     'Additional vertical shift to apply to the season and episode text. '
                     'Default is <v>0</v>.<br> If multi-line issues, problem fonts may'
@@ -47,7 +47,7 @@ class DawnTitleCard(BaseCardType):
             Extra(
                 name='Title Text Horizontal Shift',
                 identifier='title_text_horizontal_shift',
-                description='Horizontal shift for Title Text.',
+                description='Horizontal shift for the title text',
                 tooltip=(
                     'Horizontal shift to apply to title text to align with episode text. '
                     'Default is <v>0</v>.'
@@ -56,37 +56,37 @@ class DawnTitleCard(BaseCardType):
             Extra(
                 name='Stroke Text Color',
                 identifier='stroke_color',
-                description='Color to use for the episode & title text stroke.',
+                description='Color to use for the episode & title text stroke',
                 tooltip='Default is <c>black</c>.'
             ),
             Extra(
                 name='Separator Character',
                 identifier='separator',
-                description='Character to separate season and episode text.',
+                description='Character to separate season and episode text',
                 tooltip='Default is <v>•</v>.'
             ),
             Extra(
                 name='Horizontal Alignment',
                 identifier='h_align',
-                description='Horizontal alignment of text.',
+                description='Horizontal alignment of text',
                 tooltip='Either <v>left</v>, <v>center</v> or <v>right</v>. Default is <v>left</v>.'
             ),
             Extra(
                 name='CRT TV Overlay',
                 identifier='crt_overlay',
-                description='Enable CRT TV overlay.',
+                description='CRT TV Overlay Toggle',
                 tooltip=(
-                    'Enable CRT TV overlay: <v>nobezel</v> or <v>bezel</v>.<br>'
-                    'Default is <v>None</v>.'
+                    'Either <v>nobezel</v> or <v>bezel</v>. Default is <v>None</v>.'
                 ),
             ),
             Extra(
                 name='CRT TV Watched/Unwatched Overlay',
                 identifier='crt_state_overlay',
-                description='Enable CRT TV Watched/Unwatched overlay.',
+                description='CRT TV Overlay Watched-Status Toggle',
                 tooltip=(
-                    'Enable CRT TV Watched/Unwatched overlay: <v>True</v> / <v>False</v>. Default is <v>False</v>.<br>'
-                    'Will only work if CRT TV Overlay is enabled.'
+                    'Whether to change the CRT overlay with the watched status of the Episode. '
+                    'Either <v>True</v> or <v>False</v>. Default is <v>False</v>. '
+                    'Will only work if the CRT TV Overlay Toggle is enabled.'
                 ),
             ),
             Extra(
@@ -111,7 +111,6 @@ class DawnTitleCard(BaseCardType):
         stroke_color: str = 'black'
         separator: str = '•'
         h_align: Literal['left', 'center', 'right'] = 'left'
-        symbol: str = None
         crt_overlay: str = None
         crt_state_overlay: bool = False
         omit_gradient: bool = True
@@ -132,26 +131,26 @@ class DawnTitleCard(BaseCardType):
     USES_SEASON_TITLE = True
 
     """Standard class has standard archive name"""
-    ARCHIVE_NAME = 'dawn'
+    ARCHIVE_NAME = 'Dawn'
 
     """Characteristics of episode text"""
     EPISODE_TEXT_FORMAT = 'EPISODE {to_cardinal(episode_number)}'
-    EPISODE_TEXT_FONT = str(RemoteFile('Supremicus', 'ref/fonts/ExoSoft-Medium.ttf'))
+    EPISODE_TEXT_FONT = RemoteFile('Supremicus', 'ref/fonts/ExoSoft-Medium.ttf')
 
     """Source path for CRT overlays to be overlayed if enabled"""
-    __OVERLAY_PLAIN = str(RemoteFile('Supremicus', 'ref/overlays/overlay_plain.png'))
-    __OVERLAY_PLAIN_BEZEL = str(RemoteFile('Supremicus', 'ref/overlays/overlay_plain_bezel.png'))
-    __OVERLAY_PLAY = str(RemoteFile('Supremicus', 'ref/overlays/overlay_play.png'))
-    __OVERLAY_PLAY_BEZEL = str(RemoteFile('Supremicus', 'ref/overlays/overlay_play_bezel.png'))
-    __OVERLAY_REWIND = str(RemoteFile('Supremicus', 'ref/overlays/overlay_rewind.png'))
-    __OVERLAY_REWIND_BEZEL = str(RemoteFile('Supremicus', 'ref/overlays/overlay_rewind_bezel.png'))
+    __OVERLAY_PLAIN = RemoteFile('Supremicus', 'ref/overlays/overlay_plain.png')
+    __OVERLAY_PLAIN_BEZEL = RemoteFile('Supremicus', 'ref/overlays/overlay_plain_bezel.png')
+    __OVERLAY_PLAY = RemoteFile('Supremicus', 'ref/overlays/overlay_play.png')
+    __OVERLAY_PLAY_BEZEL = RemoteFile('Supremicus', 'ref/overlays/overlay_play_bezel.png')
+    __OVERLAY_REWIND = RemoteFile('Supremicus', 'ref/overlays/overlay_rewind.png')
+    __OVERLAY_REWIND_BEZEL = RemoteFile('Supremicus', 'ref/overlays/overlay_rewind_bezel.png')
 
     """Source path for the gradient image"""
-    __GRADIENT_IMAGE = str(RemoteFile('Supremicus', 'ref/overlays/gradient.png'))
+    __GRADIENT_IMAGE = RemoteFile('Supremicus', 'ref/overlays/gradient.png')
 
     __slots__ = (
         'source_file', 'output_file', 'title_text', 'season_text',
-        'episode_prefix', 'episode_text', 'hide_season_text', 'hide_episode_text',
+        'episode_text', 'hide_season_text', 'hide_episode_text',
         'line_count', 'font_color', 'font_file', 'font_interline_spacing',
         'font_interword_spacing', 'font_kerning', 'font_size', 'font_stroke_width',
         'font_vertical_shift', 'episode_text_vertical_shift',
@@ -333,7 +332,6 @@ class DawnTitleCard(BaseCardType):
         interline_spacing = -20 + self.font_interline_spacing
         interword_spacing = 50 + self.font_interword_spacing
         kerning = -1.25 * self.font_kerning
-        vertical_shift = 50 + self.font_vertical_shift
 
         return [
             f'-font "{self.font_file.resolve()}"',
@@ -383,14 +381,14 @@ class DawnTitleCard(BaseCardType):
             return []
         # Select CRT overlay based on watch status
         if self.crt_overlay == 'nobezel':
-            if self.crt_state_overlay:
+            if self.crt_state_overlay and not self.watched:
                 crt_overlay_image = self.__OVERLAY_PLAY
             elif self.crt_state_overlay and self.watched:
                 crt_overlay_image = self.__OVERLAY_REWIND
             else:
                 crt_overlay_image = self.__OVERLAY_PLAIN
         elif self.crt_overlay == 'bezel':
-            if self.crt_state_overlay:
+            if self.crt_state_overlay and not self.watched:
                 crt_overlay_image = self.__OVERLAY_PLAY_BEZEL
             elif self.crt_state_overlay and self.watched:
                 crt_overlay_image = self.__OVERLAY_REWIND_BEZEL
