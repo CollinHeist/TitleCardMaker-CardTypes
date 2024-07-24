@@ -32,6 +32,8 @@ In order to contribute your own custom Card Type to this repository, follow thes
 | azuravian, Beedman | `azuravian/TitleColorMatch` | <img src="https://user-images.githubusercontent.com/7379812/187586521-353ba09f-30a8-424b-bbf3-ee9036c9e638.jpg" height="200"/> |
 | CollinHeist | `CollinHeist/BlacklistTitleCard` | <img src="https://user-images.githubusercontent.com/17693271/216839561-ec4a1c27-dcdc-4869-87dd-8d592a26aee2.jpg" height="200"/> |
 | KHthe8th | `KHthe8th/TintedFramePlus` | <img src="https://github.com/khthe8th/TitleCardMaker-CardTypes/assets/5308389/d089a1b1-7458-4eaf-ad8d-59c7f332a7c1" height="200"/> |
+| Supremicus | `Supremicus/Dawn` | <img src="https://raw.githubusercontent.com/Supremicus/tcm-images/main/Preview%20Cards/DawnTitleCard.preview.jpg" height="200"/> |
+| Supremicus | `Supremicus/Horizon` | <img src="https://raw.githubusercontent.com/Supremicus/tcm-images/main/Preview%20Cards/HorizonTitleCard.preview.jpg" height="200"/> |
 
 # Using a Custom Card Type
 The [available card types](#available-card-types) can all be specified within the Maker by adding the following:
