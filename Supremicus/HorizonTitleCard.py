@@ -1,6 +1,8 @@
 from pathlib import Path
 from typing import TYPE_CHECKING, Optional, Literal
 
+from pydantic import root_validator
+
 from app.schemas.card_type import BaseCardTypeCustomFontAllText
 
 from modules.BaseCardType import (
@@ -51,6 +53,18 @@ class HorizonTitleCard(BaseCardType):
                 identifier='stroke_color',
                 description='Color to use for the episode & title text stroke',
                 tooltip='Default is <c>black</c>.'
+            ),
+            Extra(
+                name='Episode Text Color',
+                identifier='episode_text_color',
+                description='Color to use separately for the episode text',
+                tooltip='Leave blank to match Title Color.'
+            ),
+            Extra(
+                name='Episode Stroke Text Color',
+                identifier='episode_text_stroke_color',
+                description='Color to use separately for the episode text stroke',
+                tooltip='Leave blank to match Stroke Text Color.'
             ),
             Extra(
                 name='Separator Character',
@@ -130,6 +144,8 @@ class HorizonTitleCard(BaseCardType):
     class CardModel(BaseCardTypeCustomFontAllText):
         episode_text_vertical_shift: int = 0
         stroke_color: str = 'black'
+        episode_text_color: Optional[str] = None
+        episode_text_stroke_color: Optional[str] = None
         separator: str = '•'
         h_align: Literal['left', 'right'] = 'left'
         symbol: Optional[str] = None
@@ -138,6 +154,16 @@ class HorizonTitleCard(BaseCardType):
         crt_overlay: str = None
         crt_state_overlay: bool = False
         omit_gradient: bool = True
+
+        @root_validator(skip_on_failure=True)
+        def validate_extras(cls, values: dict) -> dict:
+            # Convert None colors to the default font color
+            if values['episode_text_color'] is None:
+                values['episode_text_color'] = values['font_color']
+            if values['episode_text_stroke_color'] is None:
+                values['episode_text_stroke_color'] = values['stroke_color']
+
+            return values
 
     """Characteristics for title splitting by this class"""
     TITLE_CHARACTERISTICS: SplitCharacteristics = {
@@ -190,8 +216,9 @@ class HorizonTitleCard(BaseCardType):
         'line_count', 'font_color', 'font_file', 'font_interline_spacing',
         'font_interword_spacing', 'font_kerning', 'font_size', 'font_stroke_width',
         'font_vertical_shift', 'episode_text_vertical_shift', 'stroke_color',
-        'separator', 'h_align', 'symbol', 'logo', 'alignment_overlay',
-        'crt_overlay', 'crt_state_overlay', 'omit_gradient'
+        'episode_text_color', 'episode_text_stroke_color', 'separator', 'h_align', 
+        'symbol', 'logo', 'alignment_overlay', 'crt_overlay', 'crt_state_overlay',
+        'omit_gradient'
     )
 
     def __init__(self,
@@ -214,6 +241,8 @@ class HorizonTitleCard(BaseCardType):
             grayscale: bool = False,
             episode_text_vertical_shift: int = 0,
             stroke_color: str = 'black',
+            episode_text_color: str = None,
+            episode_text_stroke_color: str = None,
             separator: str = '•',
             h_align: Literal['left', 'right'] = 'left',
             logo_file: Optional[Path] = None,
@@ -254,6 +283,8 @@ class HorizonTitleCard(BaseCardType):
         # Optional extras
         self.episode_text_vertical_shift = episode_text_vertical_shift
         self.stroke_color = stroke_color
+        self.episode_text_color = episode_text_color
+        self.episode_text_stroke_color = episode_text_stroke_color
         self.separator = separator
         self.h_align = h_align
         self.logo = logo_file
@@ -301,12 +332,12 @@ class HorizonTitleCard(BaseCardType):
 
         return [
             *base_commands,
-            f'-fill {self.stroke_color}',
-            f'-stroke {self.stroke_color}',
+            f'-fill {self.episode_text_stroke_color}',
+            f'-stroke {self.episode_text_stroke_color}',
             f'-strokewidth {stroke_width}',
             f'-annotate {x:+}{y:+} "{index_text}"',
-            f'-fill "{self.font_color}"',
-            f'-stroke "{self.font_color}"',
+            f'-fill "{self.episode_text_color}"',
+            f'-stroke "{self.episode_text_color}"',
             f'-strokewidth 0',
             f'-annotate {x:+}{y:+} "{index_text}"',
         ]
