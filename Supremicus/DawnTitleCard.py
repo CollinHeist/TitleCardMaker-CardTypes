@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import TYPE_CHECKING, Optional, Literal
+from typing import TYPE_CHECKING, Optional, Literal, Union
 
 from pydantic import root_validator
 
@@ -37,14 +37,10 @@ class DawnTitleCard(BaseCardType):
         supports_custom_seasons=True,
         supported_extras=[
             Extra(
-                name='Episode Text Vertical Shift',
-                identifier='episode_text_vertical_shift',
-                description='Vertical Shift for Episode Text',
-                tooltip=(
-                    'Additional vertical shift to apply to the season and episode text. '
-                    'Default is <v>0</v>.<br> If multi-line issues, problem fonts may'
-                    'be fixed by <v>Fix vertical metrics</v> at <v>https://transfonter.org/</v>'
-                ),
+                name='Stroke Text Color',
+                identifier='stroke_color',
+                description='Color to use for the episode & title text stroke',
+                tooltip='Default is <c>black</c>.'
             ),
             Extra(
                 name='Title Text Horizontal Shift',
@@ -56,10 +52,31 @@ class DawnTitleCard(BaseCardType):
                 ),
             ),
             Extra(
-                name='Stroke Text Color',
-                identifier='stroke_color',
-                description='Color to use for the episode & title text stroke',
-                tooltip='Default is <c>black</c>.'
+                name='Episode Text Vertical Shift',
+                identifier='episode_text_vertical_shift',
+                description='Vertical Shift for Episode Text',
+                tooltip=(
+                    'Additional vertical shift to apply to the season and episode text. '
+                    'Default is <v>0</v>.<br> If multi-line issues, problem fonts may'
+                    'be fixed by <v>Fix vertical metrics</v> at <v>https://transfonter.org/</v>'
+                ),
+            ),
+            Extra(
+                name='Episode Text Font',
+                identifier='episode_text_font',
+                description='Font to use for the season and episode text',
+                tooltip=(
+                    'This can be just a file name if the font file is in the '
+                    "Series' source directory, <v>{title_font}</v> to match "
+                    'the Font used for the title text, or a full path to the '
+                    'font file.'
+                ),
+            ),
+            Extra(
+                name='Episode Text Font Size',
+                identifier='episode_text_font_size',
+                description='Size adjustment for the season and episode text',
+                tooltip='Number ≥<v>0.0</v>. Default is <v>1.0</v>.',
             ),
             Extra(
                 name='Episode Text Color',
@@ -121,9 +138,11 @@ class DawnTitleCard(BaseCardType):
     )
 
     class CardModel(BaseCardTypeCustomFontAllText):
-        episode_text_vertical_shift: int = 0
-        title_text_horizontal_shift: int = 0
         stroke_color: str = 'black'
+        title_text_horizontal_shift: int = 0
+        episode_text_vertical_shift: int = 0
+        episode_text_font: Union[Literal['{title_font}'], str, Path] = str(RemoteFile('Supremicus', 'ref/fonts/ExoSoft-Medium.ttf'))
+        episode_text_font_size: float = 1.0
         episode_text_color: Optional[str] = None
         episode_text_stroke_color: Optional[str] = None
         separator: str = '•'
@@ -131,6 +150,23 @@ class DawnTitleCard(BaseCardType):
         crt_overlay: str = None
         crt_state_overlay: bool = False
         omit_gradient: bool = True
+
+        @root_validator(skip_on_failure=True)
+        def validate_episode_text_font_file(cls, values: dict) -> dict:
+            if (etf := values['episode_text_font']) == '{title_font}':
+                values['episode_text_font'] = values['font_file']
+            # Episode text font does not exist, search alongside source image
+            elif not (etf := Path(etf)).exists():
+                if (new_etf := values['source_file'].parent / etf.name).exists():
+                    values['episode_text_font'] = new_etf
+
+            # Verify new specified font file does exist
+            values['episode_text_font'] = Path(values['episode_text_font'])
+            if not Path(values['episode_text_font']).exists():
+                raise ValueError(f'Specified Episode Text Font '
+                                 f'({values["episode_text_font"]}) does not exist')
+
+            return values
 
         @root_validator(skip_on_failure=True)
         def validate_extras(cls, values: dict) -> dict:
@@ -180,10 +216,10 @@ class DawnTitleCard(BaseCardType):
         'episode_text', 'hide_season_text', 'hide_episode_text',
         'line_count', 'font_color', 'font_file', 'font_interline_spacing',
         'font_interword_spacing', 'font_kerning', 'font_size', 'font_stroke_width',
-        'font_vertical_shift', 'episode_text_vertical_shift',
-        'title_text_horizontal_shift', 'stroke_color', 'episode_text_color',
-        'episode_text_stroke_color', 'separator', 'h_align', 'crt_overlay',
-        'crt_state_overlay', 'omit_gradient'
+        'font_vertical_shift', 'stroke_color', 'title_text_horizontal_shift',
+        'episode_text_vertical_shift', 'episode_text_font', 'episode_text_font_size',
+        'episode_text_color', 'episode_text_stroke_color', 'separator', 'h_align',
+        'crt_overlay', 'crt_state_overlay', 'omit_gradient'
     )
 
     def __init__(self,
@@ -204,9 +240,11 @@ class DawnTitleCard(BaseCardType):
             font_vertical_shift: int = 0,
             blur: bool = False,
             grayscale: bool = False,
-            episode_text_vertical_shift: int = 0,
-            title_text_horizontal_shift: int = 0,
             stroke_color: str = 'black',
+            title_text_horizontal_shift: int = 0,
+            episode_text_vertical_shift: int = 0,
+            episode_text_font: Path = EPISODE_TEXT_FONT,
+            episode_text_font_size: float = 1.0,
             episode_text_color: str = None,
             episode_text_stroke_color: str = None,
             separator: str = '•',
@@ -244,9 +282,11 @@ class DawnTitleCard(BaseCardType):
         self.font_vertical_shift = font_vertical_shift
 
         # Optional extras
-        self.episode_text_vertical_shift = episode_text_vertical_shift
-        self.title_text_horizontal_shift = title_text_horizontal_shift
         self.stroke_color = stroke_color
+        self.title_text_horizontal_shift = title_text_horizontal_shift
+        self.episode_text_vertical_shift = episode_text_vertical_shift
+        self.episode_text_font = episode_text_font
+        self.episode_text_font_size = episode_text_font_size
         self.episode_text_color = episode_text_color
         self.episode_text_stroke_color = episode_text_stroke_color
         self.separator = separator
@@ -287,13 +327,13 @@ class DawnTitleCard(BaseCardType):
         stroke_width = 4.0 * self.font_stroke_width
 
         # Base commands
-        size = 60
         base_commands = [
             f'-background transparent',
             f'-kerning 18',
-            f'-pointsize {size:.2f}',
+            f'-pointsize {60 * self.episode_text_font_size}',
             f'-interword-spacing 14.5',
             f'-gravity {gravity}',
+            f'-font "{self.episode_text_font.resolve()}"',
         ]
 
         # Text offsets
@@ -303,7 +343,6 @@ class DawnTitleCard(BaseCardType):
 
         return [
             *base_commands,
-            f'-font "{self.EPISODE_TEXT_FONT.resolve()}"',
             f'-fill {self.episode_text_stroke_color}',
             f'-stroke {self.episode_text_stroke_color}',
             f'-strokewidth {stroke_width}',
