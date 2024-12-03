@@ -84,6 +84,12 @@ class HorizonTitleCard(BaseCardType):
                 tooltip='Leave blank to match Stroke Text Color.'
             ),
             Extra(
+                name='Episode Text Kerning',
+                identifier='episode_text_kerning',
+                description='Pixel spacing between characters for the season and episode text',
+                tooltip='Number ≥<v>0</v>. Default is <v>18</v> pixels.',
+            ),
+            Extra(
                 name='Separator Character',
                 identifier='separator',
                 description='Character to separate season and episode text',
@@ -165,6 +171,7 @@ class HorizonTitleCard(BaseCardType):
         episode_text_font_size: float = 1.0
         episode_text_color: Optional[str] = None
         episode_text_stroke_color: Optional[str] = None
+        episode_text_kerning: int = 18
         separator: str = '•'
         h_align: Literal['left', 'right'] = 'left'
         symbol: Optional[str] = None
@@ -253,8 +260,9 @@ class HorizonTitleCard(BaseCardType):
         'font_interword_spacing', 'font_kerning', 'font_size', 'font_stroke_width',
         'font_vertical_shift', 'stroke_color', 'episode_text_vertical_shift',
         'episode_text_font', 'episode_text_font_size', 'episode_text_color',
-        'episode_text_stroke_color', 'separator', 'h_align', 'symbol', 'logo',
-        'alignment_overlay', 'crt_overlay', 'crt_state_overlay', 'omit_gradient'
+        'episode_text_stroke_color', 'episode_text_kerning', 'separator', 'h_align',
+        'symbol', 'logo', 'alignment_overlay', 'crt_overlay', 'crt_state_overlay',
+        'omit_gradient'
     )
 
     def __init__(self,
@@ -281,6 +289,7 @@ class HorizonTitleCard(BaseCardType):
             episode_text_font_size: float = 1.0,
             episode_text_color: str = None,
             episode_text_stroke_color: str = None,
+            episode_text_kerning: int = 18,
             separator: str = '•',
             h_align: Literal['left', 'right'] = 'left',
             logo_file: Optional[Path] = None,
@@ -325,6 +334,7 @@ class HorizonTitleCard(BaseCardType):
         self.episode_text_font_size = episode_text_font_size
         self.episode_text_color = episode_text_color
         self.episode_text_stroke_color = episode_text_stroke_color
+        self.episode_text_kerning = episode_text_kerning
         self.separator = separator
         self.h_align = h_align
         self.logo = logo_file
@@ -357,7 +367,7 @@ class HorizonTitleCard(BaseCardType):
         # Base commands
         base_commands = [
             f'-background transparent',
-            f'-kerning 18',
+            f'-kerning {self.episode_text_kerning}',
             f'-pointsize {60 * self.episode_text_font_size}',
             f'-interword-spacing 14.5',
             f'-gravity north',

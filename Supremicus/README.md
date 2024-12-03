@@ -15,6 +15,7 @@ Below is a table of all valid series [extras](https://github.com/CollinHeist/Tit
 | `episode_text_font_size` | `1.0` | Scalar of the size of the episode text |
 | `episode_text_color` | `None` | Color to use separately for the episode text |
 | `episode_text_stroke_color` | `None` | Color to use separately for the episode text stroke |
+| `episode_text_kerning` | `18` | Pixel spacing between characters for the episode text |
 | `separator` | `•` | Character to separate the season and episode text |
 | `h_align` | `left` | Horizontal alignment. `left`, `center` or `right` |
 | `crt_overlay` | `None` | Enable CRT TV Overlay `none`, `nobezel` or `bezel` |
@@ -48,6 +49,7 @@ Below is a table of all valid series [extras](https://github.com/CollinHeist/Tit
 | `episode_text_font_size` | `1.0` | Scalar of the size of the episode text |
 | `episode_text_color` | `None` | Color to use separately for the episode text |
 | `episode_text_stroke_color` | `None` | Color to use separately for the episode text stroke |
+| `episode_text_kerning` | `18` | Pixel spacing between characters for the episode text |
 | `separator` | `•` | Character to separate the season and episode text |
 | `h_align` | `left` | Horizontal alignment. `left` or `right` |
 | `symbol` | `None` | Custom symbol to use<br>Built-in: `acolyte`, `ahsoka`, `andor`, `bobafett`, `mandalorian`, `obiwan`, `witcher`<br>Custom: `logo` uses *source/show/logo.png* |
