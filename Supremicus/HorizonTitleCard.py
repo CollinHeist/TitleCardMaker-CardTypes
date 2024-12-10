@@ -6,7 +6,10 @@ from pydantic import root_validator
 from app.schemas.card_type import BaseCardTypeCustomFontAllText
 
 from modules.BaseCardType import (
-    BaseCardType, ImageMagickCommands, Extra, CardDescription
+    BaseCardType,
+    CardDescription,
+    Extra,
+    ImageMagickCommands,
 )
 from modules.Debug import log
 from modules.EpisodeInfo2 import EpisodeInfo
@@ -32,7 +35,9 @@ class HorizonTitleCard(BaseCardType):
         name='Horizon',
         identifier='Supremicus/Horizon',
         example='https://raw.githubusercontent.com/CollinHeist/TitleCardMaker-CardTypes/web-ui/Supremicus/HorizonTitleCard.preview.jpg',
-        creators=['Supremicus'],
+        creators=[
+            'Supremicus'
+        ],
         source='remote',
         supports_custom_fonts=True,
         supports_custom_seasons=True,
@@ -40,19 +45,22 @@ class HorizonTitleCard(BaseCardType):
             Extra(
                 name='Stroke Text Color',
                 identifier='stroke_color',
-                description='Color to use for the episode & title text stroke',
-                tooltip='Default is <c>black</c>.'
+                description='Color to use for the text stroke',
+                tooltip='Default is <c>black</c>.',
+                default='black'
             ),
             Extra(
                 name='Episode Text Vertical Shift',
                 identifier='episode_text_vertical_shift',
-                description='Vertical Shift for Episode Text.',
+                description='Vertical shift for episode text',
                 tooltip=(
                     'Additional vertical shift to apply to the season and '
-                    'episode text. Default is <v>0</v>.<br> If multi-line '
-                    'issues, problem fonts may be fixed by fix vertical '
-                    'metrics at <v>https://transfonter.org/</v>.'
+                    'episode text. If you encounter multi-line issues, problem '
+                    'fonts maybe fixed by Fix vertical metrics at '
+                    '<v>https://transfonter.org/</v>. Default is <v>0</v>. '
+                    'Unit is pixels.'
                 ),
+                default=0,
             ),
             Extra(
                 name='Episode Text Font',
@@ -70,39 +78,43 @@ class HorizonTitleCard(BaseCardType):
                 identifier='episode_text_font_size',
                 description='Size adjustment for the season and episode text',
                 tooltip='Number ≥<v>0.0</v>. Default is <v>1.0</v>.',
+                default=1.0,
             ),
             Extra(
                 name='Episode Text Color',
                 identifier='episode_text_color',
-                description='Color to use separately for the episode text',
-                tooltip='Leave blank to match Title Color.'
+                description='Color to use for the episode text',
+                tooltip='Defaults to match the Title Color.',
             ),
             Extra(
                 name='Episode Stroke Text Color',
                 identifier='episode_text_stroke_color',
-                description='Color to use separately for the episode text stroke',
-                tooltip='Leave blank to match Stroke Text Color.'
+                description='Color to use for the stroke of the episode text',
+                tooltip='Defaults to match the Stroke Text Color.',
             ),
             Extra(
                 name='Episode Text Kerning',
                 identifier='episode_text_kerning',
-                description='Pixel spacing between characters for the season and episode text',
-                tooltip='Number ≥<v>0</v>. Default is <v>18</v> pixels.',
+                description='Spacing between characters for the episode text',
+                tooltip='Default is <v>18</v>. Unit is pixels.',
+                default=18,
             ),
             Extra(
                 name='Separator Character',
                 identifier='separator',
                 description='Character to separate season and episode text',
-                tooltip='Default is <v>•</v>.'
+                tooltip='Default is <v>•</v>.',
+                default='•',
             ),
             Extra(
                 name='Horizontal Alignment',
                 identifier='h_align',
-                description='Horizontal alignment of the text and symbol',
+                description='Horizontal alignment of text',
                 tooltip=(
-                    'Either <v>left</v> or <v>right</v>. Default is '
-                    '<v>left</v>.'
-                )
+                    'Either <v>left</v>, <v>center</v>, or <v>right</v>. '
+                    'Default is <v>left</v>.'
+                ),
+                default='left',
             ),
             Extra(
                 name='Symbol',
@@ -111,7 +123,7 @@ class HorizonTitleCard(BaseCardType):
                 tooltip=(
                     'Either <v>acolyte</v>, <v>ahsoka</v>, <v>andor</v>, '
                     '<v>bobafett<v>, <v>mandalorian</v>, <v>obiwan</v>, or '
-                    '<v>witcher</v> to use a built-in symbol, or <v>logo</v> '
+                    '<v>witcher</v> to use a built-in symbol; or <v>logo</v> '
                     'to use the Series logo.'
                 ),
             ),
@@ -120,8 +132,8 @@ class HorizonTitleCard(BaseCardType):
                 identifier='crt_overlay',
                 description='CRT TV Overlay Toggle',
                 tooltip=(
-                    'Either <v>nobezel</v> or <v>bezel</v>. Default is '
-                    '<v>None</v>.'
+                    'Whether to display the CRT TV overlay. Either '
+                    '<v>nobezel</v>, or <v>bezel</v>. Default is no overlay.'
                 ),
             ),
             Extra(
@@ -134,6 +146,7 @@ class HorizonTitleCard(BaseCardType):
                     'Default is <v>False</v>. Will only work if the CRT TV '
                     'Overlay Toggle is enabled.'
                 ),
+                default='False',
             ),
             Extra(
                 name='Gradient Omission',
@@ -141,9 +154,10 @@ class HorizonTitleCard(BaseCardType):
                 description='Whether to omit the gradient overlay',
                 tooltip=(
                     'Either <v>True</v> or <v>False</v>. Set to <v>False</v> '
-                    'if you have trouble reading text on brighter images. '
+                    'if you have trouble reading the text on brighter images.'
                     'Default is <v>True</v>.'
                 ),
+                default='True',
             ),
             Extra(
                 name='Alignment Overlay',
@@ -155,6 +169,7 @@ class HorizonTitleCard(BaseCardType):
                     'guiding lines every 10 pixels. Either <v>True</v> or '
                     '<v>False</v>. Default is <v>False</v>.'
                 ),
+                default='False',
             ),
         ],
         description=[
@@ -167,17 +182,24 @@ class HorizonTitleCard(BaseCardType):
     class CardModel(BaseCardTypeCustomFontAllText):
         stroke_color: str = 'black'
         episode_text_vertical_shift: int = 0
-        episode_text_font: Union[Literal['{title_font}'], str, Path] = str(RemoteFile('Supremicus', 'ref/fonts/ExoSoft-Medium.ttf'))
+        episode_text_font: Union[
+            Literal['{title_font}'],
+            str,
+            Path,
+        ] = str(RemoteFile('Supremicus', 'ref/fonts/ExoSoft-Medium.ttf'))
         episode_text_font_size: float = 1.0
-        episode_text_color: Optional[str] = None
-        episode_text_stroke_color: Optional[str] = None
+        episode_text_color: str | None = None
+        episode_text_stroke_color: str | None = None
         episode_text_kerning: int = 18
         separator: str = '•'
         h_align: Literal['left', 'right'] = 'left'
-        symbol: Optional[str] = None
+        symbol: Literal[
+            'acolyte', 'ashoka', 'andor', 'bobafett', 'mandalorian', 'obiwan',
+            'witcher', 'logo',
+        ] | None = None
         logo_file: Path
         alignment_overlay: bool = False
-        crt_overlay: str = None
+        crt_overlay: Literal['nobzel', 'bezel'] | None = None
         crt_state_overlay: bool = False
         omit_gradient: bool = True
 
@@ -193,8 +215,10 @@ class HorizonTitleCard(BaseCardType):
             # Verify new specified font file does exist
             values['episode_text_font'] = Path(values['episode_text_font'])
             if not Path(values['episode_text_font']).exists():
-                raise ValueError(f'Specified Episode Text Font '
-                                 f'({values["episode_text_font"]}) does not exist')
+                raise ValueError(
+                    f'Specified Episode Text Font '
+                    f'({values["episode_text_font"]}) does not exist'
+                )
 
             return values
 
@@ -218,7 +242,7 @@ class HorizonTitleCard(BaseCardType):
     """Characteristics of the default title font"""
     TITLE_FONT = str(RemoteFile('Supremicus', 'ref/fonts/HelveticaNeue-Bold.ttf'))
     TITLE_COLOR = 'white'
-    FONT_REPLACEMENTS = {}
+    FONT_REPLACEMENTS: dict[str, str] = {}
 
     """Whether this CardType uses season titles for archival purposes"""
     USES_SEASON_TITLE = True
@@ -293,7 +317,16 @@ class HorizonTitleCard(BaseCardType):
             separator: str = '•',
             h_align: Literal['left', 'right'] = 'left',
             logo_file: Optional[Path] = None,
-            symbol: str = None,
+            symbol: None | Literal[
+                'acolyte',
+                'ashoka',
+                'andor',
+                'bobafett',
+                'mandalorian',
+                'obiwan',
+                'witcher',
+                'logo',
+            ] = None,
             alignment_overlay: bool = False,
             crt_overlay:str = None,
             crt_state_overlay: bool = False,
@@ -570,10 +603,16 @@ class HorizonTitleCard(BaseCardType):
 
         # Generic font, reset custom episode text color
         if not custom_font:
-            if 'stroke_color' in extras:
-                extras['stroke_color'] = 'black'
-            if 'episode_text_vertical_shift' in extras:
-                extras['episode_text_vertical_shift'] = 0
+            for extra in (
+                'stroke_color',
+                'episode_text_color',
+                'episode_text_kerning',
+                'episode_text_stroke_color',
+                'episode_text_font',
+                'episode_text_vertical_shift',
+            ):
+                if extra in extras:
+                    del extras[extra]
 
 
     @staticmethod
@@ -617,9 +656,10 @@ class HorizonTitleCard(BaseCardType):
             True if custom season titles are indicated, False otherwise.
         """
 
-        return (custom_episode_map
-                or episode_text_format.upper() != \
-                    HorizonTitleCard.EPISODE_TEXT_FORMAT.upper())
+        return (
+            custom_episode_map
+            or episode_text_format != HorizonTitleCard.EPISODE_TEXT_FORMAT
+        )
 
 
     @staticmethod
@@ -649,7 +689,7 @@ class HorizonTitleCard(BaseCardType):
         object's defined title card.
         """
 
-        command = ' '.join([
+        self.image_magick.run([
             f'convert "{self.source_file.resolve()}"',
             # Resize and optionally blur source image
             *self.resize_and_style,
@@ -671,5 +711,3 @@ class HorizonTitleCard(BaseCardType):
             *self.resize_output,
             f'"{self.output_file.resolve()}"',
         ])
-
-        self.image_magick.run(command)
