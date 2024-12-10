@@ -329,7 +329,7 @@
         "identifier": "Supremicus/DawnTitleCard",
         "description": [
             "Produce TitleCards with left, centered or right aligned text on the bottom.",
-            "Optional CRT TV overlay for shows like Stranger Things with a retro theme."
+            "An optional CRT TV overlay can be added for shows with a retro theme (like Stranger Things)"
         ],
         "example": "https://raw.githubusercontent.com/CollinHeist/TitleCardMaker-CardTypes/web-ui/Supremicus/DawnTitleCard.preview.jpg",
         "creators": [
@@ -339,55 +339,94 @@
         "supports_custom_seasons": true,
         "supported_extras": [
             {
-                "name": "Episode Text Vertical Shift",
-                "identifier": "episode_text_vertical_shift",
-                "description": "Vertical Shift for Episode Text",
-                "tooltip": "Additional vertical shift to apply to the season and episode text. Default is <v>0</v>.<br> If multi-line issues, problem fonts may be fixed by <v>Fix vertical metrics</v> at <v>https://transfonter.org/</v>"
+                "name": "Stroke Text Color",
+                "identifier": "stroke_color",
+                "description": "Color to use for the text stroke",
+                "tooltip": "Default is <c>black</c>.",
+                "default": "black"
             },
             {
                 "name": "Title Text Horizontal Shift",
                 "identifier": "title_text_horizontal_shift",
                 "description": "Horizontal shift for the title text",
-                "tooltip": "Horizontal shift to apply to title text to align with episode text. Default is <v>0</v>."
+                "tooltip": "Horizontal shift to apply to the title text. Default is 0. Unit is pixels.",
+                "default": 0
             },
             {
-                "name": "Stroke Text Color",
-                "identifier": "stroke_color",
-                "description": "Color to use for the episode & title text stroke",
-                "tooltip": "Default is <c>black</c>."
+                "name": "Episode Text Vertical Shift",
+                "identifier": "episode_text_vertical_shift",
+                "description": "Vertical Shift for Episode Text",
+                "tooltip": "Additional vertical shift to apply to the season and episode text. If you encounter multi-line issues, problem fonts maybe fixed by Fix vertical metrics at <v>https://transfonter.org/</v>. Default is <v>0</v>. Unit is pixels.",
+                "default": 0
+            },
+            {
+                "name": "Episode Text Font",
+                "identifier": "episode_text_font",
+                "description": "Font to use for the season and episode text",
+                "tooltip": "This can be just a file name if the font file is in the Series' source directory, <v>{title_font}</v> to match the Font used for the title text, or a full path to the font file."
+            },
+            {
+                "name": "Episode Text Font Size",
+                "identifier": "episode_text_font_size",
+                "description": "Size adjustment for the season and episode text",
+                "tooltip": "Number ≥<v>0.0</v>. Default is <v>1.0</v>.",
+                "default": 1.0
+            },
+            {
+                "name": "Episode Text Color",
+                "identifier": "episode_text_color",
+                "description": "Color to use for the episode text",
+                "tooltip": "Defaults to match the Title Color."
+            },
+            {
+                "name": "Episode Stroke Text Color",
+                "identifier": "episode_text_stroke_color",
+                "description": "Color to use for the stroke of the episode text",
+                "tooltip": "Defaults to match the Stroke Text Color."
+            },
+            {
+                "name": "Episode Text Kerning",
+                "identifier": "episode_text_kerning",
+                "description": "Spacing between characters for the episode text",
+                "tooltip": "Default is <v>18</v>. Unit is pixels.",
+                "default": 18
             },
             {
                 "name": "Separator Character",
                 "identifier": "separator",
                 "description": "Character to separate season and episode text",
-                "tooltip": "Default is <v>•</v>."
+                "tooltip": "Default is <v>•</v>.",
+                "default": "•"
             },
             {
                 "name": "Horizontal Alignment",
                 "identifier": "h_align",
                 "description": "Horizontal alignment of text",
-                "tooltip": "Either <v>left</v>, <v>center</v> or <v>right</v>. Default is <v>left</v>."
+                "tooltip": "Either <v>left</v>, <v>center</v>, or <v>right</v>. Default is <v>left</v>.",
+                "default": "left"
             },
             {
                 "name": "CRT TV Overlay",
                 "identifier": "crt_overlay",
                 "description": "CRT TV Overlay Toggle",
-                "tooltip": "Either <v>nobezel</v> or <v>bezel</v>. Default is <v>None</v>."
+                "tooltip": "Whether to display the CRT TV overlay. Either <v>nobezel</v>, or <v>bezel</v>. Default is no overlay."
             },
             {
                 "name": "CRT TV Watched/Unwatched Overlay",
                 "identifier": "crt_state_overlay",
                 "description": "CRT TV Overlay Watched-Status Toggle",
-                "tooltip": "Whether to change the CRT overlay with the watched status of the Episode. Either <v>True</v> or <v>False</v>. Default is <v>False</v>. Will only work if the CRT TV Overlay Toggle is enabled."
+                "tooltip": "Whether to change the CRT overlay with the watched status of the Episode. Either <v>True</v> or <v>False</v>. Default is <v>False</v>. Will only work if the CRT TV Overlay Toggle is enabled.",
+                "default": "False"
             },
             {
                 "name": "Gradient Omission",
                 "identifier": "omit_gradient",
                 "description": "Whether to omit the gradient overlay",
-                "tooltip": "Either <v>True</v> or <v>False</v>. Set to <v>False</v> if you have trouble reading text on brighter images.<br>Default is <v>True</v>."
+                "tooltip": "Either <v>True</v> or <v>False</v>. Set to <v>False</v> if you have trouble reading the text on brighter images. Default is <v>True</v>.",
+                "default": "True"
             }
-        ],        
-        "hash": "f8dd2e3b917b651b9fa5c56609054851"
+        ],
+        "hash": "7b4e4c497c2c47ba3d5f587bb8152b8d"
     },
     {
         "name": "Horizon",
@@ -404,60 +443,99 @@
         "supports_custom_seasons": true,
         "supported_extras": [
             {
-                "name": "Episode Text Vertical Shift",
-                "identifier": "episode_text_vertical_shift",
-                "description": "Vertical Shift for Episode Text",
-                "tooltip": "Additional vertical shift to apply to the season and episode text. Default is <v>0</v>.<br> If multi-line issues, problem fonts may be fixed by fix vertical metrics at <v>https://transfonter.org/</v>."
-            },
-            {
                 "name": "Stroke Text Color",
                 "identifier": "stroke_color",
-                "description": "Color to use for the episode & title text stroke",
-                "tooltip": "Default is <c>black</c>."
+                "description": "Color to use for the text stroke",
+                "tooltip": "Default is <c>black</c>.",
+                "default": "black"
+            },
+            {
+                "name": "Episode Text Vertical Shift",
+                "identifier": "episode_text_vertical_shift",
+                "description": "Vertical shift for episode text",
+                "tooltip": "Additional vertical shift to apply to the season and episode text. If you encounter multi-line issues, problem fonts maybe fixed by Fix vertical metrics at <v>https://transfonter.org/</v>. Default is <v>0</v>. Unit is pixels.",
+                "default": 0
+            },
+            {
+                "name": "Episode Text Font",
+                "identifier": "episode_text_font",
+                "description": "Font to use for the season and episode text",
+                "tooltip": "This can be just a file name if the font file is in the Series' source directory, <v>{title_font}</v> to match the Font used for the title text, or a full path to the font file."
+            },
+            {
+                "name": "Episode Text Font Size",
+                "identifier": "episode_text_font_size",
+                "description": "Size adjustment for the season and episode text",
+                "tooltip": "Number ≥<v>0.0</v>. Default is <v>1.0</v>.",
+                "default": 1.0
+            },
+            {
+                "name": "Episode Text Color",
+                "identifier": "episode_text_color",
+                "description": "Color to use for the episode text",
+                "tooltip": "Defaults to match the Title Color."
+            },
+            {
+                "name": "Episode Stroke Text Color",
+                "identifier": "episode_text_stroke_color",
+                "description": "Color to use for the stroke of the episode text",
+                "tooltip": "Defaults to match the Stroke Text Color."
+            },
+            {
+                "name": "Episode Text Kerning",
+                "identifier": "episode_text_kerning",
+                "description": "Spacing between characters for the episode text",
+                "tooltip": "Default is <v>18</v>. Unit is pixels.",
+                "default": 18
             },
             {
                 "name": "Separator Character",
                 "identifier": "separator",
                 "description": "Character to separate season and episode text",
-                "tooltip": "Default is <v>•</v>."
+                "tooltip": "Default is <v>•</v>.",
+                "default": "•"
             },
             {
                 "name": "Horizontal Alignment",
                 "identifier": "h_align",
-                "description": "Horizontal alignment of the text and symbol",
-                "tooltip": "Either <v>left</v> or <v>right</v>. Default is <v>left</v>."
+                "description": "Horizontal alignment of text",
+                "tooltip": "Either <v>left</v>, <v>center</v>, or <v>right</v>. Default is <v>left</v>.",
+                "default": "left"
             },
             {
                 "name": "Symbol",
                 "identifier": "symbol",
                 "description": "Add a custom symbol behind the text",
-                "tooltip": "Either <v>acolyte</v>, <v>ahsoka</v>, <v>andor</v>, <v>bobafett<v>, <v>mandalorian</v>, <v>obiwan</v>, or <v>witcher</v> to use a built-in symbol, or <v>logo</v> to use the Series logo."
+                "tooltip": "Either <v>acolyte</v>, <v>ahsoka</v>, <v>andor</v>, <v>bobafett<v>, <v>mandalorian</v>, <v>obiwan</v>, or <v>witcher</v> to use a built-in symbol; or <v>logo</v> to use the Series logo."
             },
             {
                 "name": "CRT TV Overlay",
                 "identifier": "crt_overlay",
                 "description": "CRT TV Overlay Toggle",
-                "tooltip": "Either <v>nobezel</v> or <v>bezel</v>. Default is <v>None</v>."
+                "tooltip": "Whether to display the CRT TV overlay. Either <v>nobezel</v>, or <v>bezel</v>. Default is no overlay."
             },
             {
                 "name": "CRT TV Watched/Unwatched Overlay",
                 "identifier": "crt_state_overlay",
                 "description": "CRT TV Overlay Watched-Status Toggle",
-                "tooltip": "Whether to change the CRT overlay with the watched status of the Episode. Either <v>True</v> or <v>False</v>. Default is <v>False</v>. Will only work if the CRT TV Overlay Toggle is enabled."
+                "tooltip": "Whether to change the CRT overlay with the watched status of the Episode. Either <v>True</v> or <v>False</v>. Default is <v>False</v>. Will only work if the CRT TV Overlay Toggle is enabled.",
+                "default": "False"
             },
             {
                 "name": "Gradient Omission",
                 "identifier": "omit_gradient",
                 "description": "Whether to omit the gradient overlay",
-                "tooltip": "Either <v>True</v> or <v>False</v>. Set to <v>False</v> if you have trouble reading text on brighter images. Default is <v>True</v>."
+                "tooltip": "Either <v>True</v> or <v>False</v>. Set to <v>False</v> if you have trouble reading the text on brighter images. Default is <v>True</v>.",
+                "default": "True"
             },
             {
                 "name": "Alignment Overlay",
                 "identifier": "alignment_overlay",
                 "description": "Alignment Overlay Toggle",
-                "tooltip": "Enable an alignment overlay to help assist adjusting offsets for misaligned custom fonts. The overlay has guiding lines every 10 pixels. Either <v>True</v> or <v>False</v>. Default is <v>False</v>."
-            }            
-        ],        
-        "hash": "d3dec2bf026d7266652cd9fd33e72be3"
+                "tooltip": "Enable an alignment overlay to help assist adjusting offsets for misaligned custom fonts. The overlay has guiding lines every 10 pixels. Either <v>True</v> or <v>False</v>. Default is <v>False</v>.",
+                "default": "False"
+            }
+        ],              
+        "hash": "b07175c8b64176bf80fc1cf13bfb59e7"
     }
 ]
