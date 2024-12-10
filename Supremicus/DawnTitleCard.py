@@ -6,7 +6,10 @@ from pydantic import root_validator
 from app.schemas.card_type import BaseCardTypeCustomFontAllText
 
 from modules.BaseCardType import (
-    BaseCardType, ImageMagickCommands, Extra, CardDescription
+    BaseCardType,
+    CardDescription,
+    Extra,
+    ImageMagickCommands,
 )
 from modules.Debug import log
 from modules.EpisodeInfo2 import EpisodeInfo
@@ -20,10 +23,10 @@ if TYPE_CHECKING:
 
 class DawnTitleCard(BaseCardType):
     """
-    CardType that produces title cards with left, centered or right aligned
-    text on the bottom. CRT TV overlay (nobezel or bezel) with optional
-    watched style based on Yozora's Retro title card for shows like
-    Stranger Things with a retro theme.
+    CardType that produces title cards with left, centered or right
+    aligned text on the bottom. CRT TV overlay (nobezel or bezel) with
+    optional watched style based on Yozora's Retro title card for shows
+    like Stranger Things with a retro theme.
     """
 
     """API Parameters"""
@@ -31,7 +34,9 @@ class DawnTitleCard(BaseCardType):
         name='Dawn',
         identifier='Supremicus/Dawn',
         example='https://raw.githubusercontent.com/CollinHeist/TitleCardMaker-CardTypes/web-ui/Supremicus/DawnTitleCard.preview.jpg',
-        creators=['Supremicus'],
+        creators=[
+            'Supremicus'
+        ],
         source='remote',
         supports_custom_fonts=True,
         supports_custom_seasons=True,
@@ -39,27 +44,32 @@ class DawnTitleCard(BaseCardType):
             Extra(
                 name='Stroke Text Color',
                 identifier='stroke_color',
-                description='Color to use for the episode & title text stroke',
-                tooltip='Default is <c>black</c>.'
+                description='Color to use for the text stroke',
+                tooltip='Default is <c>black</c>.',
+                default='black',
             ),
             Extra(
                 name='Title Text Horizontal Shift',
                 identifier='title_text_horizontal_shift',
                 description='Horizontal shift for the title text',
                 tooltip=(
-                    'Horizontal shift to apply to title text to align with episode text. '
-                    'Default is <v>0</v>.'
+                    'Horizontal shift to apply to the title text. Default is '
+                    '0. Unit is pixels.'
                 ),
+                default=0,
             ),
             Extra(
                 name='Episode Text Vertical Shift',
                 identifier='episode_text_vertical_shift',
-                description='Vertical Shift for Episode Text',
+                description='Vertical shift for episode text',
                 tooltip=(
-                    'Additional vertical shift to apply to the season and episode text. '
-                    'Default is <v>0</v>.<br> If multi-line issues, problem fonts may'
-                    'be fixed by <v>Fix vertical metrics</v> at <v>https://transfonter.org/</v>'
+                    'Additional vertical shift to apply to the season and '
+                    'episode text. If you encounter multi-line issues, problem '
+                    'fonts maybe fixed by Fix vertical metrics at '
+                    '<v>https://transfonter.org/</v>. Default is <v>0</v>. '
+                    'Unit is pixels.'
                 ),
+                default=0,
             ),
             Extra(
                 name='Episode Text Font',
@@ -77,43 +87,51 @@ class DawnTitleCard(BaseCardType):
                 identifier='episode_text_font_size',
                 description='Size adjustment for the season and episode text',
                 tooltip='Number ≥<v>0.0</v>. Default is <v>1.0</v>.',
+                default=1.0,
             ),
             Extra(
                 name='Episode Text Color',
                 identifier='episode_text_color',
-                description='Color to use separately for the episode text',
-                tooltip='Leave blank to match Title Color.'
+                description='Color to use for the episode text',
+                tooltip='Defaults to match the Title Color.',
             ),
             Extra(
                 name='Episode Stroke Text Color',
                 identifier='episode_text_stroke_color',
-                description='Color to use separately for the episode text stroke',
-                tooltip='Leave blank to match Stroke Text Color.'
+                description='Color to use for the stroke of the episode text',
+                tooltip='Defaults to match the Stroke Text Color.',
             ),
             Extra(
                 name='Episode Text Kerning',
                 identifier='episode_text_kerning',
-                description='Pixel spacing between characters for the season and episode text',
-                tooltip='Number ≥<v>0</v>. Default is <v>18</v> pixels.',
+                description='Spacing between characters for the episode text',
+                tooltip='Default is <v>18</v>. Unit is pixels.',
+                default=18,
             ),
             Extra(
                 name='Separator Character',
                 identifier='separator',
                 description='Character to separate season and episode text',
-                tooltip='Default is <v>•</v>.'
+                tooltip='Default is <v>•</v>.',
+                default='•',
             ),
             Extra(
                 name='Horizontal Alignment',
                 identifier='h_align',
                 description='Horizontal alignment of text',
-                tooltip='Either <v>left</v>, <v>center</v> or <v>right</v>. Default is <v>left</v>.'
+                tooltip=(
+                    'Either <v>left</v>, <v>center</v>, or <v>right</v>. '
+                    'Default is <v>left</v>.'
+                ),
+                default='left',
             ),
             Extra(
                 name='CRT TV Overlay',
                 identifier='crt_overlay',
                 description='CRT TV Overlay Toggle',
                 tooltip=(
-                    'Either <v>nobezel</v> or <v>bezel</v>. Default is <v>None</v>.'
+                    'Whether to display the CRT TV overlay. Either '
+                    '<v>nobezel</v>, or <v>bezel</v>. Default is no overlay.'
                 ),
             ),
             Extra(
@@ -121,25 +139,29 @@ class DawnTitleCard(BaseCardType):
                 identifier='crt_state_overlay',
                 description='CRT TV Overlay Watched-Status Toggle',
                 tooltip=(
-                    'Whether to change the CRT overlay with the watched status of the Episode. '
-                    'Either <v>True</v> or <v>False</v>. Default is <v>False</v>. '
-                    'Will only work if the CRT TV Overlay Toggle is enabled.'
+                    'Whether to change the CRT overlay with the watched status '
+                    'of the Episode. Either <v>True</v> or <v>False</v>. '
+                    'Default is <v>False</v>. Will only work if the CRT TV '
+                    'Overlay Toggle is enabled.'
                 ),
+                default='False',
             ),
             Extra(
                 name='Gradient Omission',
                 identifier='omit_gradient',
                 description='Whether to omit the gradient overlay',
                 tooltip=(
-                    'Either <v>True</v> or <v>False</v>. Set to <v>False</v> if you have '
-                    'trouble reading text on brighter images.<br>Default is <v>True</v>.'
+                    'Either <v>True</v> or <v>False</v>. Set to <v>False</v> '
+                    'if you have trouble reading the text on brighter images.'
+                    'Default is <v>True</v>.'
                 ),
+                default='True',
             ),
         ],
         description=[
             'Produce TitleCards with left, centered or right aligned text on '
-            'the bottom.', 'Optional CRT TV overlay for shows like Stranger '
-            'Things with a retro theme.',
+            'the bottom.', 'An optional CRT TV overlay can be added for shows '
+            'with a retro theme (like Stranger Things)',
         ]
     )
 
@@ -147,19 +169,24 @@ class DawnTitleCard(BaseCardType):
         stroke_color: str = 'black'
         title_text_horizontal_shift: int = 0
         episode_text_vertical_shift: int = 0
-        episode_text_font: Union[Literal['{title_font}'], str, Path] = str(RemoteFile('Supremicus', 'ref/fonts/ExoSoft-Medium.ttf'))
+        episode_text_font: Union[
+            Literal['{title_font}'],
+            str,
+            Path
+        ] = str(RemoteFile('Supremicus', 'ref/fonts/ExoSoft-Medium.ttf'))
         episode_text_font_size: float = 1.0
-        episode_text_color: Optional[str] = None
-        episode_text_stroke_color: Optional[str] = None
+        episode_text_color: str | None = None
+        episode_text_stroke_color: str | None = None
         episode_text_kerning: int = 18
         separator: str = '•'
         h_align: Literal['left', 'center', 'right'] = 'left'
-        crt_overlay: str = None
+        crt_overlay: Literal['nobzel', 'bezel'] | None = None
         crt_state_overlay: bool = False
         omit_gradient: bool = True
 
         @root_validator(skip_on_failure=True)
         def validate_episode_text_font_file(cls, values: dict) -> dict:
+            # Specified as "{title_font}" - use title font file
             if (etf := values['episode_text_font']) == '{title_font}':
                 values['episode_text_font'] = values['font_file']
             # Episode text font does not exist, search alongside source image
@@ -170,8 +197,10 @@ class DawnTitleCard(BaseCardType):
             # Verify new specified font file does exist
             values['episode_text_font'] = Path(values['episode_text_font'])
             if not Path(values['episode_text_font']).exists():
-                raise ValueError(f'Specified Episode Text Font '
-                                 f'({values["episode_text_font"]}) does not exist')
+                raise ValueError(
+                    f'Specified Episode Text Font ('
+                    f'{values["episode_text_font"]}) does not exist'
+                )
 
             return values
 
@@ -257,7 +286,7 @@ class DawnTitleCard(BaseCardType):
             episode_text_kerning: int = 18,
             separator: str = '•',
             h_align: Literal['left', 'center', 'right'] = 'left',
-            crt_overlay:str = None,
+            crt_overlay: Literal['nobzel', 'bezel'] | None = None,
             crt_state_overlay: bool = False,
             omit_gradient: bool = True,
             preferences: Optional['Preferences'] = None,
@@ -459,6 +488,7 @@ class DawnTitleCard(BaseCardType):
 
         if self.crt_overlay is None:
             return []
+
         # Select CRT overlay based on watch status
         if self.crt_overlay == 'nobezel':
             if self.crt_state_overlay and not self.watched:
@@ -517,12 +547,18 @@ class DawnTitleCard(BaseCardType):
 
         # Generic font, reset custom episode text color
         if not custom_font:
-            if 'stroke_color' in extras:
-                extras['stroke_color'] = 'black'
-            if 'title_text_horizontal_shift' in extras:
-                extras['title_text_horizontal_shift'] = 0
-            if 'episode_text_vertical_shift' in extras:
-                extras['episode_text_vertical_shift'] = 0
+            for extra in (
+                'episode_text_color',
+                'episode_text_font',
+                'episode_text_font_size',
+                'episode_text_kerning',
+                'episode_text_stroke_color',
+                'episode_text_vertical_shift',
+                'stroke_color',
+                'title_text_horizontal_shift',
+            ):
+                if extra in extras:
+                    del extras[extra]
 
 
     @staticmethod
@@ -568,10 +604,10 @@ class DawnTitleCard(BaseCardType):
             True if custom season titles are indicated, False otherwise.
         """
 
-        standard_etf = DawnTitleCard.EPISODE_TEXT_FORMAT.upper()
-
-        return (custom_episode_map
-                or episode_text_format.upper() != standard_etf)
+        return (
+            custom_episode_map
+            or episode_text_format != DawnTitleCard.EPISODE_TEXT_FORMAT
+        )
 
 
     @staticmethod
@@ -601,7 +637,7 @@ class DawnTitleCard(BaseCardType):
         object's defined title card.
         """
 
-        command = ' '.join([
+        self.image_magick.run([
             f'convert "{self.source_file.resolve()}"',
             # Resize and optionally blur source image
             *self.resize_and_style,
@@ -619,5 +655,3 @@ class DawnTitleCard(BaseCardType):
             *self.resize_output,
             f'"{self.output_file.resolve()}"',
         ])
-
-        self.image_magick.run(command)
