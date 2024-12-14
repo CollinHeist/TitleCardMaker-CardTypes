@@ -180,7 +180,7 @@ class DawnTitleCard(BaseCardType):
         episode_text_kerning: int = 18
         separator: str = '•'
         h_align: Literal['left', 'center', 'right'] = 'left'
-        crt_overlay: Literal['nobzel', 'bezel'] | None = None
+        crt_overlay: Literal['nobezel', 'bezel'] | None = None
         crt_state_overlay: bool = False
         omit_gradient: bool = True
 
@@ -286,7 +286,7 @@ class DawnTitleCard(BaseCardType):
             episode_text_kerning: int = 18,
             separator: str = '•',
             h_align: Literal['left', 'center', 'right'] = 'left',
-            crt_overlay: Literal['nobzel', 'bezel'] | None = None,
+            crt_overlay: Literal['nobezel', 'bezel'] | None = None,
             crt_state_overlay: bool = False,
             omit_gradient: bool = True,
             preferences: Optional['Preferences'] = None,

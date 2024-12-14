@@ -111,7 +111,7 @@ class HorizonTitleCard(BaseCardType):
                 identifier='h_align',
                 description='Horizontal alignment of text',
                 tooltip=(
-                    'Either <v>left</v>, <v>center</v>, or <v>right</v>. '
+                    'Either <v>left</v> or <v>right</v>. '
                     'Default is <v>left</v>.'
                 ),
                 default='left',
@@ -199,7 +199,7 @@ class HorizonTitleCard(BaseCardType):
         ] | None = None
         logo_file: Path
         alignment_overlay: bool = False
-        crt_overlay: Literal['nobzel', 'bezel'] | None = None
+        crt_overlay: Literal['nobezel', 'bezel'] | None = None
         crt_state_overlay: bool = False
         omit_gradient: bool = True
 
@@ -328,7 +328,7 @@ class HorizonTitleCard(BaseCardType):
                 'logo',
             ] = None,
             alignment_overlay: bool = False,
-            crt_overlay:str = None,
+            crt_overlay: Literal['nobezel', 'bezel'] | None = None,
             crt_state_overlay: bool = False,
             omit_gradient: bool = True,
             preferences: Optional['Preferences'] = None,
