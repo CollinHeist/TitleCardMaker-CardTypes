@@ -426,7 +426,7 @@
                 "default": "True"
             }
         ],
-        "hash": "533d84e83ff1a31bb6916c5d886b860d"
+        "hash": "39b32bd1355097f222fd17ad2aaa07ae"
     },
     {
         "name": "Horizon",
@@ -499,7 +499,7 @@
                 "name": "Horizontal Alignment",
                 "identifier": "h_align",
                 "description": "Horizontal alignment of text",
-                "tooltip": "Either <v>left</v>, <v>center</v>, or <v>right</v>. Default is <v>left</v>.",
+                "tooltip": "Either <v>left</v>, or <v>right</v>. Default is <v>left</v>.",
                 "default": "left"
             },
             {
@@ -536,6 +536,6 @@
                 "default": "False"
             }
         ],              
-        "hash": "b07175c8b64176bf80fc1cf13bfb59e7"
+        "hash": "590737eaeed9c8391aabcef2fb50f9bd"
     }
 ]
