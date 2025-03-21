@@ -5,7 +5,9 @@ from pydantic import constr, root_validator
 
 from app.schemas.card_type import BaseCardTypeCustomFontNoText
 from modules.BaseCardType import (
-    BaseCardType, ImageMagickCommands, CardDescription
+    BaseCardType,
+    CardDescription,
+    ImageMagickCommands,
 )
 from modules.RemoteFile import RemoteFile
 from modules.Title import SplitCharacteristics
@@ -118,9 +120,9 @@ class RetroTitleCard(BaseCardType):
             watched: bool = True,
             blur: bool = False,
             grayscale: bool = False,
-            override_bw: Optional[OverrideBw] = None,
-            override_style: Optional[OverrideStyle] = None,
-            preferences: Optional['Preferences'] = None,
+            override_bw: OverrideBw | None = None,
+            override_style: OverrideStyle | None = None,
+            preferences: 'Preferences | None' = None,
             **unused,
         ) -> None:
 
@@ -243,13 +245,14 @@ class RetroTitleCard(BaseCardType):
             True if a custom font is indicated, False otherwise.
         """
 
-        return ((font.color != RetroTitleCard.TITLE_COLOR)
-            or (font.file != RetroTitleCard.TITLE_FONT)
-            or (font.interline_spacing != 0)
-            or (font.kerning != 1.0)
-            or (font.size != 1.0)
-            or (font.stroke_width != 1.0)
-            or (font.vertical_shift != 0)
+        return (
+            font.color != RetroTitleCard.TITLE_COLOR
+            or font.file != RetroTitleCard.TITLE_FONT
+            or font.interline_spacing != 0
+            or font.kerning != 1.0
+            or font.size != 1.0
+            or font.stroke_width != 1.0
+            or font.vertical_shift != 0
         )
 
 
@@ -276,7 +279,7 @@ class RetroTitleCard(BaseCardType):
     def create(self) -> None:
         """Create this object's defined title card."""
 
-        command = ' '.join([
+        self.image_magick.run([
             f'convert "{self.source_file.resolve()}"',
             *self.resize_and_style,
             *self.add_gradient_commands,
@@ -287,5 +290,3 @@ class RetroTitleCard(BaseCardType):
             *self.resize_output,
             f'"{self.output_file.resolve()}"',
         ])
-
-        self.image_magick.run(command)

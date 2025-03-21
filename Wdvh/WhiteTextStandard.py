@@ -5,7 +5,10 @@ from pydantic import FilePath
 from app.schemas.card_type import BaseCardTypeCustomFontAllText
 
 from modules.BaseCardType import (
-    BaseCardType, ImageMagickCommands, Extra, CardDescription
+    BaseCardType,
+    ImageMagickCommands,
+    CardDescription,
+    Extra,
 )
 from modules.RemoteFile import RemoteFile
 
@@ -46,9 +49,9 @@ class WhiteTextStandard(BaseCardType):
 
     """Characteristics for title splitting by this class"""
     TITLE_CHARACTERISTICS = {
-        'max_line_width': 32,   # Character count to begin splitting titles
-        'max_line_count': 3,    # Maximum number of lines a title can take up
-        'top_heavy': False,     # This class uses bottom heavy titling
+        'max_line_width': 32,
+        'max_line_count': 3,
+        'style': 'top',
     }
 
     """Default font and text color for episode title text"""
@@ -80,7 +83,7 @@ class WhiteTextStandard(BaseCardType):
     )
 
 
-    def __init__(self,
+    def __init__(self, *,
             source_file: Path,
             card_file: Path,
             title_text: str,
@@ -98,7 +101,7 @@ class WhiteTextStandard(BaseCardType):
             blur: bool = False,
             grayscale: bool = False,
             separator: str = '•',
-            preferences: Optional['Preferences'] = None,
+            preferences: 'Preferences | None' = None,
             **unused,
         ) -> None:
         """Initialize this CardType object."""
@@ -206,13 +209,14 @@ class WhiteTextStandard(BaseCardType):
             True if a custom font is indicated, False otherwise.
         """
 
-        return ((font.color != WhiteTextStandard.TITLE_COLOR)
-            or (font.file != WhiteTextStandard.TITLE_FONT)
-            or (font.kerning != 1.0)
-            or (font.interline_spacing != 0)
-            or (font.size != 1.0)
-            or (font.stroke_width != 1.0)
-            or (font.vertical_shift != 0)
+        return (
+            font.color != WhiteTextStandard.TITLE_COLOR
+            or font.file != WhiteTextStandard.TITLE_FONT
+            or font.kerning != 1.0
+            or font.interline_spacing != 0
+            or font.size != 1.0
+            or font.stroke_width != 1.0
+            or font.vertical_shift != 0
         )
 
 
@@ -233,10 +237,10 @@ class WhiteTextStandard(BaseCardType):
             True if custom season title are indicated. False otherwise.
         """
 
-        standard_etf = WhiteTextStandard.EPISODE_TEXT_FORMAT.upper()
-
-        return (custom_episode_map
-                or episode_text_format.upper() != standard_etf)
+        return (
+            custom_episode_map
+            or episode_text_format != WhiteTextStandard.EPISODE_TEXT_FORMAT
+        )
 
 
     def create(self) -> None:
@@ -245,7 +249,7 @@ class WhiteTextStandard(BaseCardType):
         object's defined title card.
         """
 
-        command = ' '.join([
+        self.image_magick.run([
             f'convert',
             # Resize and style source image
             f'"{self.source_file.resolve()}"',
@@ -261,5 +265,3 @@ class WhiteTextStandard(BaseCardType):
             *self.resize_output,
             f'"{self.output_file.resolve()}"',
         ])
-
-        self.image_magick.run(command)

@@ -6,7 +6,9 @@ from pydantic import FilePath
 
 from app.schemas.card_type import BaseCardTypeCustomFontAllText
 from modules.BaseCardType import (
-    BaseCardType, ImageMagickCommands, CardDescription
+    BaseCardType,
+    CardDescription,
+    ImageMagickCommands,
 )
 from modules.Debug import log
 from modules.RemoteFile import RemoteFile
@@ -48,7 +50,7 @@ class TitleColorMatch(BaseCardType):
 
     class CardModel(BaseCardTypeCustomFontAllText):
         logo_file: FilePath
-        font_color: str = '#EBEBEB'
+        font_color: str = 'auto'
         font_file: FilePath
         omit_gradient: bool = False
 
@@ -64,7 +66,7 @@ class TitleColorMatch(BaseCardType):
 
     """Default font and text color for episode title text"""
     TITLE_FONT = str((REF_DIRECTORY / 'Sequel-Neue.otf').resolve())
-    TITLE_COLOR = '#EBEBEB'
+    TITLE_COLOR = 'auto'
 
     """Default characters to replace in the generic font"""
     FONT_REPLACEMENTS = {
@@ -89,10 +91,22 @@ class TitleColorMatch(BaseCardType):
     __COLORDATA_REGEX = re_compile(r'[\s]*(\d*)?:\s.*\s(#\w{8}).*\n?')
 
     __slots__ = (
-        'source_file', 'output_file', 'title_text', 'season_text',
-        'episode_text', 'hide_season_text', 'hide_episode_text', 'font_color',
-        'font_file', 'font_interline_spacing', 'font_kerning', 'font_size',
-        'font_stroke_width', 'font_vertical_shift', 'logo', 'omit_gradient',
+        'source_file',
+        'output_file',
+        'title_text',
+        'season_text',
+        'episode_text',
+        'hide_season_text',
+        'hide_episode_text',
+        'font_color',
+        'font_file',
+        'font_interline_spacing',
+        'font_kerning',
+        'font_size',
+        'font_stroke_width',
+        'font_vertical_shift',
+        'logo',
+        'omit_gradient',
     )
 
 
@@ -115,7 +129,7 @@ class TitleColorMatch(BaseCardType):
             blur: bool = False,
             grayscale: bool = False,
             omit_gradient: bool = False,
-            preferences: Optional['Preferences'] = None,
+            preferences: 'Preferences | None' = None,
             **unused,
         ) -> None:
         """Construct a new instance of this Card."""
@@ -165,11 +179,13 @@ class TitleColorMatch(BaseCardType):
 
         return [
             # Resize logo
-            f'\( "{self.logo.resolve()}"',
+            fr'\(',
+            f'"{self.logo.resolve()}"',
             f'-trim',
             f'+repage',
             f'-resize x650',
-            f'-resize 1155x650\> \)',
+            fr'-resize 1155x650\>',
+            fr'\)',
             # Overlay resized logo
             f'-gravity northwest',
             f'-define colorspace:auto-grayscale=false',
@@ -273,7 +289,7 @@ class TitleColorMatch(BaseCardType):
             return hexcolor, 'black' if luminance > 50 else 'white'
 
         # No valid colors identified, return defaults
-        return self.TITLE_COLOR, 'black'
+        return '#EBEBEB', 'black'
 
     
     @property
@@ -325,24 +341,28 @@ class TitleColorMatch(BaseCardType):
             f'-fill black',
             f'-stroke black',
             f'-strokewidth 6',
-            f'\( -gravity center',
+            fr'\(',
+            f'-gravity center',
             f'-font "{self.SEASON_COUNT_FONT.resolve()}"',
             f'label:"{self.season_text} •"',
             f'-font "{self.EPISODE_COUNT_FONT.resolve()}"',
             f'label:"{self.episode_text}"',
-            f'+smush 30 \)',
+            f'+smush 30',
+            fr'\)',
             f'-gravity southwest',
             f'-geometry +50+50',
             f'-composite',
             f'-fill "{self.SERIES_COUNT_TEXT_COLOR}"',
             f'-stroke "{self.SERIES_COUNT_TEXT_COLOR}"',
             f'-strokewidth 0.75',
-            f'\( -gravity center',
+            fr'\(',
+            f'-gravity center',
             f'-font "{self.SEASON_COUNT_FONT.resolve()}"',
             f'label:"{self.season_text} •"',
             f'-font "{self.EPISODE_COUNT_FONT.resolve()}"',
             f'label:"{self.episode_text}"',
-            f'+smush 30 \)',
+            f'+smush 30',
+            fr'\)',
             f'-gravity southwest',
             f'-geometry +50+50',
             f'-composite',
@@ -362,13 +382,14 @@ class TitleColorMatch(BaseCardType):
             True if a custom font is indicated, False otherwise.
         """
 
-        return ((font.color != TitleColorMatch.TITLE_COLOR)
-            or (font.file != TitleColorMatch.TITLE_FONT)
-            or (font.interline_spacing != 0)
-            or (font.kerning != 1.0)
-            or (font.size != 1.0)
-            or (font.stroke_width != 1.0)
-            or (font.vertical_shift != 0)
+        return (
+            font.color != TitleColorMatch.TITLE_COLOR
+            or font.file != TitleColorMatch.TITLE_FONT
+            or font.interline_spacing != 0
+            or font.kerning != 1.0
+            or font.size != 1.0
+            or font.stroke_width != 1.0
+            or font.vertical_shift != 0
         )
 
 
@@ -389,16 +410,16 @@ class TitleColorMatch(BaseCardType):
             True if custom season titles are indicated, False otherwise.
         """
 
-        standard_etf = TitleColorMatch.EPISODE_TEXT_FORMAT.upper()
-
-        return (custom_episode_map
-                or episode_text_format.upper() != standard_etf)
+        return (
+            custom_episode_map
+            or episode_text_format != TitleColorMatch.EPISODE_TEXT_FORMAT
+        )
 
 
     def create(self) -> None:
         """Create this object's defined title card."""
 
-        command = ' '.join([
+        self.image_magick.run([
             f'convert',
             # Resize source image
             f'"{self.source_file.resolve()}"',
@@ -416,5 +437,3 @@ class TitleColorMatch(BaseCardType):
             *self.resize_output,
             f'"{self.output_file.resolve()}"',
         ])
-
-        self.image_magick.run(command)

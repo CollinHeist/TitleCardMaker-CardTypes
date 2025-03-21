@@ -80,12 +80,20 @@ class BlacklistTitleCard(BaseCardType):
     USES_SEASON_TITLE = False
 
     __slots__ = (
-        'source_file', 'output_file', 'title_text', 'episode_text',
-        'hide_episode_text', 'line_count', 'font_color', 'font_file',
-        'font_size', 'font_interline_spacing', 'font_vertical_shift',
+        'source_file',
+        'output_file',
+        'title_text',
+        'episode_text',
+        'hide_episode_text',
+        'line_count',
+        'font_color',
+        'font_file',
+        'font_size',
+        'font_interline_spacing',
+        'font_vertical_shift',
     )
 
-    def __init__(self,
+    def __init__(self, *,
             source_file: Path,
             card_file: Path,
             title_text: str, 
@@ -136,11 +144,12 @@ class BlacklistTitleCard(BaseCardType):
             True if a custom font is indicated, False otherwise.
         """
 
-        return ((font.color != BlacklistTitleCard.TITLE_COLOR)
-            or (font.file != BlacklistTitleCard.TITLE_FONT)
-            or (font.interline_spacing != 0)
-            or (font.size != 1.0)
-            or (font.vertical_shift != 0)
+        return (
+            font.color != BlacklistTitleCard.TITLE_COLOR
+            or font.file != BlacklistTitleCard.TITLE_FONT
+            or font.interline_spacing != 0
+            or font.size != 1.0
+            or font.vertical_shift != 0
         )
 
 
@@ -180,7 +189,7 @@ class BlacklistTitleCard(BaseCardType):
                 f'-annotate +150+{episode_text_offset} "{self.episode_text}"',
             ]
 
-        command = ' '.join([
+        self.image_magick.run([
             f'convert "{self.source_file.resolve()}"',
             # Resize and apply styles
             *self.resize_and_style,
@@ -197,5 +206,3 @@ class BlacklistTitleCard(BaseCardType):
             *self.add_overlay_mask(self.source_file),
             f'"{self.output_file.resolve()}"',
         ])
-
-        self.image_magick.run(command)

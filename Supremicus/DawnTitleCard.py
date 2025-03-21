@@ -33,10 +33,12 @@ class DawnTitleCard(BaseCardType):
     API_DETAILS = CardDescription(
         name='Dawn',
         identifier='Supremicus/Dawn',
-        example='https://raw.githubusercontent.com/CollinHeist/TitleCardMaker-CardTypes/web-ui/Supremicus/DawnTitleCard.preview.jpg',
-        creators=[
-            'Supremicus'
-        ],
+        example=(
+            'https://raw.githubusercontent.com/CollinHeist/'
+            'TitleCardMaker-CardTypes/web-ui/Supremicus/'
+            'DawnTitleCard.preview.jpg'
+        ),
+        creators=['Supremicus'],
         source='remote',
         supports_custom_fonts=True,
         supports_custom_seasons=True,
@@ -258,7 +260,7 @@ class DawnTitleCard(BaseCardType):
         'separator', 'h_align', 'crt_overlay', 'crt_state_overlay', 'omit_gradient'
     )
 
-    def __init__(self,
+    def __init__(self, *,
             source_file: Path,
             card_file: Path,
             title_text: str,

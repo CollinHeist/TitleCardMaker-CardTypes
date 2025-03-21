@@ -22,7 +22,7 @@
                 "tooltip": "Either <v>True</v> or <v>False</v>. Default is <v>False</v>."
             }
         ],
-        "hash": "05d95c9ba644cbce18846545449dd485"
+        "hash": "f828ad9e56e5e20da149585741f52f78"
     },
     {
         "name": "SciFi",
@@ -109,7 +109,7 @@
                 "description": "The color of the text stroke"
             }
         ],
-        "hash": "c5ea4f2f2bd78561920f999c98921fba"
+        "hash": "73cc15850d32270f878743598b4020de"
     },
     {
         "name": "Blacklist",
@@ -126,7 +126,7 @@
         "supports_custom_fonts": true,
         "supports_custom_seasons": false,
         "supported_extras": [],
-        "hash": "1d0e69019b7838875bc26642b6d06433"
+        "hash": "718184a25325261a744b6b3fa75dd0a2"
     },
     {
         "name": "Tinted Frame Plus",
@@ -212,7 +212,7 @@
                 "tooltip": "Either <v>True</v> or <v>False</v>. Default is <v>True</v>."
             }
         ],        
-        "hash": "faa624806d4d5f3f22c086960b4ff34a"
+        "hash": "6e9814fb944374d6ff698cf8e8a8657d"
     },
     {
         "name": "White Text Broadcast",
@@ -229,7 +229,7 @@
         "supports_custom_fonts": true,
         "supports_custom_seasons": false,
         "supported_extras": [],
-        "hash": "2e94f41cc9ce5281446989c0b8af1a91"
+        "hash": "ea8c4014edf6e65970e53cc13a078399"
     },
     {
         "name": "Star Wars (Title Only)",
@@ -269,7 +269,7 @@
                 "description": "Character to separate the season and episode text"
             }
         ],
-        "hash": "e1074d795f905703dce9e221d0dd1415"
+        "hash": "72a1f8facf1618b7346aa91645c3f062"
     },
     {
         "name": "Retro",
@@ -299,7 +299,7 @@
                 "tooltip": "Either <v>play</v> or <v>rewind</v> to force that respective style."
             }
         ],
-        "hash": "61cf01538a82b01e99fbe547bbb4c366"
+        "hash": "264552361f77f9818848be340480a05a"
     },
     {
         "name": "Slim",
@@ -322,7 +322,7 @@
                 "tooltip": "Either <v>True</v> or <v>False</v>. If <v>True</v>, text may appear less legible on brighter images."
             }
         ],
-        "hash": "a51072ffafaf8b6201c2b5516e202697"
+        "hash": "b34bbbc2fc9b6f3f50b722457f29ebdd"
     },
     {
         "name": "Dawn",
@@ -426,7 +426,7 @@
                 "default": "True"
             }
         ],
-        "hash": "39b32bd1355097f222fd17ad2aaa07ae"
+        "hash": "11cadec508851eca865358eaa00c937d"
     },
     {
         "name": "Horizon",
@@ -536,6 +536,6 @@
                 "default": "False"
             }
         ],              
-        "hash": "590737eaeed9c8391aabcef2fb50f9bd"
+        "hash": "c40c137179d5f237add3823a233f4ffe"
     }
 ]

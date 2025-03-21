@@ -5,7 +5,9 @@ from pydantic import root_validator
 from app.schemas.card_type import BaseCardTypeCustomFontNoText
 
 from modules.BaseCardType import (
-    BaseCardType, ImageMagickCommands, CardDescription
+    BaseCardType,
+    CardDescription,
+    ImageMagickCommands,
 )
 from modules.Debug import log
 from modules.RemoteFile import RemoteFile
@@ -114,7 +116,7 @@ class WhiteTextBroadcast(BaseCardType):
             grayscale: bool = False,
             episode_text_color: str = SERIES_COUNT_TEXT_COLOR,
             omit_gradient: bool = False,
-            preferences: Optional['Preferences'] = None,
+            preferences: 'Preferences | None' = None,
             **unused,
         ) -> None:
         """Initialize this card"""
@@ -210,13 +212,14 @@ class WhiteTextBroadcast(BaseCardType):
             True if a custom font is indicated, False otherwise.
         """
 
-        return ((font.color != WhiteTextBroadcast.TITLE_COLOR)
-            or (font.file != WhiteTextBroadcast.TITLE_FONT)
-            or (font.interline_spacing != 0)
-            or (font.kerning != 1.0)
-            or (font.size != 1.0)
-            or (font.stroke_width != 1.0)
-            or (font.vertical_shift != 0)
+        return (
+            font.color != WhiteTextBroadcast.TITLE_COLOR
+            or font.file != WhiteTextBroadcast.TITLE_FONT
+            or font.interline_spacing != 0
+            or font.kerning != 1.0
+            or font.size != 1.0
+            or font.stroke_width != 1.0
+            or font.vertical_shift != 0
         )
 
 
@@ -251,7 +254,7 @@ class WhiteTextBroadcast(BaseCardType):
                 f'-composite',
             ]
 
-        command = ' '.join([
+        self.image_magick.run([
             f'convert "{self.source_file.resolve()}"',
             # Overlay gradient
             *self.resize_and_style,
@@ -264,5 +267,3 @@ class WhiteTextBroadcast(BaseCardType):
             *self.resize_output,
             f'"{self.output_file.resolve()}"',
         ])
-        
-        self.image_magick.run(command)

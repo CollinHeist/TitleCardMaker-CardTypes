@@ -6,7 +6,11 @@ from pydantic import FilePath, PositiveFloat, PositiveInt, root_validator
 from app.schemas.card_type import BaseCardTypeAllText
 from modules.Debug import log
 from modules.BaseCardType import (
-    BaseCardType, CardDescription, Coordinate, Extra, ImageMagickCommands,
+    BaseCardType,
+    CardDescription,
+    Coordinate,
+    Extra,
+    ImageMagickCommands,
     Rectangle,
 )
 from modules.Title import SplitCharacteristics
@@ -88,12 +92,12 @@ class TintedFramePlus(BaseCardType):
             bottom = values['bottom_element']
             if ((top == 'logo' or middle == 'logo' or bottom == 'logo')
                 and not values['logo_file'].exists()):
-                raise ValueError(f'Logo file indicated and does not exist')
+                raise ValueError('Logo file indicated and does not exist')
 
             # Verify no two elements are the same
             if ((top != 'omit' and top in (middle, bottom))
                 or (middle != 'omit' and (middle == bottom))):
-                raise ValueError(f'Top/middle/bottom elements cannot be the same')
+                raise ValueError('Top/middle/bottom elements cannot be the same')
 
             # Convert None colors to the default font color
             if values['episode_text_color'] is None:
@@ -238,10 +242,12 @@ class TintedFramePlus(BaseCardType):
             f'-blur 0x20',
             # Crop out center area of the source image
             f'-gravity center',
-            f'\( "{self.source_file.resolve()}"',
+            fr'\(',
+            f'"{self.source_file.resolve()}"',
             *self.resize_and_style,
             f'-crop {crop_width}x{crop_height}+0+0',
-            f'+repage \)',
+            f'+repage',
+            fr'\)',
             # Overlay unblurred center area
             f'-composite',
         ]
@@ -273,18 +279,24 @@ class TintedFramePlus(BaseCardType):
 
         return [
             f'-background transparent',
-            f'\( -font "{self.episode_text_font.resolve()}"',
-            f'+kerning +interline-spacing +interword-spacing',
+            fr'\(',
+            f'-font "{self.episode_text_font.resolve()}"',
+            f'+kerning',
+            f'+interline-spacing',
+            f'+interword-spacing',
             f'-pointsize {60 * self.episode_text_font_size}',
             f'-fill "{self.episode_text_color}"',
             f'label:"{index_text}"',
             # Create drop shadow
-            f'\( +clone',
-            f'-shadow 80x3+6+6 \)',
+            fr'\(',
+            f'+clone',
+            f'-shadow 80x3+6+6',
+            fr'\)',
             # Position shadow below text
             f'+swap',
             f'-layers merge',
-            f'+repage \)',
+            f'+repage',
+            fr'\)',
             # Overlay text and shadow onto source image
             f'-gravity center',
             f'-geometry +0{vertical_shift:+}',
@@ -324,15 +336,17 @@ class TintedFramePlus(BaseCardType):
             # Constrain by width and height
             resize_command = [
                 f'-resize x{logo_height}',
-                f'-resize {2500 * self.logo_size}x{logo_height}\>',
+                fr'-resize {2500 * self.logo_size}x{logo_height}\>',
             ]
         else:
             resize_command = [f'-resize x{logo_height}']
 
         return [
-            f'\( "{self.logo.resolve()}"',
+            fr'\(',
+            f'"{self.logo.resolve()}"',
             *resize_command,
-            f'\) -gravity center',
+            fr'\)',
+            f'-gravity center',
             f'-geometry +0{vertical_shift:+}',
             f'-composite',
         ]
@@ -363,7 +377,7 @@ class TintedFramePlus(BaseCardType):
         # Element is index text
         if self.top_element == 'index':
             element_width, _ = self.image_magick.get_text_dimensions(
-                self.index_text_commands, width='max', height='max',
+                self.index_text_commands,
             )
             margin = 25
         # Element is logo
@@ -371,13 +385,13 @@ class TintedFramePlus(BaseCardType):
             element_width, logo_height = self.image_magick.get_image_dimensions(
                 self.logo
             )
-            element_width /= (logo_height / 150)
+            element_width /= logo_height / 150
             element_width *= self.logo_size
             margin = 25
 
         # Determine bounds based on element width
-        left_box_x = (self.WIDTH / 2) - (element_width / 2) - margin
-        right_box_x = (self.WIDTH / 2) + (element_width / 2) + margin
+        left_box_x = (self.WIDTH - element_width) / 2 - margin
+        right_box_x = (self.WIDTH + element_width) / 2 + margin
 
         # If the boundaries are wider than the start of the frame, draw nothing
         if left_box_x < INSET or right_box_x > (self.WIDTH - INSET):
@@ -429,7 +443,7 @@ class TintedFramePlus(BaseCardType):
         # Element is index text
         if self.bottom_element == 'index':
             element_width, _ = self.image_magick.get_text_dimensions(
-                self.index_text_commands, width='max', height='max',
+                self.index_text_commands,
             )
             margin = 25
         # Element is logo
@@ -437,7 +451,7 @@ class TintedFramePlus(BaseCardType):
             element_width, logo_height = self.image_magick.get_image_dimensions(
                 self.logo
             )
-            element_width /= (logo_height / 150)
+            element_width /= logo_height / 150
             element_width *= self.logo_size
             margin = 25
 
@@ -495,18 +509,22 @@ class TintedFramePlus(BaseCardType):
 
         return [
             # Create blank canvas
-            f'\( -size {self.TITLE_CARD_SIZE}',
+            fr'\(',
+            f'-size {self.TITLE_CARD_SIZE}',
             f'xc:transparent',
             # Draw all sets of rectangles
             f'+stroke',
             f'-fill "{self.frame_color}"',
             *top, *left, *right, *bottom,
-            f'\( +clone',
-            f'-shadow 80x3+4+4 \)',
+            fr'\(',
+            f'+clone',
+            f'-shadow 80x3+4+4',
+            fr'\)',
             # Position drop shadow below rectangles
             f'+swap',
             f'-layers merge',
-            f'+repage \)',
+            f'+repage',
+            fr'\)',
             # Overlay box and shadow onto source image
             f'-geometry +0+0',
             f'-composite',
@@ -531,16 +549,15 @@ class TintedFramePlus(BaseCardType):
 
         # Generic font, reset episode text and box colors
         if not custom_font:
-            if 'episode_text_color' in extras:
-                extras['episode_text_color'] =TintedFramePlus.EPISODE_TEXT_COLOR
-            if 'episode_text_font' in extras:
-                extras['episode_text_font'] = TintedFramePlus.EPISODE_TEXT_FONT
-            if 'episode_text_font_size' in extras:
-                extras['episode_text_font_size'] = 1.0
-            if 'episode_text_vertical_shift' in extras:
-                extras['episode_text_vertical_shift'] = 0
-            if 'frame_color' in extras:
-                extras['frame_color'] = TintedFramePlus.TITLE_COLOR
+            for extra in (
+                'episode_text_color',
+                'episode_text_font',
+                'episode_text_font_size',
+                'episode_text_vertical_shift',
+                'frame_color',
+            ):
+                if extra in extras:
+                    del extras[extra]
 
 
     @staticmethod
@@ -556,14 +573,7 @@ class TintedFramePlus(BaseCardType):
             True if a custom font is indicated, False otherwise.
         """
 
-        return ((font.color != TintedFramePlus.TITLE_COLOR)
-            or (font.file != TintedFramePlus.TITLE_FONT)
-            or (font.interline_spacing != 0)
-            or (font.interword_spacing != 0)
-            or (font.kerning != 1.0)
-            or (font.size != 1.0)
-            or (font.vertical_shift != 0)
-        )
+        return TintedFramePlus._is_custom_font(font)
 
 
     @property
@@ -604,9 +614,10 @@ class TintedFramePlus(BaseCardType):
             True if custom season titles are indicated, False otherwise.
         """
 
-        return (custom_episode_map
-                or episode_text_format.upper() != \
-                    TintedFramePlus.EPISODE_TEXT_FORMAT.upper())
+        return (
+            custom_episode_map
+            or episode_text_format != TintedFramePlus.EPISODE_TEXT_FORMAT
+        )
 
 
     def create(self) -> None:
@@ -619,7 +630,7 @@ class TintedFramePlus(BaseCardType):
         kerning = -1.25 * self.font_kerning
         vertical_shift = 245 + self.font_vertical_shift
  
-        command = ' '.join([
+        self.image_magick.run([
             f'convert "{self.source_file.resolve()}"',
             # Resize and apply styles to source image
             *self.resize_and_style,
@@ -646,5 +657,3 @@ class TintedFramePlus(BaseCardType):
             *self.resize_output,
             f'"{self.output_file.resolve()}"',
         ])
-
-        self.image_magick.run(command)

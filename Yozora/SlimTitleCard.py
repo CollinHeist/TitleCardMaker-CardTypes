@@ -4,7 +4,10 @@ from typing import Optional, TYPE_CHECKING
 from app.schemas.card_type import BaseCardTypeCustomFontAllText
 
 from modules.BaseCardType import (
-    BaseCardType, ImageMagickCommands, Extra, CardDescription
+    BaseCardType,
+    CardDescription,
+    Extra,
+    ImageMagickCommands,
 )
 from modules.Debug import log
 from modules.RemoteFile import RemoteFile
@@ -257,7 +260,7 @@ class SlimTitleCard(BaseCardType):
             f'-background transparent',
             f'+interword-spacing',
             f'-gravity south',
-            f'\(',
+            fr'\(',
             *self.__series_count_text_global_effects,
             *self.__series_count_text_black_stroke,
             f'-font "{self.SEASON_COUNT_FONT}"',
@@ -265,11 +268,12 @@ class SlimTitleCard(BaseCardType):
             f'label:"• "',
             f'-font "{self.EPISODE_COUNT_FONT}"',
             f'label:"{self.episode_text}"',
-            f'+smush 15 \)',
+            f'+smush 15',
+            fr'\)',
             f'-geometry +0+35',
             f'-composite',
 
-            f'\(',
+            fr'\(',
             *self.__series_count_text_global_effects,
             *self.__series_count_text_effects,
             f'-font "{self.SEASON_COUNT_FONT}"',
@@ -277,7 +281,8 @@ class SlimTitleCard(BaseCardType):
             f'label:"• "',
             f'-font "{self.EPISODE_COUNT_FONT}"',
             f'label:"{self.episode_text}"',
-            f'+smush 18 \)',
+            f'+smush 18',
+            fr'\)',
             f'-geometry +0+35',
             f'-composite',
         ]
@@ -296,13 +301,14 @@ class SlimTitleCard(BaseCardType):
             True if a custom font is indicated, False otherwise.
         """
 
-        return ((font.color != SlimTitleCard.TITLE_COLOR)
-            or (font.file != SlimTitleCard.TITLE_FONT)
-            or (font.interline_spacing != 0)
-            or (font.kerning != 1.0)
-            or (font.size != 1.0)
-            or (font.stroke_width != 1.0)
-            or (font.vertical_shift != 0)
+        return (
+            font.color != SlimTitleCard.TITLE_COLOR
+            or font.file != SlimTitleCard.TITLE_FONT
+            or font.interline_spacing != 0
+            or font.kerning != 1.0
+            or font.size != 1.0
+            or font.stroke_width != 1.0
+            or font.vertical_shift != 0
         )
 
 
@@ -341,7 +347,7 @@ class SlimTitleCard(BaseCardType):
                 f'-composite',
             ]
 
-        command = ' '.join([
+        self.image_magick.run([
             f'convert "{self.source_file.resolve()}"',
             *self.resize_and_style,
             # Add gradient
@@ -355,5 +361,3 @@ class SlimTitleCard(BaseCardType):
             *self.resize_output,
             f'"{self.output_file.resolve()}"',
         ])
-
-        self.image_magick.run(command)

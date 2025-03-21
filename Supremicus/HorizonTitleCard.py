@@ -34,7 +34,11 @@ class HorizonTitleCard(BaseCardType):
     API_DETAILS = CardDescription(
         name='Horizon',
         identifier='Supremicus/Horizon',
-        example='https://raw.githubusercontent.com/CollinHeist/TitleCardMaker-CardTypes/web-ui/Supremicus/HorizonTitleCard.preview.jpg',
+        example=(
+            'https://raw.githubusercontent.com/CollinHeist/'
+            'TitleCardMaker-CardTypes/web-ui/Supremicus/'
+            'HorizonTitleCard.preview.jpg'
+        ),
         creators=[
             'Supremicus'
         ],
@@ -111,7 +115,7 @@ class HorizonTitleCard(BaseCardType):
                 identifier='h_align',
                 description='Horizontal alignment of text',
                 tooltip=(
-                    'Either <v>left</v> or <v>right</v>. '
+                    'Either <v>left</v>, <v>center</v>, or <v>right</v>. '
                     'Default is <v>left</v>.'
                 ),
                 default='left',
@@ -192,7 +196,7 @@ class HorizonTitleCard(BaseCardType):
         episode_text_stroke_color: str | None = None
         episode_text_kerning: int = 18
         separator: str = '•'
-        h_align: Literal['left', 'right'] = 'left'
+        h_align: Literal['left', 'center', 'right'] = 'left'
         symbol: Literal[
             'acolyte', 'ashoka', 'andor', 'bobafett', 'mandalorian', 'obiwan',
             'witcher', 'logo',
@@ -276,6 +280,7 @@ class HorizonTitleCard(BaseCardType):
 
     """Source path for the gradient image"""
     __GRADIENT_IMAGE = RemoteFile('Supremicus', 'ref/overlays/radial_gradient.png')
+    __GRADIENT_IMAGE_CENTERED = RemoteFile('Supremicus', 'ref/overlays/radial_gradient_centered.png')
 
     __slots__ = (
         'source_file', 'output_file', 'title_text', 'season_text',
@@ -315,7 +320,7 @@ class HorizonTitleCard(BaseCardType):
             episode_text_stroke_color: str = None,
             episode_text_kerning: int = 18,
             separator: str = '•',
-            h_align: Literal['left', 'right'] = 'left',
+            h_align: Literal['left', 'center', 'right'] = 'left',
             logo_file: Optional[Path] = None,
             symbol: None | Literal[
                 'acolyte',
@@ -410,7 +415,7 @@ class HorizonTitleCard(BaseCardType):
         # Text offsets
         offset = (124 * self.font_size / 2) * self.line_count
         y = 900 - offset + self.episode_text_vertical_shift - 30
-        x = -700 if self.h_align == 'left' else 700
+        x = -700 if self.h_align == 'left' else (700 if self.h_align == 'right' else 0)
 
         return [
             *base_commands,
@@ -435,7 +440,7 @@ class HorizonTitleCard(BaseCardType):
         font_size = 124 * self.font_size
         offset = (font_size / 2) * self.line_count
         vertical_shift = 42 + self.font_vertical_shift
-        x = -700 if self.h_align == 'left' else 700
+        x = -700 if self.h_align == 'left' else (700 if self.h_align == 'right' else 0)
         y = 900 - offset + vertical_shift - 12
 
         return [
@@ -509,7 +514,7 @@ class HorizonTitleCard(BaseCardType):
         if not symbol_image or not symbol_image.exists():
             return []
 
-        x = -700 if self.h_align == 'left' else 700
+        x = -700 if self.h_align == 'left' else (700 if self.h_align == 'right' else 0)
 
         return [
             f'-gravity center',
@@ -561,10 +566,15 @@ class HorizonTitleCard(BaseCardType):
         if self.omit_gradient:
             return []
 
-        rotation = 0 if self.h_align == 'left' else 180
+        if self.h_align in ('left', 'right'):
+            rotation = 0 if self.h_align == 'left' else 180
+            gradient_image = self.__GRADIENT_IMAGE
+        else:
+            rotation = 0
+            gradient_image = self.__GRADIENT_IMAGE_CENTERED
 
         return [
-            f'\( "{self.__GRADIENT_IMAGE.resolve()}"',
+            f'\( "{gradient_image.resolve()}"',
             f'-rotate {rotation} \)',
             f'-composite',
         ]

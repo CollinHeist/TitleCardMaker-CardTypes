@@ -5,7 +5,10 @@ from pydantic import FilePath, PositiveFloat, constr, root_validator
 from app.schemas.card_type import BaseCardTypeCustomFontNoText
 
 from modules.BaseCardType import (
-    BaseCardType, CardDescription, Extra, ImageMagickCommands,
+    BaseCardType,
+    CardDescription,
+    Extra,
+    ImageMagickCommands,
 )
 from modules.Debug import log
 from modules.RemoteFile import RemoteFile
@@ -111,7 +114,7 @@ class SciFiTitleCard(BaseCardType):
         'overlay_top_alpha', 'overlay_rectangles_alpha', 'episode_text_color',
     )
 
-    def __init__(self,
+    def __init__(self, *,
             source_file: Path,
             card_file: Path,
             title_text: str,
@@ -251,14 +254,15 @@ class SciFiTitleCard(BaseCardType):
             True if a custom font is indicated, False otherwise.
         """
 
-        return ((font.color != SciFiTitleCard.TITLE_COLOR)
-            or (font.file != SciFiTitleCard.TITLE_FONT)
-            or (font.interline_spacing != 0)
-            or (font.interword_spacing != 0)
-            or (font.kerning != 1.0)
-            or (font.size != 1.0)
-            or (font.stroke_width != 1.0)
-            or (font.vertical_shift != 0)
+        return (
+            font.color != SciFiTitleCard.TITLE_COLOR
+            or font.file != SciFiTitleCard.TITLE_FONT
+            or font.interline_spacing != 0
+            or font.interword_spacing != 0
+            or font.kerning != 1.0
+            or font.size != 1.0
+            or font.stroke_width != 1.0
+            or font.vertical_shift != 0
         )
 
 
@@ -279,10 +283,10 @@ class SciFiTitleCard(BaseCardType):
             True if custom season titles are indicated, False otherwise.
         """
 
-        standard_etf = SciFiTitleCard.EPISODE_TEXT_FORMAT.upper()
-
-        return (custom_episode_map or
-                episode_text_format.upper() != standard_etf)
+        return (
+            custom_episode_map or
+            episode_text_format != SciFiTitleCard.EPISODE_TEXT_FORMAT
+        )
 
 
     def overlay_hud(self,
@@ -303,12 +307,14 @@ class SciFiTitleCard(BaseCardType):
         """
 
         return [
-            f'\( "{overlay}"',
+            fr'\(',
+            f'"{overlay}"',
             f'-fill "{color}"',
             f'-colorize 100%',
             f'-alpha set',
             f'-channel A',
-            f'-evaluate Divide {alpha} \)',
+            f'-evaluate Divide {alpha}',
+            fr'\)',
             f'-composite'
         ]
 
@@ -316,7 +322,7 @@ class SciFiTitleCard(BaseCardType):
     def create(self) -> None:
         """Create the title card as defined by this object."""
 
-        command = ' '.join([
+        self.image_magick.run([
             f'convert "{self.source_file.resolve()}"',
             # Resize and apply styles
             *self.resize_and_style,
@@ -336,5 +342,3 @@ class SciFiTitleCard(BaseCardType):
             *self.resize_output,
             f'"{self.output_file.resolve()}"',
         ])
-
-        self.image_magick.run(command)
