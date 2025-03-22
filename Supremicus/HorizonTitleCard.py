@@ -132,6 +132,17 @@ class HorizonTitleCard(BaseCardType):
                 ),
             ),
             Extra(
+                name='Symbol Opacity',
+                identifier='symbol_opacity',
+                description='Adjust opacity of the symbol',
+                tooltip=(
+                    '<v>100</v>% being fully opaque to <v>0</v>% being '
+                    'fully transparent. '
+                    'Unit is percent.'
+                ),
+                default='100',
+            ),
+            Extra(
                 name='CRT TV Overlay',
                 identifier='crt_overlay',
                 description='CRT TV Overlay Toggle',
@@ -201,6 +212,7 @@ class HorizonTitleCard(BaseCardType):
             'acolyte', 'ashoka', 'andor', 'bobafett', 'mandalorian', 'obiwan',
             'witcher', 'logo',
         ] | None = None
+        symbol_opacity: int = 100
         logo_file: Path
         alignment_overlay: bool = False
         crt_overlay: Literal['nobezel', 'bezel'] | None = None
@@ -290,8 +302,8 @@ class HorizonTitleCard(BaseCardType):
         'font_vertical_shift', 'stroke_color', 'episode_text_vertical_shift',
         'episode_text_font', 'episode_text_font_size', 'episode_text_color',
         'episode_text_stroke_color', 'episode_text_kerning', 'separator', 'h_align',
-        'symbol', 'logo', 'alignment_overlay', 'crt_overlay', 'crt_state_overlay',
-        'omit_gradient'
+        'symbol', 'symbol_opacity', 'logo', 'alignment_overlay', 'crt_overlay',
+        'crt_state_overlay', 'omit_gradient'
     )
 
     def __init__(self,
@@ -332,6 +344,7 @@ class HorizonTitleCard(BaseCardType):
                 'witcher',
                 'logo',
             ] = None,
+            symbol_opacity: int = 100,
             alignment_overlay: bool = False,
             crt_overlay: Literal['nobezel', 'bezel'] | None = None,
             crt_state_overlay: bool = False,
@@ -377,6 +390,7 @@ class HorizonTitleCard(BaseCardType):
         self.h_align = h_align
         self.logo = logo_file
         self.symbol = symbol
+        self.symbol_opacity = symbol_opacity
         self.alignment_overlay = alignment_overlay
         self.crt_overlay = crt_overlay
         self.crt_state_overlay = crt_state_overlay
@@ -521,6 +535,10 @@ class HorizonTitleCard(BaseCardType):
             f'\( "{symbol_image.resolve()}"',
             f'-resize x850',
             f'-resize 850x850\>',
+            f'-matte',
+            f'-channel A',
+            f'+level 0,{self.symbol_opacity}%',
+            f'+channel',
             f'\) -geometry {x:+}+0',
             f'-composite',
         ]
