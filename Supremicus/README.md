@@ -53,6 +53,7 @@ Below is a table of all valid series [extras](https://github.com/CollinHeist/Tit
 | `separator` | `•` | Character to separate the season and episode text |
 | `h_align` | `left` | Horizontal alignment. `left`, `center` or `right` |
 | `symbol` | `None` | Custom symbol to use<br>Built-in: `acolyte`, `ahsoka`, `andor`, `bobafett`, `mandalorian`, `obiwan`, `witcher`<br>Custom: `logo` uses *source/show/logo.png* |
+| `symbol_opacity` | `100` | Adjust opacity of the symbol. `100`% to `0`% |
 | `crt_overlay` | `None` | Enable CRT TV Overlay `none`, `nobezel` or `bezel` |
 | `crt_state_overlay` | `False` | Enable CRT TV Overlay watched/unwatched state `true`/`false` |
 | `omit_gradient` | `True` | Omit gradient overlay `true`/`false` |
