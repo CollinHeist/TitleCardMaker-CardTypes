@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import TYPE_CHECKING, Optional, Literal, Union
 
-from pydantic import root_validator
+from pydantic import conint, root_validator
 
 from app.schemas.card_type import BaseCardTypeCustomFontAllText
 
@@ -136,11 +136,11 @@ class HorizonTitleCard(BaseCardType):
                 identifier='symbol_opacity',
                 description='Adjust opacity of the symbol',
                 tooltip=(
-                    '<v>100</v>% being fully opaque to <v>0</v>% being '
-                    'fully transparent. '
-                    'Unit is percent.'
+                    'Number between <v>0</v> and <v>100</v>. <v>0</v>% being '
+                    'fully transparent, <v>100</v>% being fully opaque. Unit '
+                    'percent.'
                 ),
-                default='100',
+                default=100,
             ),
             Extra(
                 name='CRT TV Overlay',
@@ -212,7 +212,7 @@ class HorizonTitleCard(BaseCardType):
             'acolyte', 'ashoka', 'andor', 'bobafett', 'mandalorian', 'obiwan',
             'witcher', 'logo',
         ] | None = None
-        symbol_opacity: int = 100
+        symbol_opacity: conint(ge=0, le=100) = 100
         logo_file: Path
         alignment_overlay: bool = False
         crt_overlay: Literal['nobezel', 'bezel'] | None = None
