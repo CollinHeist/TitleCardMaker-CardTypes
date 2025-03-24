@@ -40,11 +40,24 @@ class RetroTitleCard(BaseCardType):
         source='remote',
         supports_custom_fonts=True,
         supports_custom_seasons=False,
-        supported_extras=[],
+        supported_extras=[
+            Extra(
+                name="Black & White Override",
+                identifier="override_bw",
+                description="Override the Black & White modification",
+                tooltip="Either <v>bw</v>, or <v>color</v> to force the black and white or color effects."
+            ),
+            Extra(
+                name="Style Override",
+                identifier="override_style",
+                description="Override the play/rewind style",
+                tooltip="Either <v>play</v> or <v>rewind</v> to force that respective style."
+            )
+        ],
         description=[
-            'Card type featuring a VHS/Camcorder inspired overlay.',
-            "The 'Play' button can be set to 'Rewind' and the image "
-            'greyscaled when the item has been played.',
+            "Card type featuring a VHS/Camcorder inspired overlay. The 'Play' ",
+            "button can be set to 'Rewind' and the image greyscaled when the "
+            'item has been played.',
         ]
     )
 

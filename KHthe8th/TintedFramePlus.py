@@ -39,7 +39,78 @@ class TintedFramePlus(BaseCardType):
         source='remote',
         supports_custom_fonts=True,
         supports_custom_seasons=True,
-        supported_extras=[],
+        supported_extras=[
+            Extra(
+                name="Episode Text Color",
+                identifier="episode_text_color",
+                description="Color of the season and episode text",
+                tooltip="Default is to match the Font color."
+            ),
+            Extra(
+                name="Episode Text Font",
+                identifier="episode_text_font",
+                description="Font to use for the season and episode text"
+            ),
+            Extra(
+                name="Episode Text Font Size",
+                identifier="episode_text_font_size",
+                description="Size adjustment for the season and episode text",
+                tooltip="Number ≥<v>0.0</v>. Default is <v>1.0</v>."
+            ),
+            Extra(
+                name="Episode Text Vertical Shift",
+                identifier="episode_text_vertical_shift",
+                description="Additional vertical shift to apply to the season and episode text. Default is <v>0</v>."
+            ),
+            Extra(
+                name="Separator Character",
+                identifier="separator",
+                description="Character that separates the season and episode text",
+                tooltip="Default is <v>-</v>."
+            ),
+            Extra(
+                name="Frame Color",
+                identifier="frame_color",
+                description="Color of the frame edges",
+                tooltip="Default is to match the Font color."
+            ),
+            Extra(
+                name="Frame Width",
+                identifier="frame_width",
+                description="Width of the frame",
+                tooltip="Number ≥<v>0</v>. Default is <v>3</v>. Unit is pixels."
+            ),
+            Extra(
+                name="Top Element",
+                identifier="top_element",
+                description="Which element to display on the top of the frame",
+                tooltip="Either <v>index</v> to display the season and episode text, <v>logo</v> to display the logo, or <v>omit</v> to not display anything. Default is <v>logo</v>."
+            ),
+            Extra(
+                name="Middle Element",
+                identifier="middle_element",
+                description="Which element to display in the middle of the frame",
+                tooltip="Either <v>logo</v> to display the logo, or <v>omit</v> to not display anything. Default is <v>omit</v>."
+            ),
+            Extra(
+                name="Bottom Element",
+                identifier="bottom_element",
+                description="Which element to display on the bottom of the frame",
+                tooltip="Either <v>index</v> to display the season and episode text, <v>logo</v> to display the logo, or <v>omit</v> to not display anything. Default is <v>index</v>."
+            ),
+            Extra(
+                name="Logo Size",
+                identifier="logo_size",
+                description="Scalar for how much to scale the size of the logo element",
+                tooltip="Number ≥<v>0.0</v>. Default is <v>1.0</v>."
+            ),
+            Extra(
+                name="Edge Blurring",
+                identifier="blur_edges",
+                description="Whether to blur the edges around the frame",
+                tooltip="Either <v>True</v> or <v>False</v>. Default is <v>True</v>."
+            ),
+        ],
         description=[
             'A combination of the TintedFrameTitleCard and the Standard for '
             'the best of both worlds.', 'It has many of the same extras you '

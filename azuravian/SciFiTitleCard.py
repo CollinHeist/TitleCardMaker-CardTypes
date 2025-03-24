@@ -36,7 +36,78 @@ class SciFiTitleCard(BaseCardType):
         source='remote',
         supports_custom_fonts=True,
         supports_custom_seasons=False,
-        supported_extras=[],
+        supported_extras=[
+            Extra(
+                name='Trailing Underscore',
+                identifier='add_trailing_underscore',
+                description="Whether to add a trailing underscore (_) to the title text",
+                tooltip="Either <v>True</v> or <v>False</v>. Default is <v>True</v>."
+            ),
+            Extra(
+                name="Overlay Bottom Color",
+                identifier="overlay_bottom_color",
+                description="The color of the overlay's bottom layer",
+                tooltip="Defaults to <v>rgb(58, 255, 255)</v> (neon blue)."
+            ),
+            Extra(
+                name="Overlay Top Color",
+                identifier="overlay_top_color",
+                description="The color of overlay's top layer",
+                tooltip="Defaults to <v>rgb(255, 49, 255)</v> (hot pink)."
+            ),
+            Extra(
+                name="Overlay Middle Color",
+                identifier="overlay_middle_color",
+                description="The color of the overlay's middle layer",
+                tooltip="Defaults to <v>rgb(255, 255, 255)</v> (white)."
+            ),
+            Extra(
+                name="Overlay Rectangle Color",
+                identifier="overlay_rectangles_color",
+                description="The color of the overlay rectangles",
+                tooltip="Defaults to <v>rgb(102, 211, 122)</v> (neon green)."
+            ),
+            Extra(
+                name="Overlay Base Alpha",
+                identifier="overlay_base_alpha",
+                description="The transparency of the black surrounding layer",
+                tooltip="Value between <v>0.0</v> and <v>1.0</v>. Defaults to <v>1.0</v>."
+            ),
+            Extra(
+                name="Overlay Bottom Alpha",
+                identifier="overlay_bottom_alpha",
+                description="The transparency of the bottom layer",
+                tooltip="Value between <v>0.0</v> and <v>1.0</v>. Defaults to <v>0.6</v>."
+            ),
+            Extra(
+                name="Overlay Top Alpha",
+                identifier="overlay_top_alpha",
+                description="The transparency of the top layer",
+                tooltip="Value between <v>0.0</v> and <v>1.0</v>. Defaults to <v>0.6</v>."
+            ),
+            Extra(
+                name="Overlay Middle Alpha",
+                identifier="overlay_middle_alpha",
+                description="The transparency of the middle layer",
+                tooltip="Value between <v>0.0</v> and <v>1.0</v>. Defaults to <v>0.6</v>."
+            ),
+            Extra(
+                name="Overlay Rectangles Alpha",
+                identifier="overlay_rectangles_alpha",
+                description="The transparency of the overlay rectangles",
+                tooltip="Value between <v>0.0</v> and <v>1.0</v>. Defaults to <v>0.6</v>."
+            ),
+            Extra(
+                name="Episode Text Color",
+                identifier="episode_text_color",
+                description="The color of the episode text"
+            ),
+            Extra(
+                name="Text Stroke Color",
+                identifier="stroke_color",
+                description="The color of the text stroke"
+            )
+        ],
         description=[
             'A multi-overlay card designed to look like a heads up display.',
             'Intended for use in Science Fiction series.',
