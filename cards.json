@@ -499,7 +499,7 @@
                 "name": "Horizontal Alignment",
                 "identifier": "h_align",
                 "description": "Horizontal alignment of text",
-                "tooltip": "Either <v>left</v>, or <v>right</v>. Default is <v>left</v>.",
+                "tooltip": "Either <v>left</v>, <v>center</v>, or <v>right</v>. Default is <v>left</v>.",
                 "default": "left"
             },
             {
@@ -507,6 +507,13 @@
                 "identifier": "symbol",
                 "description": "Add a custom symbol behind the text",
                 "tooltip": "Either <v>acolyte</v>, <v>ahsoka</v>, <v>andor</v>, <v>bobafett<v>, <v>mandalorian</v>, <v>obiwan</v>, or <v>witcher</v> to use a built-in symbol; or <v>logo</v> to use the Series logo."
+            },
+            {
+                "name": "Symbol Opacity",
+                "identifier": "symbol_opacity",
+                "description": "Adjust opacity of the symbol",
+                "tooltip": "Number between <v>0</v> and <v>100</v>. <v>0</v>% being fully transparent, <v>100</v>% being fully opaque. Unit is percent.",
+                "default": 100
             },
             {
                 "name": "CRT TV Overlay",
@@ -536,6 +543,6 @@
                 "default": "False"
             }
         ],              
-        "hash": "c40c137179d5f237add3823a233f4ffe"
+        "hash": "aebabf99637ae762dad76bd3431f5032"
     }
 ]
