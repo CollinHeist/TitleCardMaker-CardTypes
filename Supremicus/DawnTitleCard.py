@@ -154,14 +154,14 @@ class DawnTitleCard(BaseCardType):
                 description='Whether to omit the gradient overlay',
                 tooltip=(
                     'Either <v>True</v> or <v>False</v>. Set to <v>False</v> '
-                    'if you have trouble reading the text on brighter images.'
+                    'if you have trouble reading the text on brighter images. '
                     'Default is <v>True</v>.'
                 ),
                 default='True',
             ),
         ],
         description=[
-            'Produce TitleCards with left, centered or right aligned text on '
+            'Produce Title Cards with left, centered or right-aligned text on '
             'the bottom.', 'An optional CRT TV overlay can be added for shows '
             'with a retro theme (like Stranger Things)',
         ]
