@@ -4,6 +4,7 @@ from modules.BaseCardType import BaseCardType
 from modules.Debug import log
 from modules.RemoteFile import RemoteFile
 
+
 class WhiteTextTitleOnly(BaseCardType):
     """
     This class describes Wdvh's title only title CardType.

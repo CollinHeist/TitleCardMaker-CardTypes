@@ -1,23 +1,61 @@
 from pathlib import Path
-from re import findall
+from typing import Optional, TYPE_CHECKING
 
-from modules.BaseCardType import BaseCardType, ImageMagickCommands
-from modules.RemoteFile import RemoteFile
+from app.schemas.card_type import BaseCardTypeCustomFontAllText
+
+from modules.BaseCardType import (
+    BaseCardType,
+    CardDescription,
+    Extra,
+    ImageMagickCommands,
+)
 from modules.Debug import log
+from modules.RemoteFile import RemoteFile
+from modules.Title import SplitCharacteristics
+
+if TYPE_CHECKING:
+    from app.models.preferences import Preferences
+    from modules.Font import Font
+
 
 class SlimTitleCard(BaseCardType):
     """
-    
+    Card type closely following the Standard Title Card but with slimmed
+    down margins to save space.
     """
+
+    API_DETAILS = CardDescription(
+        name='Slim',
+        identifier='Yozora/SlimTitleCard',
+        example=(
+            'https://camo.githubusercontent.com/8eb09f530888a23bc9279f26fff0d'
+            '6ee0ea82f998137560f24f042bb9a0e4639/68747470733a2f2f63646e2e6469'
+            '73636f72646170702e636f6d2f6174746163686d656e74732f39373531303830'
+            '33333533313231393937392f3937373631343933373435373330333630322f53'
+            '30314530342e6a7067'
+        ),
+        creators=['Yozora', 'CollinHeist'],
+        source='remote',
+        supports_custom_fonts=True,
+        supports_custom_seasons=True,
+        supported_extras=[],
+        description=[
+            'Card type closely following the Standard Title Card but with '
+            'slimmed down margins to save space.',
+        ]
+    )
+
+    class CardModel(BaseCardTypeCustomFontAllText):
+        omit_gradient: bool = False
 
     """Directory where all reference files used by this card are stored"""
     REF_DIRECTORY = Path(__file__).parent.parent / 'ref'
 
     """Characteristics for title splitting by this class"""
-    TITLE_CHARACTERISTICS = {
-        'max_line_width': 45,   # Character count to begin splitting titles
-        'max_line_count': 3,    # Maximum number of lines a title can take up
-        'top_heavy': False,     # This class uses bottom heavy titling
+    TITLE_CHARACTERISTICS: SplitCharacteristics = {
+        'max_line_width': 45,
+        'max_line_count': 3,
+        'style': 'bottom',
     }
 
     """Default font and text color for episode title text"""
@@ -45,9 +83,9 @@ class SlimTitleCard(BaseCardType):
 
     __slots__ = (
         'source_file', 'output_file', 'title_text', 'season_text',
-        'episode_text', 'hide_season_text', 'font_color', 'font_file',
-        'font_interline_spacing', 'font_kerning', 'font_size',
-        'font_stroke_width', 'font_vertical_shift',
+        'episode_text', 'hide_season_text', 'hide_episode_text', 'font_color',
+        'font_file', 'font_interline_spacing', 'font_kerning', 'font_size',
+        'font_stroke_width', 'font_vertical_shift', 'omit_gradient',
     )
 
 
@@ -58,6 +96,7 @@ class SlimTitleCard(BaseCardType):
             season_text: str,
             episode_text: str,
             hide_season_text: bool = False,
+            hide_episode_text: bool = False,
             font_color: str = TITLE_COLOR,
             font_file: str = TITLE_FONT,
             font_interline_spacing: int = 0,
@@ -67,20 +106,25 @@ class SlimTitleCard(BaseCardType):
             font_vertical_shift: int = 0,
             blur: bool = False,
             grayscale: bool = False,
-            **unused) -> None:
+            omit_gradient: bool = False,
+            preferences: Optional['Preferences'] = None,
+            **unused,
+        ) -> None:
         
         # Initialize the parent class - this sets up an ImageMagickInterface
-        super().__init__(blur, grayscale)
+        super().__init__(blur, grayscale, preferences=preferences)
 
         self.source_file = source_file
         self.output_file = card_file
 
         # Ensure characters that need to be escaped are
         self.title_text = self.image_magick.escape_chars(title_text)
-        self.season_text = self.image_magick.escape_chars(season_text.upper())
-        self.episode_text = self.image_magick.escape_chars(episode_text.upper())
+        self.season_text = self.image_magick.escape_chars(season_text)
+        self.episode_text = self.image_magick.escape_chars(episode_text)
         self.hide_season_text = hide_season_text
+        self.hide_episode_text = hide_episode_text
 
+        # Font characteristics
         self.font_color = font_color
         self.font_file = font_file
         self.font_interline_spacing = font_interline_spacing
@@ -89,14 +133,16 @@ class SlimTitleCard(BaseCardType):
         self.font_stroke_width = font_stroke_width
         self.font_vertical_shift = font_vertical_shift
 
+        # Extras
+        self.omit_gradient = omit_gradient
 
+
+    @property
     def __title_text_global_effects(self) -> ImageMagickCommands:
         """
-        ImageMagick commands to implement the title text's global effects.
-        Specifically the the font, kerning, fontsize, and center gravity.
-        
-        Returns:
-            List of ImageMagick commands.
+        ImageMagick commands to implement the title text's global
+        effects. Specifically the the font, kerning, fontsize, and
+        center gravity.
         """
 
         font_size = 157.41 * self.font_size
@@ -113,12 +159,10 @@ class SlimTitleCard(BaseCardType):
         ]   
 
 
+    @property
     def __title_text_black_stroke(self) -> ImageMagickCommands:
         """
         ImageMagick commands to implement the title text's black stroke.
-        
-        Returns:
-            List of ImageMagick commands.
         """
 
         stroke_width = 1.0 * self.font_stroke_width
@@ -130,13 +174,11 @@ class SlimTitleCard(BaseCardType):
         ]
 
 
+    @property
     def __series_count_text_global_effects(self) -> ImageMagickCommands:
         """
         ImageMagick commands for global text effects applied to all series count
         text (season/episode count and dot).
-        
-        Returns:
-            List of ImageMagick commands.
         """
 
         return [
@@ -145,13 +187,11 @@ class SlimTitleCard(BaseCardType):
         ]
 
 
+    @property
     def __series_count_text_black_stroke(self) -> ImageMagickCommands:
         """
         ImageMagick commands for adding the necessary black stroke effects to
         series count text.
-        
-        Returns:
-            List of ImageMagick commands.
         """
 
         return [
@@ -161,14 +201,9 @@ class SlimTitleCard(BaseCardType):
         ]
 
 
+    @property
     def __series_count_text_effects(self) -> ImageMagickCommands:
-        """
-        ImageMagick commands for adding the necessary text effects to the series
-        count text.
-        
-        Returns:
-            List of ImageMagick commands.
-        """
+        """Necessary text effects to the series count text."""
 
         return [
             f'-fill "{self.SERIES_COUNT_TEXT_COLOR}"',
@@ -179,18 +214,13 @@ class SlimTitleCard(BaseCardType):
 
     @property
     def title_text_command(self) -> ImageMagickCommands:
-        """
-        Subcommand for adding title text to the source image.
-
-        Returns:
-            List of ImageMagick commands.
-        """
+        """Add title text to the source image."""
 
         vertical_shift = 100 + self.font_vertical_shift
 
         return [
-            *self.__title_text_global_effects(),
-            *self.__title_text_black_stroke(),
+            *self.__title_text_global_effects,
+            *self.__title_text_black_stroke,
             f'-annotate +0+{vertical_shift} "{self.title_text}"',
             f'-fill "{self.font_color}"',
             f'-annotate +0+{vertical_shift} "{self.title_text}"',
@@ -199,49 +229,60 @@ class SlimTitleCard(BaseCardType):
 
     @property
     def index_text_command(self) -> ImageMagickCommands:
-        """
-        Subcommand for adding the index text to the source image.
+        """Subcommand for adding the index text to the source image."""
 
-        Returns:
-            List of ImageMagick commands.
-        """
+        if self.hide_season_text and self.hide_episode_text:
+            return []
 
         if self.hide_season_text:
             return [
-                *self.__series_count_text_global_effects(),
+                *self.__series_count_text_global_effects,
                 f'-font "{self.EPISODE_COUNT_FONT}"',
                 f'-gravity center',
-                *self.__series_count_text_black_stroke(),
+                *self.__series_count_text_black_stroke,
                 f'-annotate +0+697.2 "{self.episode_text}"',
-                *self.__series_count_text_effects(),
+                *self.__series_count_text_effects,
                 f'-annotate +0+697.2 "{self.episode_text}"',
+            ]
+        
+        if self.hide_episode_text:
+            return [
+                *self.__series_count_text_global_effects,
+                f'-font "{self.SEASON_COUNT_FONT}"',
+                f'-gravity center',
+                *self.__series_count_text_black_stroke,
+                f'-annotate +0+697.2 "{self.season_text}"',
+                *self.__series_count_text_effects,
+                f'-annotate +0+697.2 "{self.season_text}"',
             ]
 
         return [
             f'-background transparent',
             f'+interword-spacing',
             f'-gravity south',
-            f'\(',
-            *self.__series_count_text_global_effects(),
-            *self.__series_count_text_black_stroke(),
+            fr'\(',
+            *self.__series_count_text_global_effects,
+            *self.__series_count_text_black_stroke,
             f'-font "{self.SEASON_COUNT_FONT}"',
             f'label:"{self.season_text}"',
             f'label:"• "',
             f'-font "{self.EPISODE_COUNT_FONT}"',
             f'label:"{self.episode_text}"',
-            f'+smush 15 \)',
+            f'+smush 15',
+            fr'\)',
             f'-geometry +0+35',
             f'-composite',
 
-            f'\(',
-            *self.__series_count_text_global_effects(),
-            *self.__series_count_text_effects(),
+            fr'\(',
+            *self.__series_count_text_global_effects,
+            *self.__series_count_text_effects,
             f'-font "{self.SEASON_COUNT_FONT}"',
             f'label:"{self.season_text}"',
             f'label:"• "',
             f'-font "{self.EPISODE_COUNT_FONT}"',
             f'label:"{self.episode_text}"',
-            f'+smush 18 \)',
+            f'+smush 18',
+            fr'\)',
             f'-geometry +0+35',
             f'-composite',
         ]
@@ -260,19 +301,22 @@ class SlimTitleCard(BaseCardType):
             True if a custom font is indicated, False otherwise.
         """
 
-        return ((font.color != SlimTitleCard.TITLE_COLOR)
-            or (font.file != SlimTitleCard.TITLE_FONT)
-            or (font.interline_spacing != 0)
-            or (font.kerning != 1.0)
-            or (font.size != 1.0)
-            or (font.stroke_width != 1.0)
-            or (font.vertical_shift != 0)
+        return (
+            font.color != SlimTitleCard.TITLE_COLOR
+            or font.file != SlimTitleCard.TITLE_FONT
+            or font.interline_spacing != 0
+            or font.kerning != 1.0
+            or font.size != 1.0
+            or font.stroke_width != 1.0
+            or font.vertical_shift != 0
         )
 
 
     @staticmethod
     def is_custom_season_titles(
-            custom_episode_map: bool, episode_text_format: str) -> bool:
+            custom_episode_map: bool,
+            episode_text_format: str,
+        ) -> bool:
         """
         Determines whether the given attributes constitute custom or
         generic season titles.
@@ -293,23 +337,27 @@ class SlimTitleCard(BaseCardType):
 
 
     def create(self) -> None:
-        """
-        Make the necessary ImageMagick and system calls to create this
-        object's defined title card.
-        """
+        """Create this object's defined title card."""
 
-        command = ' '.join([
+        if self.omit_gradient:
+            gradient_command = []
+        else:
+            gradient_command = [
+                f'"{self.__GRADIENT_IMAGE.resolve()}"',
+                f'-composite',
+            ]
+
+        self.image_magick.run([
             f'convert "{self.source_file.resolve()}"',
             *self.resize_and_style,
             # Add gradient
-            f'"{self.__GRADIENT_IMAGE.resolve()}"',
-            f'-composite',
+            *gradient_command,
             # Add title and index text
             *self.title_text_command,
             *self.index_text_command,
+            # Attempt to overlay mask
+            *self.add_overlay_mask(self.source_file),
             # Create card
             *self.resize_output,
             f'"{self.output_file.resolve()}"',
         ])
-
-        self.image_magick.run(command)

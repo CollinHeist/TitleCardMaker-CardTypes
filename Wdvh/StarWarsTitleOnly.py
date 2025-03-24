@@ -1,25 +1,56 @@
 from pathlib import Path
+from typing import Literal, Optional, TYPE_CHECKING
 
+from pydantic import constr
 
-from modules.BaseCardType import BaseCardType
+from app.schemas.card_type import BaseCardTypeCustomFontNoText
+from modules.BaseCardType import BaseCardType, CardDescription
 from modules.Debug import log
 from modules.RemoteFile import RemoteFile
 
+if TYPE_CHECKING:
+    from app.models.preferences import Preferences
+    from modules.Font import Font
+
+
 class StarWarsTitleOnly(BaseCardType):
     """
-    This class describes a type of ImageMaker that produces title cards in the
-    theme of Star Wars cards as designed by reddit user /u/Olivier_286. These
-    cards are not as customizable as the standard template.
+    This class describes a type of Card that produces a modified version
+    of the Star Wars card.
     """
+
+    API_DETAILS = CardDescription(
+        name='Star Wars (Title Only)',
+        identifier='Wdvh/StarWarsTitleOnly',
+        example=(
+            'https://user-images.githubusercontent.com/17693271/'
+            '178131539-c7b55ced-b9ba-4564-8153-a998454e1742.jpg'
+        ),
+        creators=['Wdvh', 'CollinHeist'],
+        source='remote',
+        supports_custom_fonts=False,
+        supports_custom_seasons=False,
+        supported_extras=[],
+        description=[
+            'A variation of the standard Star Wars Card for Shows like '
+            'Obi-Wan Kenobi that use Part/Chapter and similar as episode '
+            'titles.', 'This card also uses a modified star gradient so that '
+            'more of the left side of the image is visible.',
+        ]
+    )
+
+    class CardModel(BaseCardTypeCustomFontNoText):
+        title_text: constr(to_upper=True)
+        font_color: str = '#DAC960'
 
     """Directory where all reference files used by this card are stored"""
     REF_DIRECTORY = Path(__file__).parent.parent / 'ref' / 'star_wars'
 
     """Characteristics for title splitting by this class"""
     TITLE_CHARACTERISTICS = {
-        'max_line_width': 16,   # Character count to begin splitting titles
-        'max_line_count': 5,    # Maximum number of lines a title can take up
-        'top_heavy': True,      # This class uses top heavy titling
+        'max_line_width': 16,
+        'max_line_count': 5,
+        'style': 'top',
     }
 
     """How to name archive directories for this type of card"""
@@ -52,24 +83,20 @@ class StarWarsTitleOnly(BaseCardType):
             title_text: str,
             blur: bool = False,
             grayscale: bool = False,
-            **unused) -> None:
-        """
-        Initialize this CardType object.
-        """
+            preferences: Optional['Preferences'] = None,
+            **unused,
+        ) -> None:
+        """Initialize this CardType object."""
         
-        # Initialize the parent class - this sets up an ImageMagickInterface
-        super().__init__(blur, grayscale)
+        super().__init__(blur, grayscale, preferences=preferences)
 
-        # Store source and output file
         self.source_file = source_file
         self.output_file = card_file
-
-        # Store episode title
-        self.title = self.image_magick.escape_chars(title_text.upper())
+        self.title = self.image_magick.escape_chars(title_text)
 
 
     @staticmethod
-    def is_custom_font(font: 'Font') -> bool:
+    def is_custom_font(font: 'Font') -> Literal[False]:
         """
         Determines whether the given font characteristics constitute a
         default or custom font.
@@ -86,7 +113,9 @@ class StarWarsTitleOnly(BaseCardType):
 
     @staticmethod
     def is_custom_season_titles(
-            custom_episode_map: bool, episode_text_format: str) -> bool:
+            custom_episode_map: bool,
+            episode_text_format: str,
+        ) -> Literal[False]:
         """
         Determines whether the given attributes constitute custom or
         generic season titles.
@@ -103,10 +132,7 @@ class StarWarsTitleOnly(BaseCardType):
 
 
     def create(self) -> None:
-        """
-        Make the necessary ImageMagick and system calls to create this
-        object's defined title card.
-        """
+        """Create this object's defined title card."""
 
         command = ' '.join([
             f'convert "{self.source_file.resolve()}"',
@@ -123,6 +149,8 @@ class StarWarsTitleOnly(BaseCardType):
             f'-interline-spacing 20',
             f'-fill "{self.TITLE_COLOR}"',
             f'-annotate +320+1529 "{self.title}"',
+            # Attempt to overlay mask
+            *self.add_overlay_mask(self.source_file),
             # Resize and write output
             *self.resize_output,
             f'"{self.output_file.resolve()}"',

@@ -1,0 +1,541 @@
+[
+    {
+        "name": "Title Color Match",
+        "identifier": "azuravian/TitleColorMatch",
+        "description": [
+            "A modification of GradientLogoTitleCard that includes the option to auto-select font color based on logo color.",
+            "This card will also automatically crop off extraneous transparent space from around the logo."
+        ],
+        "example": "https://user-images.githubusercontent.com/7379812/187586521-353ba09f-30a8-424b-bbf3-ee9036c9e638.jpg",
+        "creators": [
+            "Azuravian",
+            "Beedman",
+            "CollinHeist"
+        ],
+        "supports_custom_fonts": true,
+        "supports_custom_seasons": true,
+        "supported_extras": [
+            {
+                "name": "Gradient Omission",
+                "identifier": "omit_gradient",
+                "description": "Whether to omit the gradient overlay",
+                "tooltip": "Either <v>True</v> or <v>False</v>. Default is <v>False</v>."
+            }
+        ],
+        "hash": "f828ad9e56e5e20da149585741f52f78"
+    },
+    {
+        "name": "SciFi",
+        "identifier": "azuravian/SciFiTitleCard",
+        "description": [
+            "A multi-overlay card designed to look like a heads up display.",
+            "Intended for use in Science Fiction series."
+        ],
+        "example": "https://raw.githubusercontent.com/azuravian/myimages/main/SciFiTitleCard/Example1.jpg",
+        "creators": [
+            "Azuravian"
+        ],
+        "supports_custom_fonts": true,
+        "supports_custom_seasons": false,
+        "supported_extras": [
+            {
+                "name": "Trailing Underscore",
+                "identifier": "add_trailing_underscore",
+                "description": "Whether to add a trailing underscore (_) to the title text",
+                "tooltip": "Either <v>True</v> or <v>False</v>. Default is <v>True</v>."
+            },
+            {
+                "name": "Overlay Bottom Color",
+                "identifier": "overlay_bottom_color",
+                "description": "The color of the overlay's bottom layer",
+                "tooltip": "Defaults to <v>rgb(58, 255, 255)</v> (neon blue)."
+            },
+            {
+                "name": "Overlay Top Color",
+                "identifier": "overlay_top_color",
+                "description": "The color of overlay's top layer",
+                "tooltip":"Defaults to <v>rgb(255, 49, 255)</v> (hot pink)."
+            },
+            {
+                "name": "Overlay Middle Color",
+                "identifier": "overlay_middle_color",
+                "description": "The color of the overlay's middle layer",
+                "tooltip": "Defaults to <v>rgb(255, 255, 255)</v> (white)."
+            },
+            {
+                "name": "Overlay Rectangle Color",
+                "identifier": "overlay_rectangles_color",
+                "description": "The color of the overlay rectangles",
+                "tooltip": "Defaults to <v>rgb(102, 211, 122)</v> (neon green)."
+            },
+            {
+                "name": "Overlay Base Alpha",
+                "identifier": "overlay_base_alpha",
+                "description": "The transparency of the black surrounding layer",
+                "tooltip": "Value between <v>0.0</v> and <v>1.0</v>. Defaults to <v>1.0</v>."
+            },
+            {
+                "name": "Overlay Bottom Alpha",
+                "identifier": "overlay_bottom_alpha",
+                "description": "The transparency of the bottom layer",
+                "tooltip": "Value between <v>0.0</v> and <v>1.0</v>. Defaults to <v>0.6</v>."
+            },
+            {
+                "name": "Overlay Top Alpha",
+                "identifier": "overlay_top_alpha",
+                "description": "The transparency of the top layer",
+                "tooltip": "Value between <v>0.0</v> and <v>1.0</v>. Defaults to <v>0.6</v>."
+            },
+            {
+                "name": "Overlay Middle Alpha",
+                "identifier": "overlay_middle_alpha",
+                "description": "The transparency of the middle layer",
+                "tooltip": "Value between <v>0.0</v> and <v>1.0</v>. Defaults to <v>0.6</v>."
+            },
+            {
+                "name": "Overlay Rectangles Alpha",
+                "identifier": "overlay_rectangles_alpha",
+                "description": "The transparency of the overlay rectangles",
+                "tooltip": "Value between <v>0.0</v> and <v>1.0</v>. Defaults to <v>0.6</v>."
+            },
+            {
+                "name": "Episode Text Color",
+                "identifier": "episode_text_color",
+                "description": "The color of the episode text"
+            },
+            {
+                "name": "Text Stroke Color",
+                "identifier": "stroke_color",
+                "description": "The color of the text stroke"
+            }
+        ],
+        "hash": "73cc15850d32270f878743598b4020de"
+    },
+    {
+        "name": "Blacklist",
+        "identifier": "CollinHeist/BlacklistTitleCard",
+        "description": [
+            "Title Card intended for the 'The Blacklist' television series",
+            "This Card features a prominent title and a customizable 'blacklist number' beneath the title.",
+            "The default Font for this card is a modified version of Helvetica."
+        ],
+        "example": "https://user-images.githubusercontent.com/17693271/216839561-ec4a1c27-dcdc-4869-87dd-8d592a26aee2.jpg",
+        "creators": [
+            "CollinHeist"
+        ],
+        "supports_custom_fonts": true,
+        "supports_custom_seasons": false,
+        "supported_extras": [],
+        "hash": "718184a25325261a744b6b3fa75dd0a2"
+    },
+    {
+        "name": "Tinted Frame Plus",
+        "identifier": "KHthe8th/TintedFramePlus",
+        "description": [
+            "A combination of the TintedFrameTitleCard and the StandardTitleCard for the best of both worlds.",
+            "It has many of the same extras you can pass to tinted frame, but it adds the episode title text above the bottom frame element (this is not modifiable).",
+            "The top element will default to logo now, and title is no longer an option (as it is always shown above the bottom element)."
+        ],
+        "example": "https://github.com/khthe8th/TitleCardMaker-CardTypes/assets/5308389/d089a1b1-7458-4eaf-ad8d-59c7f332a7c1",
+        "creators": ["KHthe8th", "CollinHeist"],
+        "supports_custom_fonts": true,
+        "supports_custom_seasons": true,
+        "supported_extras": [
+            {
+                "name": "Episode Text Color",
+                "identifier": "episode_text_color",
+                "description": "Color of the season and episode text",
+                "tooltip": "Default is to match the Font color."
+            },
+            {
+                "name": "Episode Text Font",
+                "identifier": "episode_text_font",
+                "description": "Font to use for the season and episode text"
+            },
+            {
+                "name": "Episode Text Font Size",
+                "identifier": "episode_text_font_size",
+                "description": "Size adjustment for the season and episode text",
+                "tooltip": "Number ≥<v>0.0</v>. Default is <v>1.0</v>."
+            },
+            {
+                "name": "Episode Text Vertical Shift",
+                "identifier": "episode_text_vertical_shift",
+                "description": "Additional vertical shift to apply to the season and episode text. Default is <v>0</v>."
+            },
+            {
+                "name": "Separator Character",
+                "identifier": "separator",
+                "description": "Character that separates the season and episode text",
+                "tooltip": "Default is <v>-</v>."
+            },
+            {
+                "name": "Frame Color",
+                "identifier": "frame_color",
+                "description": "Color of the frame edges",
+                "tooltip": "Default is to match the Font color."
+            },
+            {
+                "name": "Frame Width",
+                "identifier": "frame_width",
+                "description": "Width of the frame",
+                "tooltip": "Number ≥<v>0</v>. Default is <v>3</v>. Unit is pixels."
+            },
+            {
+                "name": "Top Element",
+                "identifier": "top_element",
+                "description": "Which element to display on the top of the frame",
+                "tooltip": "Either <v>index</v> to display the season and episode text, <v>logo</v> to display the logo, or <v>omit</v> to not display anything. Default is <v>logo</v>."
+            },
+            {
+                "name": "Middle Element",
+                "identifier": "middle_element",
+                "description": "Which element to display in the middle of the frame",
+                "tooltip": "Either <v>logo</v> to display the logo, or <v>omit</v> to not display anything. Default is <v>omit</v>."
+            },
+            {
+                "name": "Bottom Element",
+                "identifier": "bottom_element",
+                "description": "Which element to display on the bottom of the frame",
+                "tooltip": "Either <v>index</v> to display the season and episode text, <v>logo</v> to display the logo, or <v>omit</v> to not display anything. Default is <v>index</v>."
+            },
+            {
+                "name": "Logo Size",
+                "identifier": "logo_size",
+                "description": "Scalar for how much to scale the size of the logo element",
+                "tooltip": "Number ≥<v>0.0</v>. Default is <v>1.0</v>."
+            },
+            {
+                "name": "Edge Blurring",
+                "identifier": "blur_edges",
+                "description": "Whether to blur the edges around the frame",
+                "tooltip": "Either <v>True</v> or <v>False</v>. Default is <v>True</v>."
+            }
+        ],        
+        "hash": "6e9814fb944374d6ff698cf8e8a8657d"
+    },
+    {
+        "name": "White Text Broadcast",
+        "identifier": "lyonza/WhiteTextBroadcast",
+        "description": [
+            "Card based on Wdvh's White Text Absolute card, using the same format, but has the season number included in the episode text."
+        ],
+        "example": "https://user-images.githubusercontent.com/1803189/171089736-f60a6ff2-0914-432a-a45d-145323d39c42.jpg",
+        "creators": [
+            "lyonza",
+            "Wdvh",
+            "CollinHeist"
+        ],
+        "supports_custom_fonts": true,
+        "supports_custom_seasons": false,
+        "supported_extras": [],
+        "hash": "ea8c4014edf6e65970e53cc13a078399"
+    },
+    {
+        "name": "Star Wars (Title Only)",
+        "identifier": "Wdvh/StarWarsTitleOnly",
+        "description": [
+            "A variation of the standard Star Wars Card for Shows like Obi-Wan Kenobi that use Part/Chapter and similar as episode titles.",
+            "This card also uses a modified star gradient so that more of the left side of the image is visible."
+        ],
+        "example": "https://user-images.githubusercontent.com/17693271/178131539-c7b55ced-b9ba-4564-8153-a998454e1742.jpg",
+        "creators": [
+            "Wdvh",
+            "CollinHeist"
+        ],
+        "supports_custom_fonts": false,
+        "supports_custom_seasons": false,
+        "supported_extras": [],
+        "hash": "f95d2a58db2cae120569e4016b100a51"
+    },
+    {
+        "name": "White Text Standard",
+        "identifier": "Wdvh/WhiteTextStandard",
+        "description": [
+            "Modification of the Standard Card Type.",
+            "This Card uses a different font, smaller text size, and the episode title is positioned lower than the Standard Card Type."
+        ],
+        "example": "https://user-images.githubusercontent.com/17693271/169709359-ffc9e109-b327-44e9-b78a-7276f77fe917.jpg",
+        "creators": [
+            "Wdvh",
+            "CollinHeist"
+        ],
+        "supports_custom_fonts": true,
+        "supports_custom_seasons": false,
+        "supported_extras": [
+            {
+                "name": "Separator Character",
+                "identifier": "separator",
+                "description": "Character to separate the season and episode text"
+            }
+        ],
+        "hash": "72a1f8facf1618b7346aa91645c3f062"
+    },
+    {
+        "name": "Retro",
+        "identifier": "Yozora/RetroTitleCard",
+        "description": [
+            "Card type featuring a VHS/Camcorder inspired overlay.",
+            "The 'Play' button can be set to 'Rewind' and the image greyscaled when the item has been played."
+        ],
+        "example": "https://raw.githubusercontent.com/CollinHeist/TitleCardMaker-CardTypes/refs/heads/web-ui/Yozora/RetroTitleCard.preview.webp",
+        "creators": [
+            "Yozora",
+            "CollinHeist"
+        ],
+        "supports_custom_fonts": true,
+        "supports_custom_seasons": false,
+        "supported_extras": [
+            {
+                "name": "Black & White Override",
+                "identifier": "override_bw",
+                "description": "Override the Black & White modification",
+                "tooltip": "Either <v>bw</v>, or <v>color</v> to force the black and white or color effects."
+            },
+            {
+                "name": "Style Override",
+                "identifier": "override_style",
+                "description": "Override the play/rewind style",
+                "tooltip": "Either <v>play</v> or <v>rewind</v> to force that respective style."
+            }
+        ],
+        "hash": "264552361f77f9818848be340480a05a"
+    },
+    {
+        "name": "Slim",
+        "identifier": "Yozora/SlimTitleCard",
+        "description": [
+            "Card type closely following the Standard Title Card but with slimmed down margins to save space."
+        ],
+        "example": "https://raw.githubusercontent.com/CollinHeist/TitleCardMaker-CardTypes/refs/heads/web-ui/Yozora/SlimTitleCard.preview.webp",
+        "creators": [
+            "Yozora",
+            "CollinHeist"
+        ],
+        "supports_custom_fonts": true,
+        "supports_custom_seasons": true,
+        "supported_extras": [
+            {
+                "name": "Gradient Omission",
+                "identifier": "omit_gradient",
+                "description": "Whether to omit the gradient overlay from this Card",
+                "tooltip": "Either <v>True</v> or <v>False</v>. If <v>True</v>, text may appear less legible on brighter images."
+            }
+        ],
+        "hash": "b34bbbc2fc9b6f3f50b722457f29ebdd"
+    },
+    {
+        "name": "Dawn",
+        "identifier": "Supremicus/DawnTitleCard",
+        "description": [
+            "Produce TitleCards with left, centered or right aligned text on the bottom.",
+            "An optional CRT TV overlay can be added for shows with a retro theme (like Stranger Things)"
+        ],
+        "example": "https://raw.githubusercontent.com/CollinHeist/TitleCardMaker-CardTypes/web-ui/Supremicus/DawnTitleCard.preview.jpg",
+        "creators": [
+            "Supremicus"
+        ],
+        "supports_custom_fonts": true,
+        "supports_custom_seasons": true,
+        "supported_extras": [
+            {
+                "name": "Stroke Text Color",
+                "identifier": "stroke_color",
+                "description": "Color to use for the text stroke",
+                "tooltip": "Default is <c>black</c>.",
+                "default": "black"
+            },
+            {
+                "name": "Title Text Horizontal Shift",
+                "identifier": "title_text_horizontal_shift",
+                "description": "Horizontal shift for the title text",
+                "tooltip": "Horizontal shift to apply to the title text. Default is 0. Unit is pixels.",
+                "default": 0
+            },
+            {
+                "name": "Episode Text Vertical Shift",
+                "identifier": "episode_text_vertical_shift",
+                "description": "Vertical Shift for Episode Text",
+                "tooltip": "Additional vertical shift to apply to the season and episode text. If you encounter multi-line issues, problem fonts maybe fixed by Fix vertical metrics at <v>https://transfonter.org/</v>. Default is <v>0</v>. Unit is pixels.",
+                "default": 0
+            },
+            {
+                "name": "Episode Text Font",
+                "identifier": "episode_text_font",
+                "description": "Font to use for the season and episode text",
+                "tooltip": "This can be just a file name if the font file is in the Series' source directory, <v>{title_font}</v> to match the Font used for the title text, or a full path to the font file."
+            },
+            {
+                "name": "Episode Text Font Size",
+                "identifier": "episode_text_font_size",
+                "description": "Size adjustment for the season and episode text",
+                "tooltip": "Number ≥<v>0.0</v>. Default is <v>1.0</v>.",
+                "default": 1.0
+            },
+            {
+                "name": "Episode Text Color",
+                "identifier": "episode_text_color",
+                "description": "Color to use for the episode text",
+                "tooltip": "Defaults to match the Title Color."
+            },
+            {
+                "name": "Episode Stroke Text Color",
+                "identifier": "episode_text_stroke_color",
+                "description": "Color to use for the stroke of the episode text",
+                "tooltip": "Defaults to match the Stroke Text Color."
+            },
+            {
+                "name": "Episode Text Kerning",
+                "identifier": "episode_text_kerning",
+                "description": "Spacing between characters for the episode text",
+                "tooltip": "Default is <v>18</v>. Unit is pixels.",
+                "default": 18
+            },
+            {
+                "name": "Separator Character",
+                "identifier": "separator",
+                "description": "Character to separate season and episode text",
+                "tooltip": "Default is <v>•</v>.",
+                "default": "•"
+            },
+            {
+                "name": "Horizontal Alignment",
+                "identifier": "h_align",
+                "description": "Horizontal alignment of text",
+                "tooltip": "Either <v>left</v>, <v>center</v>, or <v>right</v>. Default is <v>left</v>.",
+                "default": "left"
+            },
+            {
+                "name": "CRT TV Overlay",
+                "identifier": "crt_overlay",
+                "description": "CRT TV Overlay Toggle",
+                "tooltip": "Whether to display the CRT TV overlay. Either <v>nobezel</v>, or <v>bezel</v>. Default is no overlay."
+            },
+            {
+                "name": "CRT TV Watched/Unwatched Overlay",
+                "identifier": "crt_state_overlay",
+                "description": "CRT TV Overlay Watched-Status Toggle",
+                "tooltip": "Whether to change the CRT overlay with the watched status of the Episode. Either <v>True</v> or <v>False</v>. Default is <v>False</v>. Will only work if the CRT TV Overlay Toggle is enabled.",
+                "default": "False"
+            },
+            {
+                "name": "Gradient Omission",
+                "identifier": "omit_gradient",
+                "description": "Whether to omit the gradient overlay",
+                "tooltip": "Either <v>True</v> or <v>False</v>. Set to <v>False</v> if you have trouble reading the text on brighter images. Default is <v>True</v>.",
+                "default": "True"
+            }
+        ],
+        "hash": "11cadec508851eca865358eaa00c937d"
+    },
+    {
+        "name": "Horizon",
+        "identifier": "Supremicus/HorizonTitleCard",
+        "description": [
+            "Produce TitleCards with left or right aligned centered text with an optional symbol similar to those found on MediUX.",
+            "Optional CRT TV overlay for shows like Stranger Things with a retro theme."
+        ],
+        "example": "https://raw.githubusercontent.com/CollinHeist/TitleCardMaker-CardTypes/web-ui/Supremicus/HorizonTitleCard.preview.jpg",
+        "creators": [
+            "Supremicus"
+        ],
+        "supports_custom_fonts": true,
+        "supports_custom_seasons": true,
+        "supported_extras": [
+            {
+                "name": "Stroke Text Color",
+                "identifier": "stroke_color",
+                "description": "Color to use for the text stroke",
+                "tooltip": "Default is <c>black</c>.",
+                "default": "black"
+            },
+            {
+                "name": "Episode Text Vertical Shift",
+                "identifier": "episode_text_vertical_shift",
+                "description": "Vertical shift for episode text",
+                "tooltip": "Additional vertical shift to apply to the season and episode text. If you encounter multi-line issues, problem fonts maybe fixed by Fix vertical metrics at <v>https://transfonter.org/</v>. Default is <v>0</v>. Unit is pixels.",
+                "default": 0
+            },
+            {
+                "name": "Episode Text Font",
+                "identifier": "episode_text_font",
+                "description": "Font to use for the season and episode text",
+                "tooltip": "This can be just a file name if the font file is in the Series' source directory, <v>{title_font}</v> to match the Font used for the title text, or a full path to the font file."
+            },
+            {
+                "name": "Episode Text Font Size",
+                "identifier": "episode_text_font_size",
+                "description": "Size adjustment for the season and episode text",
+                "tooltip": "Number ≥<v>0.0</v>. Default is <v>1.0</v>.",
+                "default": 1.0
+            },
+            {
+                "name": "Episode Text Color",
+                "identifier": "episode_text_color",
+                "description": "Color to use for the episode text",
+                "tooltip": "Defaults to match the Title Color."
+            },
+            {
+                "name": "Episode Stroke Text Color",
+                "identifier": "episode_text_stroke_color",
+                "description": "Color to use for the stroke of the episode text",
+                "tooltip": "Defaults to match the Stroke Text Color."
+            },
+            {
+                "name": "Episode Text Kerning",
+                "identifier": "episode_text_kerning",
+                "description": "Spacing between characters for the episode text",
+                "tooltip": "Default is <v>18</v>. Unit is pixels.",
+                "default": 18
+            },
+            {
+                "name": "Separator Character",
+                "identifier": "separator",
+                "description": "Character to separate season and episode text",
+                "tooltip": "Default is <v>•</v>.",
+                "default": "•"
+            },
+            {
+                "name": "Horizontal Alignment",
+                "identifier": "h_align",
+                "description": "Horizontal alignment of text",
+                "tooltip": "Either <v>left</v>, or <v>right</v>. Default is <v>left</v>.",
+                "default": "left"
+            },
+            {
+                "name": "Symbol",
+                "identifier": "symbol",
+                "description": "Add a custom symbol behind the text",
+                "tooltip": "Either <v>acolyte</v>, <v>ahsoka</v>, <v>andor</v>, <v>bobafett<v>, <v>mandalorian</v>, <v>obiwan</v>, or <v>witcher</v> to use a built-in symbol; or <v>logo</v> to use the Series logo."
+            },
+            {
+                "name": "CRT TV Overlay",
+                "identifier": "crt_overlay",
+                "description": "CRT TV Overlay Toggle",
+                "tooltip": "Whether to display the CRT TV overlay. Either <v>nobezel</v>, or <v>bezel</v>. Default is no overlay."
+            },
+            {
+                "name": "CRT TV Watched/Unwatched Overlay",
+                "identifier": "crt_state_overlay",
+                "description": "CRT TV Overlay Watched-Status Toggle",
+                "tooltip": "Whether to change the CRT overlay with the watched status of the Episode. Either <v>True</v> or <v>False</v>. Default is <v>False</v>. Will only work if the CRT TV Overlay Toggle is enabled.",
+                "default": "False"
+            },
+            {
+                "name": "Gradient Omission",
+                "identifier": "omit_gradient",
+                "description": "Whether to omit the gradient overlay",
+                "tooltip": "Either <v>True</v> or <v>False</v>. Set to <v>False</v> if you have trouble reading the text on brighter images. Default is <v>True</v>.",
+                "default": "True"
+            },
+            {
+                "name": "Alignment Overlay",
+                "identifier": "alignment_overlay",
+                "description": "Alignment Overlay Toggle",
+                "tooltip": "Enable an alignment overlay to help assist adjusting offsets for misaligned custom fonts. The overlay has guiding lines every 10 pixels. Either <v>True</v> or <v>False</v>. Default is <v>False</v>.",
+                "default": "False"
+            }
+        ],              
+        "hash": "c40c137179d5f237add3823a233f4ffe"
+    }
+]

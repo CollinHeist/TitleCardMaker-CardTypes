@@ -6,6 +6,7 @@ from modules.BaseCardType import BaseCardType
 from modules.RemoteFile import RemoteFile
 from modules.Debug import log
 
+
 class WhiteTextStandardLogo(BaseCardType):
     """
     WDVH's WhiteTextStandardLogo card type.

@@ -1,19 +1,3 @@
-# BarebonesTitleCard
-## Description
-This is a minimalistic custom CardType which emulates the main features of the [StarWarsTitleCard](https://github.com/CollinHeist/TitleCardMaker/wiki/StarWarsTitleCard). The main difference made to this CardType is the rework of the card to make it more universal in terms of style and design (such as changing the star-themed gradient)
-
-## Example Cards
-<img src="https://user-images.githubusercontent.com/17693271/177438468-ba114f2a-a80b-49ad-8c4f-2d0f39f1ad64.jpg" width="1000"/>
-
-## Features
-The following outlines the differences from the StandardTitleCard.
-
-- Default font switched to Montserrat
-- Episode and Title color change now supported
-- Removed Gradient
-
-All other features are as per the StarWarsTitleCard.
-
 # RetroTitleCard
 ## Description
 This is a custom CardType which is inspired by old-school VHS tapes and camcorders. The main difference made to this CardType is the rework of the card to make it more universal in terms of style and design (such as changing the star-themed gradient)

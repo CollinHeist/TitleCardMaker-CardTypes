@@ -1,11 +1,23 @@
 from pathlib import Path
-from re import findall, compile as re_compile
-from typing import Optional
+from re import compile as re_compile, findall
+from typing import Optional, TYPE_CHECKING
 
-from modules.BaseCardType import BaseCardType, ImageMagickCommands
-from modules.CleanPath import CleanPath
+from pydantic import FilePath
+
+from app.schemas.card_type import BaseCardTypeCustomFontAllText
+from modules.BaseCardType import (
+    BaseCardType,
+    CardDescription,
+    ImageMagickCommands,
+)
 from modules.Debug import log
 from modules.RemoteFile import RemoteFile
+from modules.Title import SplitCharacteristics
+
+if TYPE_CHECKING:
+    from app.models.preferences import Preferences
+    from modules.Font import Font
+
 
 class TitleColorMatch(BaseCardType):
     """
@@ -15,20 +27,46 @@ class TitleColorMatch(BaseCardType):
     matches the logo, as well as trimming the logo of any extra
     transparent space that makes its  location incorrect.
     """
-    
+
+    API_DETAILS =  CardDescription(
+        name='Title Color Match',
+        identifier='azuravian/TitleColorMatch',
+        example=(
+            'https://user-images.githubusercontent.com/7379812/'
+            '187586521-353ba09f-30a8-424b-bbf3-ee9036c9e638.jpg'
+        ),
+        creators=['Azuravian', 'Beedman', 'CollinHeist'],
+        source='remote',
+        supports_custom_fonts=True,
+        supports_custom_seasons=True,
+        supported_extras=[],
+        description=[
+            'A modification of GradientLogoTitleCard that includes the option '
+            'to auto-select font color based on logo color.', 'This card will '
+            'also automatically crop off extraneous transparent space from '
+            'around the logo.',
+        ]
+    )
+
+    class CardModel(BaseCardTypeCustomFontAllText):
+        logo_file: FilePath
+        font_color: str = 'auto'
+        font_file: FilePath
+        omit_gradient: bool = False
+
     """Directory where all reference files used by this card are stored"""
     REF_DIRECTORY = Path(__file__).parent.parent / 'ref'
 
     """Characteristics for title splitting by this class"""
-    TITLE_CHARACTERISTICS = {
-        'max_line_width': 32,   # Character count to begin splitting titles
-        'max_line_count': 3,    # Maximum number of lines a title can take up
-        'top_heavy': False,     # This class uses bottom heavy titling
+    TITLE_CHARACTERISTICS: SplitCharacteristics = {
+        'max_line_width': 32,
+        'max_line_count': 3,
+        'style': 'bottom',
     }
 
     """Default font and text color for episode title text"""
     TITLE_FONT = str((REF_DIRECTORY / 'Sequel-Neue.otf').resolve())
-    TITLE_COLOR = '#EBEBEB'
+    TITLE_COLOR = 'auto'
 
     """Default characters to replace in the generic font"""
     FONT_REPLACEMENTS = {
@@ -53,20 +91,34 @@ class TitleColorMatch(BaseCardType):
     __COLORDATA_REGEX = re_compile(r'[\s]*(\d*)?:\s.*\s(#\w{8}).*\n?')
 
     __slots__ = (
-        'source_file', 'output_file', 'title_text', 'season_text',
-        'episode_text', 'hide_season_text', 'font_color', 'font_file',
-        'font_interline_spacing', 'font_kerning', 'font_size',
-        'font_stroke_width', 'font_vertical_shift', 'logo', 
+        'source_file',
+        'output_file',
+        'title_text',
+        'season_text',
+        'episode_text',
+        'hide_season_text',
+        'hide_episode_text',
+        'font_color',
+        'font_file',
+        'font_interline_spacing',
+        'font_kerning',
+        'font_size',
+        'font_stroke_width',
+        'font_vertical_shift',
+        'logo',
+        'omit_gradient',
     )
 
 
     def __init__(self, *,
             source_file: Path,
             card_file: Path,
+            logo_file: Path,
             title_text: str,
             season_text: str,
             episode_text: str,
             hide_season_text: bool = False,
+            hide_episode_text: bool = False,
             font_color: str = TITLE_COLOR,
             font_file: str = TITLE_FONT,
             font_interline_spacing: int = 0,
@@ -74,37 +126,27 @@ class TitleColorMatch(BaseCardType):
             font_size: float = 1.0,
             font_stroke_width: float = 1.0,
             font_vertical_shift: int = 0,
-            season_number: int = 1,
-            episode_number: int = 1,
             blur: bool = False,
             grayscale: bool = False,
-            logo: Optional[str] = None,
-            **unused) -> None:
-        """
-        Construct a new instance of this Card.
-        """
+            omit_gradient: bool = False,
+            preferences: 'Preferences | None' = None,
+            **unused,
+        ) -> None:
+        """Construct a new instance of this Card."""
         
         # Initialize the parent class - this sets up an ImageMagickInterface
-        super().__init__(blur, grayscale)
+        super().__init__(blur, grayscale, preferences=preferences)
 
         self.source_file = source_file
         self.output_file = card_file
-        if logo is None:
-            self.logo = None
-        else:
-            try:
-                logo = logo.format(season_number=season_number,
-                                   episode_number=episode_number)
-                self.logo = Path(CleanPath(logo).sanitize())
-            except Exception as e:
-                self.valid = False
-                log.exception(f'Invalid logo file "{logo}"', e)
+        self.logo = logo_file
 
         # Ensure characters that need to be escaped are
         self.title_text = self.image_magick.escape_chars(title_text)
-        self.season_text = self.image_magick.escape_chars(season_text.upper())
-        self.episode_text = self.image_magick.escape_chars(episode_text.upper())
-        self.hide_season_text = hide_season_text or len(season_text) == 0
+        self.season_text = self.image_magick.escape_chars(season_text)
+        self.episode_text = self.image_magick.escape_chars(episode_text)
+        self.hide_season_text = hide_season_text
+        self.hide_episode_text = hide_episode_text
         
         self.font_color = font_color
         self.font_file = font_file
@@ -114,24 +156,36 @@ class TitleColorMatch(BaseCardType):
         self.font_stroke_width = font_stroke_width
         self.font_vertical_shift = font_vertical_shift
 
+        # Extras
+        self.omit_gradient = omit_gradient
+
+
+    @property
+    def gradient_command(self) -> ImageMagickCommands:
+        """Subcommands to add the gradient to the image."""
+
+        if self.omit_gradient:
+            return []
+
+        return [
+            f'"{self.__GRADIENT_IMAGE}"',
+            f'-composite',
+        ]
+
 
     @property
     def logo_command(self) -> ImageMagickCommands:
-        """
-        Get the ImageMagick commands to add the resized logo to the
-        source image.
-
-        Returns:
-            List of ImageMagick commands.
-        """
+        """ImageMagick commands to add the resized logo to the image."""
 
         return [
             # Resize logo
-            f'\( "{self.logo.resolve()}"',
+            fr'\(',
+            f'"{self.logo.resolve()}"',
             f'-trim',
             f'+repage',
             f'-resize x650',
-            f'-resize 1155x650\> \)',
+            fr'-resize 1155x650\>',
+            fr'\)',
             # Overlay resized logo
             f'-gravity northwest',
             f'-define colorspace:auto-grayscale=false',
@@ -147,9 +201,6 @@ class TitleColorMatch(BaseCardType):
         ImageMagick commands to implement the title text's global
         effects. Specifically the the font, kerning, fontsize, and
         center gravity.
-
-        Returns:
-            List of ImageMagick commands.
         """
 
         # Get the title color and stroke for this logo
@@ -187,7 +238,7 @@ class TitleColorMatch(BaseCardType):
         """
 
         # If auto color wasn't indicated use indicated color and black stroke
-        if self.font_color.lower() != 'auto':
+        if self.font_color != 'auto':
             return self.font_color, 'black'
 
         # Command to get histogram of the colors in logo image
@@ -238,34 +289,48 @@ class TitleColorMatch(BaseCardType):
             return hexcolor, 'black' if luminance > 50 else 'white'
 
         # No valid colors identified, return defaults
-        return self.TITLE_COLOR, 'black'
+        return '#EBEBEB', 'black'
 
     
     @property
     def index_text_command(self) -> ImageMagickCommands:
         """
-        Get the ImageMagick commands required to add the index (season
-        and episode) text to the image.
-
-        Returns:
-            List of ImageMagick commands.
+        ImageMagick commands required to add the index (season and
+        episode) text to the image.
         """
 
         # Season hiding, just add episode text
         if self.hide_season_text:
             return [
+                f'-font "{self.EPISODE_COUNT_FONT.resolve()}"',
                 f'-kerning 5.42',
                 f'-pointsize 67.75',
-                f'-font "{self.EPISODE_COUNT_FONT.resolve()}"',
-                f'-gravity southwest',
                 f'-fill black',
                 f'-stroke black',
                 f'-strokewidth 6',
+                f'-gravity southwest',
                 f'-annotate +50+50 "{self.episode_text}"',
                 f'-fill "{self.SERIES_COUNT_TEXT_COLOR}"',
                 f'-stroke "{self.SERIES_COUNT_TEXT_COLOR}"',
                 f'-strokewidth 0.75',
                 f'-annotate +50+50 "{self.episode_text}"',
+            ]
+
+        # Episode hiding, just add season text
+        if self.hide_episode_text:
+            return [
+                f'-font "{self.SEASON_COUNT_FONT.resolve()}"',
+                f'-kerning 5.42',
+                f'-pointsize 67.75',
+                f'-fill black',
+                f'-stroke black',
+                f'-strokewidth 6',
+                f'-gravity southwest',
+                f'-annotate +50+50 "{self.season_text}"',
+                f'-fill "{self.SERIES_COUNT_TEXT_COLOR}"',
+                f'-stroke "{self.SERIES_COUNT_TEXT_COLOR}"',
+                f'-strokewidth 0.75',
+                f'-annotate +50+50 "{self.season_text}"',
             ]
 
         return [
@@ -276,24 +341,28 @@ class TitleColorMatch(BaseCardType):
             f'-fill black',
             f'-stroke black',
             f'-strokewidth 6',
-            f'\( -gravity center',
+            fr'\(',
+            f'-gravity center',
             f'-font "{self.SEASON_COUNT_FONT.resolve()}"',
             f'label:"{self.season_text} •"',
             f'-font "{self.EPISODE_COUNT_FONT.resolve()}"',
             f'label:"{self.episode_text}"',
-            f'+smush 30 \)',
+            f'+smush 30',
+            fr'\)',
             f'-gravity southwest',
             f'-geometry +50+50',
             f'-composite',
             f'-fill "{self.SERIES_COUNT_TEXT_COLOR}"',
             f'-stroke "{self.SERIES_COUNT_TEXT_COLOR}"',
             f'-strokewidth 0.75',
-            f'\( -gravity center',
+            fr'\(',
+            f'-gravity center',
             f'-font "{self.SEASON_COUNT_FONT.resolve()}"',
             f'label:"{self.season_text} •"',
             f'-font "{self.EPISODE_COUNT_FONT.resolve()}"',
             f'label:"{self.episode_text}"',
-            f'+smush 30 \)',
+            f'+smush 30',
+            fr'\)',
             f'-gravity southwest',
             f'-geometry +50+50',
             f'-composite',
@@ -313,21 +382,24 @@ class TitleColorMatch(BaseCardType):
             True if a custom font is indicated, False otherwise.
         """
 
-        return ((font.color != TitleColorMatch.TITLE_COLOR)
-            or (font.file != TitleColorMatch.TITLE_FONT)
-            or (font.interline_spacing != 0)
-            or (font.kerning != 1.0)
-            or (font.size != 1.0)
-            or (font.stroke_width != 1.0)
-            or (font.vertical_shift != 0)
+        return (
+            font.color != TitleColorMatch.TITLE_COLOR
+            or font.file != TitleColorMatch.TITLE_FONT
+            or font.interline_spacing != 0
+            or font.kerning != 1.0
+            or font.size != 1.0
+            or font.stroke_width != 1.0
+            or font.vertical_shift != 0
         )
 
 
     @staticmethod
     def is_custom_season_titles(
-            custom_episode_map: bool, episode_text_format: str) -> bool:
+            custom_episode_map: bool,
+            episode_text_format: str,
+        ) -> bool:
         """
-         Determines whether the given attributes constitute custom or
+        Determines whether the given attributes constitute custom or
         generic season titles.
 
         Args:
@@ -338,43 +410,30 @@ class TitleColorMatch(BaseCardType):
             True if custom season titles are indicated, False otherwise.
         """
 
-        standard_etf = TitleColorMatch.EPISODE_TEXT_FORMAT.upper()
-
-        return (custom_episode_map or
-                episode_text_format.upper() != standard_etf)
+        return (
+            custom_episode_map
+            or episode_text_format != TitleColorMatch.EPISODE_TEXT_FORMAT
+        )
 
 
     def create(self) -> None:
-        """
-        Make the necessary ImageMagick and system calls to create this
-        object's defined title card.
-        """
-        
-        # Skip card if logo doesn't exist
-        if self.logo is None:
-            log.error(f'Logo file not specified')
-            return None
-        elif not self.logo.exists():
-            log.error(f'Logo file "{self.logo.resolve()}" does not exist')
-            return None
+        """Create this object's defined title card."""
 
-        command = ' '.join([
+        self.image_magick.run([
             f'convert',
             # Resize source image
             f'"{self.source_file.resolve()}"',
             *self.resize_and_style,
-            # Overlay gradient
-            f'"{self.__GRADIENT_IMAGE}"',
-            f'-composite',
+            *self.gradient_command,
             # Overlay resized logo
             *self.logo_command,
             # Put title text
             *self.title_text_command,
             # Put season/episode text
             *self.index_text_command,
+            # Attempt to overlay mask
+            *self.add_overlay_mask(self.source_file),
             # Create and resize output
             *self.resize_output,
             f'"{self.output_file.resolve()}"',
         ])
-
-        self.image_magick.run(command)
