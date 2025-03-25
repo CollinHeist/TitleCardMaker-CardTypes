@@ -58,7 +58,10 @@ def extract_card_details(file_path: Path):
 
 
 def update_cards_json(directory: Path):
-    """Updates cards.json with details of Python files containing CardDescription."""
+    """
+    Updates the card JSON file with the Card API descriptions of all
+    the child Python files.
+    """
 
     # Generate card JSON data
     cards = []
