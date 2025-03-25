@@ -8,8 +8,10 @@ import re
 CARDS_FILE = 'cards.json'
 
 
-def convert_to_dict(node):
-    """Recursively converts AST nodes into dictionaries where applicable."""
+def convert_to_dict(node: ast.expr):
+    """
+    Recursively converts AST nodes into dictionaries where applicable.
+    """
 
     if isinstance(node, ast.Expr):
         return convert_to_dict(node.value)  # Extract the expression's value
@@ -59,8 +61,8 @@ def extract_card_details(file_path: Path):
 
 def update_cards_json(directory: Path):
     """
-    Updates the card JSON file with the Card API descriptions of all
-    the child Python files.
+    Updates the card JSON file with the Card API descriptions of all the
+    child Python files.
     """
 
     # Generate card JSON data

@@ -8,6 +8,7 @@ from app.schemas.card_type import BaseCardTypeCustomFontAllText
 from modules.BaseCardType import (
     BaseCardType,
     CardDescription,
+    Extra,
     ImageMagickCommands,
 )
 from modules.Debug import log

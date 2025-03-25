@@ -33,7 +33,7 @@ class HorizonTitleCard(BaseCardType):
     """API Parameters"""
     API_DETAILS = CardDescription(
         name='Horizon',
-        identifier='Supremicus/Horizon',
+        identifier='Supremicus/HorizonTitleCard',
         example=(
             'https://raw.githubusercontent.com/CollinHeist/'
             'TitleCardMaker-CardTypes/web-ui/Supremicus/'

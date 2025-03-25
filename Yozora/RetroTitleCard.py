@@ -7,6 +7,7 @@ from app.schemas.card_type import BaseCardTypeCustomFontNoText
 from modules.BaseCardType import (
     BaseCardType,
     CardDescription,
+    Extra,
     ImageMagickCommands,
 )
 from modules.RemoteFile import RemoteFile

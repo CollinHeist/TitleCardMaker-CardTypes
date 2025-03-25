@@ -18,7 +18,7 @@
     },
     {
         "name": "Dawn",
-        "identifier": "Supremicus/Dawn",
+        "identifier": "Supremicus/DawnTitleCard",
         "example": "https://raw.githubusercontent.com/CollinHeist/TitleCardMaker-CardTypes/web-ui/Supremicus/DawnTitleCard.preview.jpg",
         "creators": [
             "Supremicus"
@@ -118,11 +118,11 @@
             "Produce Title Cards with left, centered or right-aligned text on the bottom.",
             "An optional CRT TV overlay can be added for shows with a retro theme (like Stranger Things)"
         ],
-        "hash": "6b833de985021a219b98e86d0833ca4f"
+        "hash": "3587aed1ff0ef65571f6a04d5829cbcc"
     },
     {
         "name": "Horizon",
-        "identifier": "Supremicus/Horizon",
+        "identifier": "Supremicus/HorizonTitleCard",
         "example": "https://raw.githubusercontent.com/CollinHeist/TitleCardMaker-CardTypes/web-ui/Supremicus/HorizonTitleCard.preview.jpg",
         "creators": [
             "Supremicus"
@@ -234,7 +234,7 @@
         "description": [
             "Produce TitleCards with left or right aligned centered text with an optional symbol similar to those found on MediUX. CRT TV overlay for shows like Stranger Things with a retro theme."
         ],
-        "hash": "aebabf99637ae762dad76bd3431f5032"
+        "hash": "580d271d84b726842da25d343b804a56"
     },
     {
         "name": "Retro",
@@ -264,7 +264,7 @@
             "Card type featuring a VHS/Camcorder inspired overlay. The 'Play' ",
             "button can be set to 'Rewind' and the image greyscaled when the item has been played."
         ],
-        "hash": "1a0fb6c2489e5a1cef5cb91c33035552"
+        "hash": "2ba4b7c9a45793c7da1930610eedc877"
     },
     {
         "name": "SciFi",
@@ -505,7 +505,7 @@
             "A modification of GradientLogoTitleCard that includes the option to auto-select font color based on logo color.",
             "This card will also automatically crop off extraneous transparent space from around the logo."
         ],
-        "hash": "efbb7c496a4b495d4e00f4e19ab7d566"
+        "hash": "be85cdb44e224ae58ec85b556b468c9e"
     },
     {
         "name": "White Text Broadcast",

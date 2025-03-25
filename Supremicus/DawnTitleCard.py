@@ -32,7 +32,7 @@ class DawnTitleCard(BaseCardType):
     """API Parameters"""
     API_DETAILS = CardDescription(
         name='Dawn',
-        identifier='Supremicus/Dawn',
+        identifier='Supremicus/DawnTitleCard',
         example=(
             'https://raw.githubusercontent.com/CollinHeist/'
             'TitleCardMaker-CardTypes/web-ui/Supremicus/'
