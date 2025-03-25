@@ -20,7 +20,7 @@ jobs:
           python-version: '3.12'
 
       - name: Run script to update cards.json
-        run: python update_cards_json.py
+        run: python parse.py
 
       - name: Commit and push changes
         run: |
