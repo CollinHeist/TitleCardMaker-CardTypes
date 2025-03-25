@@ -1,6 +1,7 @@
 name: Update Card JSON File
 
 on:
+  workflow_dispatch: 
   push:
     branches:
       - web-ui
