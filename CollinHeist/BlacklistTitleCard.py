@@ -21,7 +21,7 @@ class BlacklistTitleCard(BaseCardType):
     with a subtitle of the "blacklist number" parsed via an extra.
     """
 
-    API_DETAILS =  CardDescription(
+    API_DETAILS = CardDescription(
         name='Blacklist',
         identifier='CollinHeist/BlacklistTitleCard',
         example=(
@@ -58,7 +58,7 @@ class BlacklistTitleCard(BaseCardType):
             return values
 
     """Characteristics for title splitting by this class"""
-    TITLE_CHARACTERISTICS: SplitCharacteristics = {
+    TITLE_CHARACTERISTICS = {
         'max_line_width': 15,
         'max_line_count': 4,
         'style': 'top',
@@ -80,17 +80,17 @@ class BlacklistTitleCard(BaseCardType):
     USES_SEASON_TITLE = False
 
     __slots__ = (
-        'source_file',
-        'output_file',
-        'title_text',
         'episode_text',
-        'hide_episode_text',
-        'line_count',
         'font_color',
         'font_file',
         'font_size',
         'font_interline_spacing',
         'font_vertical_shift',
+        'hide_episode_text',
+        'output_file',
+        'line_count',
+        'source_file',
+        'title_text',
     )
 
     def __init__(self, *,
@@ -134,7 +134,7 @@ class BlacklistTitleCard(BaseCardType):
     @staticmethod
     def is_custom_font(font: 'Font') -> bool:
         """
-         Determines whether the given arguments represent a custom font
+        Determines whether the given arguments represent a custom font
         for this card.
 
         Args:

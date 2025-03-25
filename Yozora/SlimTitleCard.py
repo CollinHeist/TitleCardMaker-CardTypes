@@ -38,7 +38,14 @@ class SlimTitleCard(BaseCardType):
         source='remote',
         supports_custom_fonts=True,
         supports_custom_seasons=True,
-        supported_extras=[],
+        supported_extras=[
+            Extra(
+                name="Gradient Omission",
+                identifier="omit_gradient",
+                description="Whether to omit the gradient overlay from this Card",
+                tooltip="Either <v>True</v> or <v>False</v>. If <v>True</v>, text may appear less legible on brighter images."
+            ),
+        ],
         description=[
             'Card type closely following the Standard Title Card but with '
             'slimmed down margins to save space.',

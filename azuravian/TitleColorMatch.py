@@ -8,6 +8,7 @@ from app.schemas.card_type import BaseCardTypeCustomFontAllText
 from modules.BaseCardType import (
     BaseCardType,
     CardDescription,
+    Extra,
     ImageMagickCommands,
 )
 from modules.Debug import log
@@ -39,7 +40,15 @@ class TitleColorMatch(BaseCardType):
         source='remote',
         supports_custom_fonts=True,
         supports_custom_seasons=True,
-        supported_extras=[],
+        supported_extras=[
+            Extra(
+                name='Gradient Omission',
+                identifier='omit_gradient',
+                description='Whether to omit the gradient overlay',
+                tooltip='Either <v>True</v> or <v>False</v>. Default is <v>False</v>.',
+                default='False',
+            )
+        ],
         description=[
             'A modification of GradientLogoTitleCard that includes the option '
             'to auto-select font color based on logo color.', 'This card will '
@@ -58,7 +67,7 @@ class TitleColorMatch(BaseCardType):
     REF_DIRECTORY = Path(__file__).parent.parent / 'ref'
 
     """Characteristics for title splitting by this class"""
-    TITLE_CHARACTERISTICS: SplitCharacteristics = {
+    TITLE_CHARACTERISTICS = {
         'max_line_width': 32,
         'max_line_count': 3,
         'style': 'bottom',

@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import TYPE_CHECKING, Optional, Literal, Union
 
-from pydantic import root_validator
+from pydantic import conint, root_validator
 
 from app.schemas.card_type import BaseCardTypeCustomFontAllText
 
@@ -33,7 +33,7 @@ class HorizonTitleCard(BaseCardType):
     """API Parameters"""
     API_DETAILS = CardDescription(
         name='Horizon',
-        identifier='Supremicus/Horizon',
+        identifier='Supremicus/HorizonTitleCard',
         example=(
             'https://raw.githubusercontent.com/CollinHeist/'
             'TitleCardMaker-CardTypes/web-ui/Supremicus/'
@@ -115,7 +115,7 @@ class HorizonTitleCard(BaseCardType):
                 identifier='h_align',
                 description='Horizontal alignment of text',
                 tooltip=(
-                    'Either <v>left</v> or <v>right</v>. '
+                    'Either <v>left</v>, <v>center</v>, or <v>right</v>. '
                     'Default is <v>left</v>.'
                 ),
                 default='left',
@@ -130,6 +130,17 @@ class HorizonTitleCard(BaseCardType):
                     '<v>witcher</v> to use a built-in symbol; or <v>logo</v> '
                     'to use the Series logo.'
                 ),
+            ),
+            Extra(
+                name='Symbol Opacity',
+                identifier='symbol_opacity',
+                description='Adjust opacity of the symbol',
+                tooltip=(
+                    'Number between <v>0</v> and <v>100</v>. <v>0</v>% being '
+                    'fully transparent, <v>100</v>% being fully opaque. Unit '
+                    'percent.'
+                ),
+                default=100,
             ),
             Extra(
                 name='CRT TV Overlay',
@@ -196,11 +207,12 @@ class HorizonTitleCard(BaseCardType):
         episode_text_stroke_color: str | None = None
         episode_text_kerning: int = 18
         separator: str = '•'
-        h_align: Literal['left', 'right'] = 'left'
+        h_align: Literal['left', 'center', 'right'] = 'left'
         symbol: Literal[
             'acolyte', 'ashoka', 'andor', 'bobafett', 'mandalorian', 'obiwan',
             'witcher', 'logo',
         ] | None = None
+        symbol_opacity: conint(ge=0, le=100) = 100
         logo_file: Path
         alignment_overlay: bool = False
         crt_overlay: Literal['nobezel', 'bezel'] | None = None
@@ -280,6 +292,7 @@ class HorizonTitleCard(BaseCardType):
 
     """Source path for the gradient image"""
     __GRADIENT_IMAGE = RemoteFile('Supremicus', 'ref/overlays/radial_gradient.png')
+    __GRADIENT_IMAGE_CENTERED = RemoteFile('Supremicus', 'ref/overlays/radial_gradient_centered.png')
 
     __slots__ = (
         'source_file', 'output_file', 'title_text', 'season_text',
@@ -289,8 +302,8 @@ class HorizonTitleCard(BaseCardType):
         'font_vertical_shift', 'stroke_color', 'episode_text_vertical_shift',
         'episode_text_font', 'episode_text_font_size', 'episode_text_color',
         'episode_text_stroke_color', 'episode_text_kerning', 'separator', 'h_align',
-        'symbol', 'logo', 'alignment_overlay', 'crt_overlay', 'crt_state_overlay',
-        'omit_gradient'
+        'symbol', 'symbol_opacity', 'logo', 'alignment_overlay', 'crt_overlay',
+        'crt_state_overlay', 'omit_gradient'
     )
 
     def __init__(self,
@@ -319,7 +332,7 @@ class HorizonTitleCard(BaseCardType):
             episode_text_stroke_color: str = None,
             episode_text_kerning: int = 18,
             separator: str = '•',
-            h_align: Literal['left', 'right'] = 'left',
+            h_align: Literal['left', 'center', 'right'] = 'left',
             logo_file: Optional[Path] = None,
             symbol: None | Literal[
                 'acolyte',
@@ -331,6 +344,7 @@ class HorizonTitleCard(BaseCardType):
                 'witcher',
                 'logo',
             ] = None,
+            symbol_opacity: int = 100,
             alignment_overlay: bool = False,
             crt_overlay: Literal['nobezel', 'bezel'] | None = None,
             crt_state_overlay: bool = False,
@@ -376,6 +390,7 @@ class HorizonTitleCard(BaseCardType):
         self.h_align = h_align
         self.logo = logo_file
         self.symbol = symbol
+        self.symbol_opacity = symbol_opacity
         self.alignment_overlay = alignment_overlay
         self.crt_overlay = crt_overlay
         self.crt_state_overlay = crt_state_overlay
@@ -414,7 +429,7 @@ class HorizonTitleCard(BaseCardType):
         # Text offsets
         offset = (124 * self.font_size / 2) * self.line_count
         y = 900 - offset + self.episode_text_vertical_shift - 30
-        x = -700 if self.h_align == 'left' else 700
+        x = -700 if self.h_align == 'left' else (700 if self.h_align == 'right' else 0)
 
         return [
             *base_commands,
@@ -439,7 +454,7 @@ class HorizonTitleCard(BaseCardType):
         font_size = 124 * self.font_size
         offset = (font_size / 2) * self.line_count
         vertical_shift = 42 + self.font_vertical_shift
-        x = -700 if self.h_align == 'left' else 700
+        x = -700 if self.h_align == 'left' else (700 if self.h_align == 'right' else 0)
         y = 900 - offset + vertical_shift - 12
 
         return [
@@ -513,13 +528,17 @@ class HorizonTitleCard(BaseCardType):
         if not symbol_image or not symbol_image.exists():
             return []
 
-        x = -700 if self.h_align == 'left' else 700
+        x = -700 if self.h_align == 'left' else (700 if self.h_align == 'right' else 0)
 
         return [
             f'-gravity center',
             f'\( "{symbol_image.resolve()}"',
             f'-resize x850',
             f'-resize 850x850\>',
+            f'-matte',
+            f'-channel A',
+            f'+level 0,{self.symbol_opacity}%',
+            f'+channel',
             f'\) -geometry {x:+}+0',
             f'-composite',
         ]
@@ -565,10 +584,15 @@ class HorizonTitleCard(BaseCardType):
         if self.omit_gradient:
             return []
 
-        rotation = 0 if self.h_align == 'left' else 180
+        if self.h_align in ('left', 'right'):
+            rotation = 0 if self.h_align == 'left' else 180
+            gradient_image = self.__GRADIENT_IMAGE
+        else:
+            rotation = 0
+            gradient_image = self.__GRADIENT_IMAGE_CENTERED
 
         return [
-            f'\( "{self.__GRADIENT_IMAGE.resolve()}"',
+            f'\( "{gradient_image.resolve()}"',
             f'-rotate {rotation} \)',
             f'-composite',
         ]
