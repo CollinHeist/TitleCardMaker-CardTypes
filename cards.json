@@ -479,7 +479,7 @@
             "A combination of the TintedFrameTitleCard and the Standard for the best of both worlds.",
             "It has many of the same extras you can pass to tinted frame, but it adds the episode title text above the bottom frame element (this is not modifiable). The top element will default to logo now, and title is no longer an option (as it is always shown above the bottom element)."
         ],
-        "hash": "7f08371117d7aabc452452b3d17fe313"
+        "hash": "cb67fc04ee1a81185c8af7330a12a58e"
     },
     {
         "name": "Title Color Match",
@@ -522,7 +522,7 @@
         "description": [
             "Card based on Wdvh's White Text Absolute card, using the same format, but has the season number included in the episode text."
         ],
-        "hash": "ae196409888f1d3a7ba76bb45549f160"
+        "hash": "ea8c4014edf6e65970e53cc13a078399"
     },
     {
         "name": "White Text Standard",
