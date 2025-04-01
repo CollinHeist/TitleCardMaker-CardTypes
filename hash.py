@@ -8,7 +8,7 @@ def print_file_hashes() -> None:
     """
 
     for card_file in Path(__file__).parent.glob('*/*.py'):
-        file_hash = md5(card_file.read_text().encode('utf-8')).hexdigest()
+        file_hash = md5(card_file.read_bytes()).hexdigest()
         print(f'{card_file.parent.name}/{card_file.name} : {file_hash}')
 
 

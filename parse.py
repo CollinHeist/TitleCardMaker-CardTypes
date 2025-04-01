@@ -73,7 +73,7 @@ def update_cards_json(directory: Path):
             details.pop('source', None)
 
             # Add hashes
-            details['hash'] = md5(card_file.read_text().encode('utf-8')).hexdigest()
+            details['hash'] = md5(card_file.read_bytes()).hexdigest()
 
             cards.append(details)
 
