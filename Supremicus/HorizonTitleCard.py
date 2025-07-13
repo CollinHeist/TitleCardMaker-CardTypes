@@ -219,7 +219,7 @@ class HorizonTitleCard(BaseCardType):
         crt_state_overlay: bool = False
         omit_gradient: bool = True
 
-        @root_validator(skip_on_failure=True)
+        @root_validator(skip_on_failure=True, allow_reuse=True)
         def validate_episode_text_font_file(cls, values: dict) -> dict:
             if (etf := values['episode_text_font']) == '{title_font}':
                 values['episode_text_font'] = values['font_file']
