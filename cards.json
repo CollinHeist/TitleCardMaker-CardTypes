@@ -14,7 +14,7 @@
             "This Card features a prominent title and a customizable 'blacklist number' beneath the title.",
             "The default Font for this card is a modified version of Helvetica."
         ],
-        "hash": "50aa8b8f44eaf521b2c5886a3eaaf403"
+        "hash": "4fa8589a5aa4a54d58904a976841c996"
     },
     {
         "name": "Dawn",
@@ -118,7 +118,7 @@
             "Produce Title Cards with left, centered or right-aligned text on the bottom.",
             "An optional CRT TV overlay can be added for shows with a retro theme (like Stranger Things)"
         ],
-        "hash": "c495fb57b6ba69a2b2ac1b378edda54b"
+        "hash": "fe463ac95aab3b772322e1d5d681211d"
     },
     {
         "name": "Horizon",
@@ -234,7 +234,7 @@
         "description": [
             "Produce TitleCards with left or right aligned centered text with an optional symbol similar to those found on MediUX. CRT TV overlay for shows like Stranger Things with a retro theme."
         ],
-        "hash": "4c8b7ed857edefd47f853c3132883c7a"
+        "hash": "f451975242bf90d35d863d0b55bbc9ff"
     },
     {
         "name": "Retro",
@@ -264,7 +264,7 @@
             "Card type featuring a VHS/Camcorder inspired overlay. The 'Play' ",
             "button can be set to 'Rewind' and the image greyscaled when the item has been played."
         ],
-        "hash": "2ba4b7c9a45793c7da1930610eedc877"
+        "hash": "8a3e015ff425d9dc05365aca82735908"
     },
     {
         "name": "SciFi",
@@ -351,7 +351,7 @@
             "A multi-overlay card designed to look like a heads up display.",
             "Intended for use in Science Fiction series."
         ],
-        "hash": "612a274476d850ab5f3bbca0cf81d938"
+        "hash": "90e534ad58c8dacc0edcd74eef531609"
     },
     {
         "name": "Slim",
@@ -374,7 +374,7 @@
         "description": [
             "Card type closely following the Standard Title Card but with slimmed down margins to save space."
         ],
-        "hash": "c9bbd213a801d0d6fdba77cf69a9485c"
+        "hash": "1145811f5ddbbd21b6ebf3cffbd89de9"
     },
     {
         "name": "Star Wars (Title Only)",
@@ -391,7 +391,7 @@
             "A variation of the standard Star Wars Card for Shows like Obi-Wan Kenobi that use Part/Chapter and similar as episode titles.",
             "This card also uses a modified star gradient so that more of the left side of the image is visible."
         ],
-        "hash": "f95d2a58db2cae120569e4016b100a51"
+        "hash": "9f5c73bbfe1e06e9bbf8e077514f865b"
     },
     {
         "name": "Tinted Frame+",
@@ -479,7 +479,7 @@
             "A combination of the TintedFrameTitleCard and the Standard for the best of both worlds.",
             "It has many of the same extras you can pass to tinted frame, but it adds the episode title text above the bottom frame element (this is not modifiable). The top element will default to logo now, and title is no longer an option (as it is always shown above the bottom element)."
         ],
-        "hash": "cb67fc04ee1a81185c8af7330a12a58e"
+        "hash": "89d96b84de5c4b9d44de0cf6ecb9faa9"
     },
     {
         "name": "Title Color Match",
@@ -505,7 +505,7 @@
             "A modification of GradientLogoTitleCard that includes the option to auto-select font color based on logo color.",
             "This card will also automatically crop off extraneous transparent space from around the logo."
         ],
-        "hash": "be85cdb44e224ae58ec85b556b468c9e"
+        "hash": "aa6acf1774855a2da1f1e31da7360e10"
     },
     {
         "name": "White Text Broadcast",
@@ -522,7 +522,7 @@
         "description": [
             "Card based on Wdvh's White Text Absolute card, using the same format, but has the season number included in the episode text."
         ],
-        "hash": "ea8c4014edf6e65970e53cc13a078399"
+        "hash": "9643b626134ab4f881489e28a35b18c6"
     },
     {
         "name": "White Text Standard",
@@ -539,6 +539,6 @@
             "Modification of the Standard Card Type.",
             "This Card uses a different font, smaller text size, and the episode title is positioned lower than the Standard Card Type."
         ],
-        "hash": "72a1f8facf1618b7346aa91645c3f062"
+        "hash": "3e7ca87b87d55269532805826b2062db"
     }
 ]
