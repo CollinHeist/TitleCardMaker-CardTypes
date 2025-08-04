@@ -1,9 +1,9 @@
 from pathlib import Path
-from typing import Literal, Optional, TYPE_CHECKING
+from typing import Literal, TYPE_CHECKING
 
 from pydantic import constr, root_validator
 
-from app.schemas.card_type import BaseCardTypeCustomFontNoText
+from app.schemas.base import BaseCardTypeCustomFontNoText
 from modules.BaseCardType import (
     BaseCardType,
     CardDescription,
@@ -14,8 +14,8 @@ from modules.RemoteFile import RemoteFile
 from modules.Title import SplitCharacteristics
 
 if TYPE_CHECKING:
-    from app.models.preferences import Preferences
-    from modules.Font import Font
+    from app.yaml.font import Font
+    from modules.preferences import Preferences
 
 
 OverrideBw = Literal['bw', 'color']
@@ -67,8 +67,8 @@ class RetroTitleCard(BaseCardType):
         episode_text: constr(to_upper=True)
         hide_episode_text: bool = False
         watched: bool = True
-        override_bw: Optional[OverrideBw] = None
-        override_style: Optional[OverrideStyle] = None
+        override_bw: OverrideBw | None = None
+        override_style: OverrideStyle | None = None
 
         @root_validator
         def toggle_text_hiding(cls, values):

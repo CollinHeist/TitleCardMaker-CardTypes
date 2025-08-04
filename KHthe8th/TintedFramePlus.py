@@ -1,10 +1,10 @@
 from pathlib import Path
-from typing import TYPE_CHECKING, Literal, Optional
+from typing import TYPE_CHECKING, Literal
 
 from pydantic import FilePath, PositiveFloat, PositiveInt, root_validator
 
-from app.schemas.card_type import BaseCardTypeAllText
-from modules.Debug import log
+from app.logging.logger import log
+from app.schemas.base import BaseCardTypeAllText
 from modules.BaseCardType import (
     BaseCardType,
     CardDescription,
@@ -16,8 +16,8 @@ from modules.BaseCardType import (
 from modules.Title import SplitCharacteristics
 
 if TYPE_CHECKING:
-    from app.models.preferences import Preferences
-    from modules.Font import Font
+    from app.yaml.font import Font
+    from modules.preferences import Preferences
 
 
 class TintedFramePlus(BaseCardType):
@@ -131,11 +131,11 @@ class TintedFramePlus(BaseCardType):
         font_size: PositiveFloat = 1.0
         font_vertical_shift: int = 0
         separator: str = '-'
-        episode_text_color: Optional[str] = None
+        episode_text_color: str | None = None
         episode_text_font: Path = BaseCardType.BASE_REF_DIRECTORY / 'tinted_frame' / 'Galey Semi Bold.ttf'
         episode_text_font_size: PositiveFloat = 1.0
         episode_text_vertical_shift: int = 0
-        frame_color: Optional[str] = None
+        frame_color: str | None = None
         frame_width: PositiveInt = 3
         top_element: Literal['index', 'logo', 'omit'] = 'logo'
         middle_element: Literal['logo', 'omit'] = 'omit'
@@ -223,7 +223,7 @@ class TintedFramePlus(BaseCardType):
     def __init__(self, *,
             source_file: Path,
             card_file: Path,
-            logo_file: Optional[Path],
+            logo_file: Path | None,
             title_text: str,
             season_text: str,
             episode_text: str,
@@ -252,7 +252,7 @@ class TintedFramePlus(BaseCardType):
             bottom_element: Literal['index', 'logo', 'omit'] = 'index',
             logo_size: float = 1.0,
             blur_edges: bool = True,
-            preferences: Optional['Preferences'] = None,
+            preferences: 'Preferences | None' = None,
             **unused,
         ) -> None:
         """Construct a new instance of this Card."""

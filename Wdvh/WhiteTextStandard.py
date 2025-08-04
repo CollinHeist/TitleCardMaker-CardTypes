@@ -1,20 +1,19 @@
 from pathlib import Path
-from typing import Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
 from pydantic import FilePath
-from app.schemas.card_type import BaseCardTypeCustomFontAllText
 
+from app.schemas.base import BaseCardTypeCustomFontAllText
 from modules.BaseCardType import (
     BaseCardType,
     ImageMagickCommands,
     CardDescription,
-    Extra,
 )
 from modules.RemoteFile import RemoteFile
 
 if TYPE_CHECKING:
-    from app.models.preferences import Preferences
-    from modules.Font import Font
+    from app.yaml.font import Font
+    from modules.preferences import Preferences
 
 
 class WhiteTextStandard(BaseCardType):

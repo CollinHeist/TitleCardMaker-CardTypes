@@ -2,7 +2,7 @@ from pathlib import Path
 from re import findall
 
 from modules.BaseCardType import BaseCardType
-from modules.Debug import log
+from app.logging.logger import log
 from modules.RemoteFile import RemoteFile
 
 class WhiteTextAbsolute(BaseCardType):

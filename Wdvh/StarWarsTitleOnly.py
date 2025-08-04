@@ -5,7 +5,7 @@ from pydantic import constr
 
 from app.schemas.card_type import BaseCardTypeCustomFontNoText
 from modules.BaseCardType import BaseCardType, CardDescription
-from modules.Debug import log
+from app.logging.logger import log
 from modules.RemoteFile import RemoteFile
 
 if TYPE_CHECKING:
