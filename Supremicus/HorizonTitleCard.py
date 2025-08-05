@@ -3,7 +3,6 @@ from typing import TYPE_CHECKING, Literal, Union
 
 from pydantic import conint, root_validator
 
-from app.info.episode import EpisodeInfo
 from app.logging.logger import log
 from app.schemas.base import BaseCardTypeCustomFontAllText
 from modules.BaseCardType import (
@@ -12,6 +11,7 @@ from modules.BaseCardType import (
     Extra,
     ImageMagickCommands,
 )
+from modules.EpisodeInfo import EpisodeInfo
 from modules.RemoteFile import RemoteFile
 from modules.Title import SplitCharacteristics
 
