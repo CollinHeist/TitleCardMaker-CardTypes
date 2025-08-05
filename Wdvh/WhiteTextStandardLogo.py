@@ -4,7 +4,7 @@ from typing import Optional
 
 from modules.BaseCardType import BaseCardType
 from modules.RemoteFile import RemoteFile
-from app.logging.logger import log
+from modules.Debug import log
 
 
 class WhiteTextStandardLogo(BaseCardType):

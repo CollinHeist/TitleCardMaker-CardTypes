@@ -1,22 +1,23 @@
 from pathlib import Path
 from re import compile as re_compile, findall
-from typing import TYPE_CHECKING
+from typing import Optional, TYPE_CHECKING
 
 from pydantic import FilePath
 
-from app.schemas.base import BaseCardTypeCustomFontAllText
+from app.schemas.card_type import BaseCardTypeCustomFontAllText
 from modules.BaseCardType import (
     BaseCardType,
     CardDescription,
     Extra,
     ImageMagickCommands,
 )
-from app.logging.logger import log
+from modules.Debug import log
 from modules.RemoteFile import RemoteFile
+from modules.Title import SplitCharacteristics
 
 if TYPE_CHECKING:
-    from app.yaml.font import Font
-    from modules.preferences import Preferences
+    from app.models.preferences import Preferences
+    from modules.Font import Font
 
 
 class TitleColorMatch(BaseCardType):

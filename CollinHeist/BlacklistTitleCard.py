@@ -1,17 +1,17 @@
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import Optional, TYPE_CHECKING
 
 from pydantic import FilePath, PositiveFloat, constr, root_validator
 from app.schemas.card_type import BaseCardModel
 
-from app.logging.logger import log
-from app.schemas.base import BaseCardType
-from modules.BaseCardType import CardDescription
+from modules.BaseCardType import BaseCardType, CardDescription
+from modules.Debug import log
 from modules.RemoteFile import RemoteFile
+from modules.Title import SplitCharacteristics
 
 if TYPE_CHECKING:
-    from app.yaml.font import Font
-    from modules.preferences import Preferences
+    from app.models.preferences import Preferences
+    from modules.Font import Font
 
 
 class BlacklistTitleCard(BaseCardType):
@@ -106,7 +106,7 @@ class BlacklistTitleCard(BaseCardType):
             font_vertical_shift: int = 0.0,
             blur: bool = False,
             grayscale: bool = False,
-            preferences: 'Preferences | None' = None,
+            preferences: Optional['Preferences'] = None,
             **unused,
         ) -> None:
         """Construct a new instance of this Card."""

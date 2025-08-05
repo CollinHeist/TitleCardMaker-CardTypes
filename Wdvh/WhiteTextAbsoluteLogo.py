@@ -2,7 +2,7 @@ from pathlib import Path
 from typing import Optional
 
 from modules.BaseCardType import BaseCardType
-from app.logging.logger import log
+from modules.Debug import log
 from modules.RemoteFile import RemoteFile
 
 class WhiteTextAbsoluteLogo(BaseCardType):

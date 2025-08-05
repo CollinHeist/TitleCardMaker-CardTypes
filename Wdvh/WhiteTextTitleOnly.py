@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from modules.BaseCardType import BaseCardType
-from app.logging.logger import log
+from modules.Debug import log
 from modules.RemoteFile import RemoteFile
 
 

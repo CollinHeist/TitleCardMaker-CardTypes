@@ -1,22 +1,22 @@
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import Optional, TYPE_CHECKING
 
 from pydantic import FilePath, PositiveFloat, constr, root_validator
+from app.schemas.card_type import BaseCardTypeCustomFontNoText
 
-from app.schemas.base import BaseCardTypeCustomFontNoText
 from modules.BaseCardType import (
     BaseCardType,
     CardDescription,
     Extra,
     ImageMagickCommands,
 )
-from app.logging.logger import log
+from modules.Debug import log
 from modules.RemoteFile import RemoteFile
 from modules.Title import SplitCharacteristics
 
 if TYPE_CHECKING:
-    from app.yaml.font import Font
-    from modules.preferences import Preferences
+    from app.models.preferences import Preferences
+    from modules.Font import Font
 
 
 class SciFiTitleCard(BaseCardType):
@@ -213,7 +213,7 @@ class SciFiTitleCard(BaseCardType):
             overlay_rectangles_alpha: float = 0.6,
             episode_text_color: str = TITLE_COLOR,
             stroke_color: str = STROKE_COLOR,
-            preferences: 'Preferences | None' = None,
+            preferences: Optional['Preferences'] = None,
             **unused,
         ) -> None:
         """Initialize the CardType object."""

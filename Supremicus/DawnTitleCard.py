@@ -1,23 +1,24 @@
 from pathlib import Path
-from typing import TYPE_CHECKING, Literal, Union
+from typing import TYPE_CHECKING, Optional, Literal, Union
 
 from pydantic import root_validator
 
-from app.logging.logger import log
-from app.schemas.base import BaseCardTypeCustomFontAllText
+from app.schemas.card_type import BaseCardTypeCustomFontAllText
+
 from modules.BaseCardType import (
     BaseCardType,
     CardDescription,
     Extra,
     ImageMagickCommands,
 )
-from modules.EpisodeInfo import EpisodeInfo
+from modules.Debug import log
+from modules.EpisodeInfo2 import EpisodeInfo
 from modules.RemoteFile import RemoteFile
 from modules.Title import SplitCharacteristics
 
 if TYPE_CHECKING:
-    from app.yaml.font import Font
-    from modules.preferences import Preferences
+    from app.models.preferences import Preferences
+    from modules.Font import Font
 
 
 class DawnTitleCard(BaseCardType):
@@ -290,7 +291,7 @@ class DawnTitleCard(BaseCardType):
             crt_overlay: Literal['nobezel', 'bezel'] | None = None,
             crt_state_overlay: bool = False,
             omit_gradient: bool = True,
-            preferences: 'Preferences | None' = None,
+            preferences: Optional['Preferences'] = None,
             **unused,
         ) -> None:
         """Construct a new instance of this card."""
