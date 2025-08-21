@@ -1,7 +1,7 @@
 from pathlib import Path
-from typing import Literal, TYPE_CHECKING
+from typing import Literal, TYPE_CHECKING, Self
 
-from pydantic import constr, root_validator
+from pydantic import constr, model_validator, Field
 
 from app.schemas.base import BaseCardTypeCustomFontNoText
 from modules.BaseCardType import (
@@ -64,17 +64,17 @@ class RetroTitleCard(BaseCardType):
 
     class CardModel(BaseCardTypeCustomFontNoText):
         title_text: str
-        episode_text: constr(to_upper=True)
+        episode_text: str = Field(to_upper=True)
         hide_episode_text: bool = False
         watched: bool = True
         override_bw: OverrideBw | None = None
         override_style: OverrideStyle | None = None
 
-        @root_validator
-        def toggle_text_hiding(cls, values):
-            values['hide_episode_text'] |= (len(values['episode_text']) == 0)
+        @model_validator
+        def toggle_text_hiding(self) -> Self:
+            self.hide_episode_text |= len(self.episode_text) == 0
 
-            return values
+            return self
 
     """Directory where all reference files used by this card are stored"""
     REF_DIRECTORY = Path(__file__).parent.parent / 'ref' / 'retro'
