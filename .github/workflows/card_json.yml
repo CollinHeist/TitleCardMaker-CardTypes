@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - web-ui
+      - web-ui-develop
 
 jobs:
   update-json:
