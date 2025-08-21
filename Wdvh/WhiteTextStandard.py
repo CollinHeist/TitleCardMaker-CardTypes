@@ -13,7 +13,6 @@ from modules.RemoteFile import RemoteFile
 
 if TYPE_CHECKING:
     from app.yaml.font import Font
-    from modules.preferences import Preferences
 
 
 class WhiteTextStandard(BaseCardType):
@@ -100,12 +99,11 @@ class WhiteTextStandard(BaseCardType):
             blur: bool = False,
             grayscale: bool = False,
             separator: str = '•',
-            preferences: 'Preferences | None' = None,
             **unused,
         ) -> None:
         """Initialize this CardType object."""
 
-        super().__init__(blur, grayscale, preferences=preferences)
+        super().__init__(blur, grayscale)
 
         self.source_file = source_file
         self.output_file = card_file

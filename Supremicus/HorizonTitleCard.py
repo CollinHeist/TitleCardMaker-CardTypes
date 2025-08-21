@@ -17,7 +17,6 @@ from modules.Title import SplitCharacteristics
 
 if TYPE_CHECKING:
     from app.yaml.font import Font
-    from modules.preferences import Preferences
 
 
 class HorizonTitleCard(BaseCardType):
@@ -348,13 +347,12 @@ class HorizonTitleCard(BaseCardType):
             crt_overlay: Literal['nobezel', 'bezel'] | None = None,
             crt_state_overlay: bool = False,
             omit_gradient: bool = True,
-            preferences: 'Preferences | None' = None,
             **unused,
         ) -> None:
         """Construct a new instance of this card."""
 
         # Initialize the parent class - this sets up an ImageMagickInterface
-        super().__init__(blur, grayscale, preferences=preferences)
+        super().__init__(blur, grayscale)
 
         self.source_file = source_file
         self.output_file = card_file

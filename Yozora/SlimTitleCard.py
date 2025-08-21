@@ -14,7 +14,6 @@ from modules.Title import SplitCharacteristics
 
 if TYPE_CHECKING:
     from app.yaml.font import Font
-    from modules.preferences import Preferences
 
 
 class SlimTitleCard(BaseCardType):
@@ -113,12 +112,11 @@ class SlimTitleCard(BaseCardType):
             blur: bool = False,
             grayscale: bool = False,
             omit_gradient: bool = False,
-            preferences: 'Preferences | None' = None,
             **unused,
         ) -> None:
         
         # Initialize the parent class - this sets up an ImageMagickInterface
-        super().__init__(blur, grayscale, preferences=preferences)
+        super().__init__(blur, grayscale)
 
         self.source_file = source_file
         self.output_file = card_file

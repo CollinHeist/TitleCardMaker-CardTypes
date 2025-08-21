@@ -15,7 +15,6 @@ from modules.Title import SplitCharacteristics
 
 if TYPE_CHECKING:
     from app.yaml.font import Font
-    from modules.preferences import Preferences
 
 
 OverrideBw = Literal['bw', 'color']
@@ -136,12 +135,11 @@ class RetroTitleCard(BaseCardType):
             grayscale: bool = False,
             override_bw: OverrideBw | None = None,
             override_style: OverrideStyle | None = None,
-            preferences: 'Preferences | None' = None,
             **unused,
         ) -> None:
 
         # Initialize the parent class - this sets up an ImageMagickInterface
-        super().__init__(blur, grayscale, preferences=preferences)
+        super().__init__(blur, grayscale)
 
         self.source_file = source_file
         self.output_file = card_file

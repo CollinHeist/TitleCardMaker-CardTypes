@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING
 
 from pydantic import FilePath, PositiveFloat, constr, root_validator
 
+from app.logging.logger import log
 from app.schemas.base import BaseCardTypeCustomFontNoText
 from modules.BaseCardType import (
     BaseCardType,
@@ -10,13 +11,11 @@ from modules.BaseCardType import (
     Extra,
     ImageMagickCommands,
 )
-from app.logging.logger import log
 from modules.RemoteFile import RemoteFile
 from modules.Title import SplitCharacteristics
 
 if TYPE_CHECKING:
     from app.yaml.font import Font
-    from modules.preferences import Preferences
 
 
 class SciFiTitleCard(BaseCardType):
@@ -213,13 +212,12 @@ class SciFiTitleCard(BaseCardType):
             overlay_rectangles_alpha: float = 0.6,
             episode_text_color: str = TITLE_COLOR,
             stroke_color: str = STROKE_COLOR,
-            preferences: 'Preferences | None' = None,
             **unused,
         ) -> None:
         """Initialize the CardType object."""
 
         # Initialize the parent class - this sets up an ImageMagickInterface
-        super().__init__(blur, grayscale, preferences=preferences)
+        super().__init__(blur, grayscale)
 
         # Store source and output file
         self.source_file = source_file

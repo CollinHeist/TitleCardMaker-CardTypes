@@ -15,7 +15,6 @@ from modules.Title import SplitCharacteristics
 
 if TYPE_CHECKING:
     from app.yaml.font import Font
-    from modules.preferences import Preferences
 
 
 class WhiteTextBroadcast(BaseCardType):
@@ -116,12 +115,11 @@ class WhiteTextBroadcast(BaseCardType):
             grayscale: bool = False,
             episode_text_color: str = SERIES_COUNT_TEXT_COLOR,
             omit_gradient: bool = False,
-            preferences: 'Preferences | None' = None,
             **unused,
         ) -> None:
         """Initialize this card"""
         
-        super().__init__(blur, grayscale, preferences=preferences)
+        super().__init__(blur, grayscale)
 
         self.source_file = source_file
         self.output_file = card_file

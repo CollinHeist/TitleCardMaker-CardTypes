@@ -11,7 +11,6 @@ from modules.RemoteFile import RemoteFile
 
 if TYPE_CHECKING:
     from app.yaml.font import Font
-    from modules.preferences import Preferences
 
 
 class BlacklistTitleCard(BaseCardType):
@@ -106,12 +105,11 @@ class BlacklistTitleCard(BaseCardType):
             font_vertical_shift: int = 0.0,
             blur: bool = False,
             grayscale: bool = False,
-            preferences: 'Preferences | None' = None,
             **unused,
         ) -> None:
         """Construct a new instance of this Card."""
 
-        super().__init__(blur, grayscale, preferences=preferences)
+        super().__init__(blur, grayscale)
 
         # Store source and output file
         self.source_file = source_file

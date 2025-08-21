@@ -88,7 +88,7 @@ class StarWarsTitleOnly(BaseCardType):
         ) -> None:
         """Initialize this CardType object."""
         
-        super().__init__(blur, grayscale, preferences=preferences)
+        super().__init__(blur, grayscale)
 
         self.source_file = source_file
         self.output_file = card_file
