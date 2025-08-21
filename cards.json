@@ -264,7 +264,7 @@
             "Card type featuring a VHS/Camcorder inspired overlay. The 'Play' ",
             "button can be set to 'Rewind' and the image greyscaled when the item has been played."
         ],
-        "hash": "f547c484b5155668fac56575aed3c322"
+        "hash": "b8881d568ce953de53daeb15d0407bd1"
     },
     {
         "name": "SciFi",
@@ -522,7 +522,7 @@
         "description": [
             "Card based on Wdvh's White Text Absolute card, using the same format, but has the season number included in the episode text."
         ],
-        "hash": "fe74e7f625ab37c6b5a6228ae95d4f73"
+        "hash": "1d35848aec6d7a542add5f78ad231d0b"
     },
     {
         "name": "White Text Standard",
@@ -539,6 +539,6 @@
             "Modification of the Standard Card Type.",
             "This Card uses a different font, smaller text size, and the episode title is positioned lower than the Standard Card Type."
         ],
-        "hash": "0204043abfc383c6ccafb23c545b0ca8"
+        "hash": "e0a7a03ba6a903be4cee07bbf15f8e63"
     }
 ]
