@@ -69,7 +69,7 @@ class RetroTitleCard(BaseCardType):
         override_bw: OverrideBw | None = None
         override_style: OverrideStyle | None = None
 
-        @model_validator
+        @model_validator(mode='after')
         def toggle_text_hiding(self) -> Self:
             self.hide_episode_text |= len(self.episode_text) == 0
 

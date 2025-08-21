@@ -1,7 +1,7 @@
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Self
 
-from pydantic import root_validator
+from pydantic import model_validator
 
 from app.logging.logger import log
 from app.schemas.base import BaseCardTypeCustomFontNoText
@@ -49,11 +49,11 @@ class WhiteTextBroadcast(BaseCardType):
         episode_text_color: str = '#FFFFFF'
         omit_gradient: bool = False
 
-        @root_validator
-        def toggle_text_hiding(cls, values):
-            values['hide_episode_text'] |= (len(values['episode_text']) == 0)
+        @model_validator(mode='after')
+        def toggle_text_hiding(self) -> Self:
+            self.hide_episode_text |= (len(self.episode_text) == 0)
 
-            return values
+            return self
 
     """Directory where all reference files used by this card are stored"""
     REF_DIRECTORY = Path(__file__).parent.parent / 'ref'
@@ -115,10 +115,10 @@ class WhiteTextBroadcast(BaseCardType):
             grayscale: bool = False,
             episode_text_color: str = SERIES_COUNT_TEXT_COLOR,
             omit_gradient: bool = False,
-            **unused,
+            **unused: Any,
         ) -> None:
         """Initialize this card"""
-        
+
         super().__init__(blur, grayscale)
 
         self.source_file = source_file

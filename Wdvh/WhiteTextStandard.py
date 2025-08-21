@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from pydantic import FilePath
 
@@ -42,9 +42,6 @@ class WhiteTextStandard(BaseCardType):
         font_file: FilePath
         separator: str = '•'
 
-    """Directory where all reference files used by this card are stored"""
-    REF_DIRECTORY = Path(__file__).parent.parent / 'ref'
-
     """Characteristics for title splitting by this class"""
     TITLE_CHARACTERISTICS = {
         'max_line_width': 32,
@@ -66,11 +63,11 @@ class WhiteTextStandard(BaseCardType):
     ARCHIVE_NAME = 'White Text Standard Style'
 
     """Source path for the gradient image overlayed over all title cards"""
-    __GRADIENT_IMAGE = REF_DIRECTORY / 'GRADIENT.png'
+    __GRADIENT_IMAGE = BaseCardType.BASE_REF_DIRECTORY / 'GRADIENT.png'
 
     """Default fonts and color for series count text"""
-    SEASON_COUNT_FONT = REF_DIRECTORY / 'Sequel-Neue.otf'
-    EPISODE_COUNT_FONT = REF_DIRECTORY / 'Sequel-Neue.otf'
+    SEASON_COUNT_FONT = BaseCardType.BASE_REF_DIRECTORY / 'Sequel-Neue.otf'
+    EPISODE_COUNT_FONT = BaseCardType.BASE_REF_DIRECTORY / 'Sequel-Neue.otf'
     SERIES_COUNT_TEXT_COLOR = '#FFFFFF'
 
     __slots__ = (
@@ -99,7 +96,7 @@ class WhiteTextStandard(BaseCardType):
             blur: bool = False,
             grayscale: bool = False,
             separator: str = '•',
-            **unused,
+            **unused: Any,
         ) -> None:
         """Initialize this CardType object."""
 
